@@ -5,13 +5,14 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import SignupPage from './pages/clients/SignupPage';
 import SigninPage from './pages/clients/SigninPage';
 
+
 const router = createBrowserRouter([
+  // {
+  //   path: "/",
+  //   element: <div>Hello world!</div>,
+  // },
   {
     path: "/",
-    element: <div>Hello world!</div>,
-  },
-  {
-    path: "/clients/signup",
     element: <SignupPage />,
   },
   {

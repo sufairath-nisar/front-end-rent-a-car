@@ -279,7 +279,7 @@ export default function Signup() {
         <input type="submit" className="rounded-md bg-blue-500 py-1 text-white" />
         <p>
           Already have an account?{" "}
-          <Link to="clients/signin" className="text-blue-500 underline">
+          <Link to="/clients/signin" className="text-blue-500 underline">
             Sign in
           </Link>
         </p>

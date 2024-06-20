@@ -39,7 +39,7 @@ export default function Signin() {
       <input type="submit" className="rounded-md bg-blue-500 py-1 text-white" />
       <p>
         Not registered yet!{" "}
-        <Link to="./Signup.jsx" className="text-blue-500 underline">
+        <Link to="/" className="text-blue-500 underline">
           Signup
         </Link>
       </p>

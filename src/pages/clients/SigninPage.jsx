@@ -1,3 +1,4 @@
+import React from 'react';
 import Signin from "../../components/clients/Signin";
 
 const SigninPage = () => {
