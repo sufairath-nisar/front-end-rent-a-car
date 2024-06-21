@@ -1,28 +1,60 @@
 import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
-const clientNavbar = () => {
+const Navbar = () => {
   const navLinks = [
-    {
-      path: "/contact-us",
-      value: "Contact Us",
-    },
-    {
-      path: "/about-us",
-      value: "About Us",
-    },
+    { path: "/cars", value: "Cars" },
+    { path: "/rental-deals", value: "Rental deals" },
+    { path: "/how-it-works", value: "How it works" },
+    { path: "/our-locations", value: "Our locations" },
+    { path: "/why-choose-us", value: "Why choose us" },
   ];
+
+  const authLinks = [
+    { path: "/clients/signup", value: "Signup" },
+    { path: "/clients/signin", value: "Signin" },
+  ];
+
   return (
-    <div>
-      <h1>Logo</h1>
-      <ul>
-        {navLinks.map((link, index) => (
-          <Link key={index} to={link.path}>
-            <li>{link.value}</li>
-          </Link>
+    <div className="flex justify-between items-center p-4 text-2xl shadow-lg top-0 sticky">
+      <div className="flex items-center">
+        <p>Logo</p>
+      </div>
+      <div className="flex-1 flex justify-center">
+        <ul className="flex items-center gap-x-5 text-base">
+          {navLinks.map((link, index) => (
+            <li key={index}>
+              <NavLink
+                to={link.path}
+                className={({ isActive }) =>
+                  isActive ? "text-red-500" : "text-hover"
+                }
+              >
+                {link.value}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="flex items-center gap-x-5">
+      <ul className="flex items-center gap-x-5 text-base">
+        {authLinks.map((link, index) => (
+           <NavLink
+           to={link.path}
+           className={({ isActive }) =>
+             isActive ? "text-red-500" : "text-red-700 text-hover"
+           }
+         >
+           <button className="btn btn-active btn-link text-red-700 text-hover ">
+             {link.value}
+           </button>
+         </NavLink>
+          
         ))}
       </ul>
+      </div>
     </div>
   );
 };
 
-export default clientNavbar;
+export default Navbar;

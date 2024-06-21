@@ -12,7 +12,7 @@
       @apply text-xl;
     }
     h3 {
-      @apply text-lg;
+      @apply text-xl;
     }
 }
 
@@ -21,10 +21,19 @@
   }
 
 .text-hover:hover {
-    @apply text-red-400;
+    @apply text-red-600;
 }
 
 /* Home */
 .banner{
     background-image:url('../public/home-banner-img.webp');
+}
+
+.home-banner{
+  min-height : 900px;
+  z-index:-1;
+}
+
+.btn-ghost:hover {
+background-color : #0000;
 }
