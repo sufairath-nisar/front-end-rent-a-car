@@ -4,20 +4,27 @@ import './index.css'
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import SignupPage from './pages/clients/SignupPage';
 import SigninPage from './pages/clients/SigninPage';
+import { HomePage } from './pages/clients/HomePage';
+import HomeLayout from './layouts/HomeLayout';
 
 
 const router = createBrowserRouter([
-  // {
-  //   path: "/",
-  //   element: <div>Hello world!</div>,
-  // },
   {
-    path: "/",
-    element: <SignupPage />,
-  },
-  {
-    path: "/clients/signin",
-    element: <SigninPage />,
+    element: <HomeLayout />,
+    children: [
+      {
+        path: "/",
+        element: <HomePage />,
+      },
+      {
+        path: "/clients/signup",
+        element: <SignupPage />,
+      },
+      {
+        path: "/clients/signin",
+        element: <SigninPage />,
+      },
+    ],
   },
  
 ]);

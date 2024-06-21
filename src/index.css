@@ -1,8 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-*{
-    -webkit-text-size-adjust: none; /* For WebKit browsers */
-    text-size-adjust: none;         /* Standard property */
+@layer base {
+    h1 {
+      @apply text-5xl;
+    }
+    h2 {
+      @apply text-xl;
+    }
+    h3 {
+      @apply text-lg;
+    }
+}
+
+* {
+    font-family: 'Poppins', sans-serif;
+  }
+
+.text-hover:hover {
+    @apply text-red-400;
+}
+
+/* Home */
+.banner{
+    background-image:url('../public/home-banner-img.webp');
 }
