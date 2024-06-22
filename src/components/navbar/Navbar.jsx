@@ -117,7 +117,7 @@ const Navbar = () => {
                                   <NavLink
                                     to={subLink.path}
                                     className={({ isActive }) =>
-                                      isActive ? "text-red-600 bg-red-50" : "text-hover"
+                                      isActive ? "text-red-600 bg-red-50" : "hover:bg-red-50 text-hover"
                                     }
                                   >
                                     {subLink.value}

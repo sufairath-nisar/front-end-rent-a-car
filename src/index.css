@@ -9,11 +9,15 @@
       @apply text-5xl;
     }
     h2 {
-      @apply text-xl;
+      @apply text-3xl;
     }
     h3 {
       @apply text-xl;
     }
+    h4 {
+      @apply text-lg;
+    }
+
 }
 
 * {
@@ -30,10 +34,26 @@
 }
 
 .home-banner{
-  min-height : 900px;
+  min-height : 820px;
   z-index:-1;
 }
 
 .btn-ghost:hover {
 background-color : #0000;
 }
+
+.section-safety{
+  background: linear-gradient(to left, #767876   , #C8CBC8    );
+  background-size: cover; 
+  background-repeat: no-repeat; 
+  min-height:200px;
+}
+
+.section-outline{
+  min-max: 300px;
+}
+
+.section-how-it-works{
+  min-max: 300px;
+}
+

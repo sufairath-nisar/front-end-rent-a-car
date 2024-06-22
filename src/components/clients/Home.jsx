@@ -1,91 +1,126 @@
 import React from 'react';
 import Button from './Button';
+import Profile from './Profile';
+import { Link } from 'react-router-dom';
+import Search from './Search';
 
 export const Home = () => {
+
   return (
     <>
-      <div className="relative home-banner pb-5 min-h-screen"> 
-        <div className="grid grid-cols-3 gap-4 place-items-center">
-          <div className='pl-14 ml-5'>
-            <h1 className='font-bold leading-8'>
-              Find, book and rent a car <span className='text-red-700'>Easily</span>
-            </h1>
-            <p className='pt-5'>
-              Discover the convenience of renting a car with us. Whether for business or leisure, enjoy a seamless experience with our wide selection of vehicles, competitive prices, and exceptional customer service.
-            </p>
-          </div>
-          <div className="flex justify-center items-center pt-9 w-full h-full col-span-2">
-            <img className="object-full w-10/12" src="../../../public/images/banner-image.jpg" alt="image" />
-          </div>
+
+    <div className="home-banner pb-5 min-h-screen">
+      <div className="grid grid-cols-3 gap-4 place-items-center">
+        <div className='pl-14 ml-5'>
+          <h1 className='font-bold leading-8'>
+            Find, book and rent a car <span className='text-red-700'>Easily</span>
+          </h1>
+          <p className='pt-5'>
+            Discover the convenience of renting a car with us. Whether for business or leisure, enjoy a seamless experience with our wide selection of vehicles, competitive prices, and exceptional customer service.
+          </p>
         </div>
-
-      <div className='absolute w-4/5 left-1/2 transform mb-5 -translate-x-1/2 -translate-y-1/2  shadow-red-100 mt-10 shadow-2xl grid grid-rows-1 bg-white'>
-          <div className="p-12 shadow-slate-100 shadow-lg"> 
-              <h3 className='font-semibold pb-3'>What are you looking for?</h3>
-              <div className='flex'>
-                <label className="relative block w-10/12">
-                  <input className=" placeholder:text-slate-600 block bg-white w-full pl-5 border border-slate-300 py-2  pr-3 shadow-sm focus:outline-none focus:border-red-700 focus:ring-red-700 focus:ring-1 sm:text-sm" placeholder="Tap a brand or model..." type="text" name="search"/>
-                  <span className="absolute inset-y-0 right-2 flex items-center ">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                    </svg>
-                  </span>
-                </label>
-                <span className="w-2/12">
-                  <Button className="w-10/12 ml-5" text="Search" colorClass="text-red-500" onClick={() => console.log('Button clicked')}  />
-                </span>
-              </div>        
-          </div>
-          <div className="grid grid-cols-6 mt-3 gap-1 place-items-center">
-
-            <div className='grid-cols-1 border-r border-gray-300 w-full'>
-                <div className='flex flex-col items-center '>
-                  <img src='../../../public/images/icons/home-icon-sedan.png' />
-                  <p>Sedan</p>
-                </div>
-            </div>
-
-            <div className='grid-cols-1 border-r border-gray-300 w-full'>  
-                <div className='flex flex-col items-center'>
-                  <img src='../../../public/images/icons/home-icon-suv.png' />
-                  <p>SUV</p>
-                </div>   
-            </div>
-
-            <div className='grid-cols-1 border-r border-gray-300 w-full'>       
-                <div className='flex flex-col items-center'>
-                  <img src='../../../public/images/icons/home-icon-hatchback.png' />
-                  <p>Hatchpack</p>
-                </div>
-            </div>
-
-            <div className='grid-cols-1 border-r border-gray-300 w-full'>    
-                <div className='flex flex-col items-center'>
-                  <img src='../../../public/images/icons/home-icon-lsuv.png' />
-                  <p>Large SUV</p>
-                </div>
-            </div>
-
-            <div className='grid-cols-1 border-r border-gray-300 w-full'>    
-                <div className='flex flex-col items-center'>
-                  <img src='../../../public/images/icons/home-icon-luxury.png' />
-                  <p>Luxury cars</p>
-                </div>
-            </div>
-   
-                <div className='flex flex-col items-center '>
-                  <img src='../../../public/images/icons/home-icon-commercial.png' />
-                  <p>Commercial cars</p>
-                </div>
-            
-          </div>   
-      </div>
-
+        <div className="flex justify-center items-center pt-5 w-full h-full col-span-2">
+          <img className="object-full w-10/12" src="/images/banner-h-img.jpg" alt="image" />
+        </div>
+      </div> 
+      <Search />
     </div>
 
+    <div class="grid grid-cols-2 section-outline py-16">
+        <div className='flex pl-16 pb-16 flex-col justify-center h-full'>
+            <h3 className='text-red-700 text-medium pb-6'>Rent a car across the UAE</h3>
+            <p>With a comprehensive fleet of new and highly maintained vehicles, Shift Car Rental offers the best car hire deals in Dubai, Abu Dhabi and norther Emirates. And with award-winning services, you can always expect the highest quality standards.</p>
+        </div>
 
-   
+        <div className='text-center'>
+            <h2 className='font-medium'>CHOOSE YOUR <span className='text-red-700'>RIDE</span></h2>
+            <div class="grid grid-cols-3 pt-5 gap-4">
+              <Link to="/cars/all-cars" className="flex flex-col items-center cursor-pointer">
+                  <div  className='place-items-center cursor-pointer text-center'>   
+                      <img src='/images/icons/icon-red-outline-all.png' alt="Car"/>
+                      <p>All Cars</p>
+                  </div>
+              </Link>
+              
+              <Link to="/cars/small-cars" className="flex flex-col items-center cursor-pointer">
+                  <div  className='place-items-center cursor-pointer text-center'>   
+                      <img src='/images/icons/icon-red-outline-small.png' alt="Car"/>
+                      <p>Small</p>
+                  </div>
+              </Link>
 
-    </>
+              <Link to="/cars/medium-cars" className="flex flex-col items-center cursor-pointer">
+                  <div  className='place-items-center cursor-pointer text-center'>   
+                      <img src='/images/icons/icon-red-outline-medium.png' alt="Car"/>
+                      <p>Medium</p>
+                  </div>
+              </Link>
+
+              <Link to="/cars/crossover" className="flex flex-col items-center cursor-pointer">
+                  <div className='place-items-center cursor-pointer text-center'>   
+                      <img src='/images/icons/icon-red-outline-crossover.png' alt="Car" />
+                      <p>Crossover</p>
+                  </div>
+              </Link>
+
+                 
+
+              <Link to="/cars/suv" className="flex flex-col items-center cursor-pointer">
+                  <div className='place-items-center cursor-pointer text-center'> 
+                      <img src='/images/icons/icon-red-outline-suv.png' alt="Car"/>
+                      <p>SUV</p>
+                  </div>
+              </Link>     
+                
+              <Link to="/cars/luxury" className="flex flex-col items-center cursor-pointer">
+                    <div  className='place-items-center cursor-pointer text-center'>                      
+                      <img src='/images/icons/icon-red-outline-luxury.png' alt="Car"/>
+                      <p>Luxury</p>                 
+                    </div>
+              </Link>
+                
+            </div>
+        </div>
+       
+    </div>
+     
+    <div className='grid grid-rows-1 section-safety relative  w-full '>
+          <div className='grid grid-cols-2'>
+
+            <div className='flex  absolute  -top-1/5 transform -translate-y-1/2'>
+                <img src='/images/nisan-car.png' className='w-4/12 top-0'/>
+            </div>
+
+            <div className="px-14 pt-14 col-span-2 text-white relative z-10">
+            <h2 className="font-medium pb-5 text-center">We are responsible for your safety</h2>
+              <p>Each vehicle in our inventory is meticulously checked and maintained to ascertain the safety of its passengers. We can also customize your vehicle and make it perfect for any occasion with features such as child booster seats, GPS, and even provisions such as additional drivers on the rental cars.</p>
+              <div className='flex justify-center  pt-8'>
+              <Button text="FIND MORE DETAILS" onClick={() => console.log('Button clicked')} />
+              </div>
+            </div>
+          
+          </div>
+    </div>
+
+    <div className='grid grid-rows-1 grid-cols-4 section-how-it-works p-16'>
+      <div className='text-center'>
+        <Profile textHeading="Choose your Ride" text="Book your car rental online with three easy steps with option to pay online." path={"/images/how-it-works1.png"}/>
+      </div>
+
+      <div>
+        <Profile />
+      </div>
+
+      <div>
+        <Profile />
+      </div>
+
+      <div>
+        <Profile />
+      </div>
+      
+    </div>
+    
+  </>
   );
 };
