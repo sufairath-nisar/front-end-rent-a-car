@@ -3,6 +3,7 @@ import Button from './Button';
 import Profile from './Profile';
 import { Link } from 'react-router-dom';
 import Search from './Search';
+import Carousel from './Carousel';
 
 export const Home = () => {
 
@@ -28,7 +29,7 @@ export const Home = () => {
 
     <div class="grid grid-cols-2 section-outline py-16">
         <div className='flex pl-16 pb-16 flex-col justify-center h-full'>
-            <h3 className='text-red-700 text-medium pb-6'>Rent a car across the UAE</h3>
+            <h3 className='text-red-700  pb-6 font-medium'>Rent a car across the UAE</h3>
             <p>With a comprehensive fleet of new and highly maintained vehicles, Shift Car Rental offers the best car hire deals in Dubai, Abu Dhabi and norther Emirates. And with award-winning services, you can always expect the highest quality standards.</p>
         </div>
 
@@ -63,8 +64,6 @@ export const Home = () => {
                   </div>
               </Link>
 
-                 
-
               <Link to="/cars/suv" className="flex flex-col items-center cursor-pointer">
                   <div className='place-items-center cursor-pointer text-center'> 
                       <img src='/images/icons/icon-red-outline-suv.png' alt="Car"/>
@@ -81,10 +80,10 @@ export const Home = () => {
                 
             </div>
         </div>
-       
+
     </div>
      
-    <div className='grid grid-rows-1 section-safety relative  w-full '>
+    <div className='grid grid-rows-1 section-safety relative pb-8 w-full '>
           <div className='grid grid-cols-2'>
 
             <div className='flex  absolute  -top-1/5 transform -translate-y-1/2'>
@@ -102,25 +101,39 @@ export const Home = () => {
           </div>
     </div>
 
-    <div className='grid grid-rows-1 grid-cols-4 section-how-it-works p-16'>
-      <div className='text-center'>
-        <Profile textHeading="Choose your Ride" text="Book your car rental online with three easy steps with option to pay online." path={"/images/how-it-works1.png"}/>
+    <div className='section-how-it-works p-14'>
+      <div className='text-center grid-grid-rows-1 pb-8'>
+        <h2 className='font-medium'>
+          How it <span className='text-red-700'>Works</span>
+        </h2>
       </div>
 
-      <div>
-        <Profile />
-      </div>
+      <div className='grid grid-cols-4 gap-6'>
+        <div className='text-center'>
+          <Profile textHeading="Choose your Ride" text="Book your car rental online with three easy steps with option to pay online." path={"/images/how-it-works1.png"} />
+        </div>
 
-      <div>
-        <Profile />
-      </div>
+        <div className='text-center'>
+          <Profile textHeading="Start your Journey" text="Get your car delivered to your doorstep or any other location of your choice." path="/images/how-it-works2.png" />
+        </div>
 
-      <div>
-        <Profile />
+        <div className='text-center'>
+          <Profile textHeading="Enjoy the Drive" text="Enjoy the freedom of driving your car rental anywhere in Dubai and across UAE." path="/images/how-it-works3.png" />
+        </div>
+
+        <div className='text-center'>
+          <Profile textHeading="End your Ride" text="Get your car collected at your doorstep or any Shift rental location. See You Again!" path="/images/how-it-works4.png" />
+        </div>
       </div>
-      
     </div>
-    
+
+    <div className='section-testimonials'>
+        <div className='grid grid-col-1'>
+          <Carousel />
+        </div>
+    </div>
+
+      
   </>
   );
 };

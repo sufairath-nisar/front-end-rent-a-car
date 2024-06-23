@@ -50,10 +50,10 @@ background-color : #0000;
 }
 
 .section-outline{
-  min-max: 300px;
+  min-height: 300px;
 }
 
 .section-how-it-works{
-  min-max: 300px;
+  min-max: 100px;
 }
 
