@@ -3,7 +3,7 @@ import Button from './Button';
 import Profile from './Profile';
 import { Link } from 'react-router-dom';
 import Search from './Search';
-import Carousel from './Carousel';
+import CarouselTestimonial from './CarouselTestimonial';
 
 export const Home = () => {
 
@@ -127,10 +127,15 @@ export const Home = () => {
       </div>
     </div>
 
-    <div className='section-testimonials'>
-        <div className='grid grid-col-1'>
-          <Carousel />
+    <div className='section-testimonials '>
+      <div className="grid grid-cols-1 md:grid-cols-4 relative">
+        <div className="md:col-start-1 col-span-1 md:col-span-2">
+          <CarouselTestimonial />
         </div>
+        <div className="col-span-1 md:block hidden absolute w-2/4 right-0">
+          <img src='/images/car1.png' className='w-full h-auto' alt="Car"/>
+        </div>
+      </div>
     </div>
 
       
