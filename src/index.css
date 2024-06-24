@@ -22,6 +22,7 @@
 
 * {
     font-family: 'Poppins', sans-serif;
+    
   }
 
  
@@ -69,6 +70,7 @@ background-color : #0000;
 } 
 
 .section-testimonials{
-  min-height:300px;
+  min-height:200px;
+  
   /* background-image: url('/images/car-banner7.jpg'); */
 }

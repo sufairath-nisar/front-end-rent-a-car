@@ -21,7 +21,7 @@ const CarouselTestimonial = () => {
           <Profile textHeading="SAVAD" withQuotes={true} text="I highly recommend Emirates Drive for their exceptional service and affordable rates. The car was clean, well-maintained, and perfect for exploring the city." path="/images/testimonial3.jpeg"/>
         </div>
         <div>
-          <Profile textHeading="RAMEES" withQuotes={true}  text="Choosing Emirates Drive for my car rental needs was the best decision. The customer service exceeded my expectations, and the flexibility in pick-up and drop-off locations made my trip hassle-free." path="/images/testimonial4.jpeg"/>
+          <Profile textHeading="RAMEES" withQuotes={true}  text="This was my second time renting from Emirates Drive, and once again, they exceeded my expectations. Consistent quality and service!" path="/images/testimonial4.jpeg"/>
         </div>
         <div>
           <Profile textHeading="ROSHNA" withQuotes={true} text="Renting from Emirates Drive made my vacation memorable. The car was reliable, and I appreciated the ease of extending my rental when my plans changed." path="/images/testimonial5.jpeg"/>

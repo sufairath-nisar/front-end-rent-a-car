@@ -8,7 +8,7 @@ const Search = () => {
   return (
    <>
     <div className=' mx-14 mb-14 shadow-red-100 shadow-2xl grid grid-rows-1 bg-white'>
-        <div className="p-10 shadow-slate-100 shadow-lg">
+        <div className="p-10 shadow-slate-100 shadow-lg ">
           <h3 className='font-semibold pb-3'>What are you looking for?</h3>
           <div className='flex'>
             <label className="relative block w-10/12">
@@ -19,12 +19,13 @@ const Search = () => {
                 </svg>
               </span>
             </label>
-            <span className="w-2/12">
+            <span className="md:w-2/12">
               <Button className="w-10/12 ml-5" text="Search" colorClass="text-red-500" onClick={() => console.log('Button clicked')} />
             </span>
           </div>
         </div>
-        <div className="grid grid-cols-6 mt-3 gap-1 place-items-center">
+
+        <div className="grid md:grid-cols-6 mt-3 gap-1 place-items-center">
 
           <div className='grid-cols-1 border-r border-gray-300 w-full'>
             <Link to="/cars/types/sedan" className="flex flex-col items-center cursor-pointer">

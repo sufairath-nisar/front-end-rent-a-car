@@ -9,6 +9,17 @@ import HomeLayout from './layouts/HomeLayout';
 import Sedan from './components/cars/carTypes/Sedan';
 import path from 'path';
 import SedanPage from './pages/cars/types/SedanPage';
+import NissanPage from './pages/cars/brands/NissanPage';
+import InfinitiPage from './pages/cars/brands/InfinitiPage';
+import KiaPage from './pages/cars/brands/KiaPage';
+import MistubishiPage from './pages/cars/brands/MistubishiPage';
+import ChevroletPage from './pages/cars/brands/ChevroletPage';
+import RenaultPage from './pages/cars/brands/RenaultPage';
+import HyundaiPage from './pages/cars/brands/HyundaiPage';
+import MgPage from './pages/cars/brands/MgPage';
+import ToyotaPage from './pages/cars/brands/ToyotaPage';
+import RentalDeals from './components/clients/RentalDeals';
+import WhyChooseUs from './components/clients/WhyChooseUs';
 
 
 const router = createBrowserRouter([
@@ -18,6 +29,14 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <HomePage />,
+      },
+      {
+        path: "/rental-deals",
+        element: <RentalDeals />
+      },
+      {
+        path: "/why-choose-us",
+        element: <WhyChooseUs />
       },
       {
         path: "/clients/signup",
@@ -32,7 +51,46 @@ const router = createBrowserRouter([
   {
         element: <SedanPage />,
         path: "/cars/types/sedan"
-  }
+  },
+
+  
+  {
+    path: "/cars/brands/nissan",
+    element: <NissanPage />
+  },
+  {
+    path: "/cars/brands/infiniti",
+    element: <InfinitiPage />
+  },
+  {
+    path: "/cars/brands/kia",
+    element: <KiaPage />
+  },
+  {
+    path: "/cars/brands/mistubishi",
+    element: <MistubishiPage />
+  },
+  {
+    path: "/cars/brands/chevrolet",
+    element: <ChevroletPage />
+  },
+  {
+    path: "/cars/brands/renault",
+    element: <RenaultPage />
+  },
+  {
+    path: "/cars/brands/hyundai",
+    element: <HyundaiPage />
+  },
+  {
+    path: "/cars/brands/mg",
+    element: <MgPage />
+  },
+  {
+    path: "/cars/brands/toyota",
+    element: <ToyotaPage />
+  },
+ 
 
 ]);
 
