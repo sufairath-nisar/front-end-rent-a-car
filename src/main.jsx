@@ -18,8 +18,8 @@ import RenaultPage from './pages/cars/brands/RenaultPage';
 import HyundaiPage from './pages/cars/brands/HyundaiPage';
 import MgPage from './pages/cars/brands/MgPage';
 import ToyotaPage from './pages/cars/brands/ToyotaPage';
-import RentalDeals from './components/clients/RentalDeals';
-import WhyChooseUs from './components/clients/WhyChooseUs';
+import RentaldealsPage from './pages/clients/RentaldealsPage';
+import WhychooseusPage from './pages/clients/WhychooseusPage';
 
 
 const router = createBrowserRouter([
@@ -32,11 +32,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/rental-deals",
-        element: <RentalDeals />
+        element: <RentaldealsPage />
       },
       {
         path: "/why-choose-us",
-        element: <WhyChooseUs />
+        element: <WhychooseusPage />
       },
       {
         path: "/clients/signup",

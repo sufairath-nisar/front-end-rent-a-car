@@ -5,8 +5,23 @@ import { Link } from 'react-router-dom';
 import Search from './Search';
 import CarouselTestimonial from './CarouselTestimonial';
 import CardBrand from './CardBrand';
+import CardDocuments from './CardDocuments';
 
 export const Home = () => {
+  const titleEmiratis = "Emiratis & UAE Residents";
+  const itemsEmiratis = [
+    "A valid UAE Driving License under hirer name",
+    "Emirates ID front & back",
+    "Passport & Visa page copy",
+    
+  ];
+
+  const titleTourists = "Foreign Tourists";
+  const itemsTourists = [
+    "International & country Driving License under hirer name",
+    "Copy of Visa and Entry Stamp",
+    "Passport copy",
+  ];
 
   return (
     <>
@@ -93,8 +108,23 @@ export const Home = () => {
  
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 section-outline pt-12 pb-16">
-        <div className='flex pl-16 pb-16 flex-col justify-center h-full'>
+    <div className='section-documents-required  pb-14 pt-12'>      
+        <div className='pb-10 grid grid-cols-1 text-center'>
+          <h2 className='font-medium'>Mandatory <span className='text-red-700'>Documents</span></h2>
+        </div>
+            
+        <div className="grid grid-cols-1 gap-10 px-16 md:grid-cols-2 ">
+          <div>
+            <CardDocuments title={titleEmiratis} items={itemsEmiratis} path={'/images/document-required-1new.png'}/>
+          </div>
+          <div>
+            <CardDocuments title={titleTourists} items={itemsTourists} path={'/images/documents-required-visit.png'}/>
+          </div>
+        </div>        
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 section-outline pt-8 pb-16">
+        <div className='flex pl-16 pr-9 md:pr-0 pb-16 flex-col justify-center h-full'>
             <h3 className='text-red-700  pb-6 font-medium'>Rent a car across the UAE</h3>
             <p>With a comprehensive fleet of new and highly maintained vehicles, Shift Car Rental offers the best car hire deals in Dubai, Abu Dhabi and norther Emirates. And with award-winning services, you can always expect the highest quality standards.</p>
         </div>
@@ -149,7 +179,7 @@ export const Home = () => {
 
     </div>
      
-    <div className='grid grid-rows-1 section-safety relative pb-8 w-full '>
+    <div className='grid grid-rows-1 section-safety relative pb-12 w-full '>
           <div className='grid grid-cols-2'>
 
             <div className='flex  absolute  -top-1/5 transform -translate-y-1/2'>
@@ -167,7 +197,7 @@ export const Home = () => {
           </div>
     </div>
 
-    <div className='section-how-it-works p-14'>
+    <div className='section-how-it-works px-14 pt-14 pb-8'>
       <div className='text-center grid grid-rows-1 pb-8'>
         <h2 className='font-medium'>
           How it <span className='text-red-700'>Works</span>
