@@ -20,6 +20,8 @@ import MgPage from './pages/cars/brands/MgPage';
 import ToyotaPage from './pages/cars/brands/ToyotaPage';
 import RentaldealsPage from './pages/clients/RentaldealsPage';
 import WhychooseusPage from './pages/clients/WhychooseusPage';
+import OurlocationsPage from './pages/clients/OurlocationsPage';
+import ContactusPage from './pages/clients/ContactusPage';
 
 
 const router = createBrowserRouter([
@@ -33,6 +35,14 @@ const router = createBrowserRouter([
       {
         path: "/rental-deals",
         element: <RentaldealsPage />
+      },
+      {
+        path: "/our-locations",
+        element: <OurlocationsPage />
+      },
+      {
+        path: "/contact-us",
+        element: <ContactusPage />
       },
       {
         path: "/why-choose-us",

@@ -76,3 +76,7 @@ background-color : #0000;
 /* .section-documents-required .list-disc ::marker{
   color: #B91C1C !important;
 } */
+
+.our-locations{
+  min-height:400px;
+}
