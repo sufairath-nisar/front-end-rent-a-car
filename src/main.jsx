@@ -22,6 +22,7 @@ import RentaldealsPage from './pages/clients/RentaldealsPage';
 import WhychooseusPage from './pages/clients/WhychooseusPage';
 import OurlocationsPage from './pages/clients/OurlocationsPage';
 import ContactusPage from './pages/clients/ContactusPage';
+import SafetyPage from './pages/clients/SafetyPage';
 
 
 const router = createBrowserRouter([
@@ -56,14 +57,14 @@ const router = createBrowserRouter([
         path: "/clients/signin",
         element: <SigninPage />,
       },
-    ],
-  },
-  {
+      {
+        path: "/clients/safety",
+        element: <SafetyPage />
+      },
+      {
         element: <SedanPage />,
         path: "/cars/types/sedan"
   },
-
-  
   {
     path: "/cars/brands/nissan",
     element: <NissanPage />
@@ -99,6 +100,8 @@ const router = createBrowserRouter([
   {
     path: "/cars/brands/toyota",
     element: <ToyotaPage />
+  },
+    ],
   },
  
 

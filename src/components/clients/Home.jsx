@@ -190,7 +190,9 @@ export const Home = () => {
             <h2 className="font-medium pb-5 text-center">We are responsible for your safety</h2>
               <p>Each vehicle in our inventory is meticulously checked and maintained to ascertain the safety of its passengers. We can also customize your vehicle and make it perfect for any occasion with features such as child booster seats, GPS, and even provisions such as additional drivers on the rental cars.</p>
               <div className='flex justify-center  pt-8'>
-              <Button text="FIND MORE DETAILS" onClick={() => console.log('Button clicked')} />
+              <Link to="/clients/safety">
+                  <Button text="FIND MORE DETAILS" onClick={() => console.log('Button clicked')} />
+              </Link>
               </div>
             </div>
           

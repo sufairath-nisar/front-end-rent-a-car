@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Button from './Button'; // Assuming Button component is defined
+import { IoLocationSharp, IoCallSharp } from 'react-icons/io5'; // Import Ionicons from react-icons
 
 const OurLocations = () => {
   const [locations, setLocations] = useState([]); // All locations (initially empty)
@@ -53,13 +54,13 @@ const OurLocations = () => {
   return (
     <div className="our-locations text-center p-16">
       <h2 className="font-semibold  mb-12">Our <span className='text-red-700'>Locations</span></h2>
-      <div className="city-buttons grid grid-cols-6 gap-4">
+      <div className="city-buttons grid grid-cols-1 md:grid-cols-6 gap-4">
         {cityOptions.map((city) => (
           <Button
             key={city}
             text={city}
             onClick={() => handleCityButtonClick(city)}
-            className={`w-full md:w-auto mr-2 mb-2 ${selectedCity === city ? 'bg-opacity-75' : ''}`} // Adjust button width and apply selected opacity
+            className={`w-full md:w-auto mr-2 mb-2 ${selectedCity === city ? 'bg-opacity-75' : ''}`} 
           />
         ))}
       </div>
@@ -70,19 +71,25 @@ const OurLocations = () => {
       ) : (
         <>
           {filteredLocations.length === 0 ? (
-            <p>No branches available</p>
+            <p className='pt-8 text-red-700'>No branches available!</p>
           ) : (
-            <div className="location-details text-left pt-14">
-              {/* Display details of the filtered locations here */}
-              {filteredLocations.map((location) => (
-                <div key={location._id} className="location-item">
-                  <p>Branch: {location.name}</p>
-                  <p>Address: {location.address}</p>
-                  <p>Phone: {location.ph}</p>
-                  {/* Add more details based on your location data structure */}
+            <div className="location-details grid grid-cols-1 md:grid-cols-4 gap-4 text-left pt-14">
+         
+            {filteredLocations.map((location) => (
+              <div key={location._id} className="location-item flex flex-col"> 
+                <p className='text-red-700  mb-2'>{location.name}</p>
+                <div className="flex items-center mb-2">
+                  <IoLocationSharp className="h-5 w-5 mr-2 text-gray-500" /> 
+                  <p className="address-text">{location.address}</p> 
                 </div>
-              ))}
-            </div>
+                <div className="flex items-center"> 
+                  <IoCallSharp className="h-5 w-5 mr-2 text-gray-500" /> 
+                  <p>{location.ph}</p> 
+                </div>
+              </div>
+            ))}
+          </div>
+          
           )}
         </>
       )}

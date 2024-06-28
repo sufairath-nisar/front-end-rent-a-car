@@ -3,11 +3,11 @@ import React from 'react'
 const RentalDeals = () => {
   return (
     <>
-        <div className='pt-14 pb-10'>
+        <div className='pb-14 pt-16'>
             
-            <h1 className='pb-5  text-center font-semibold'>Rental<span className='text-red-700'> Deals</span></h1>
+            <h2 className='text-center pb-4 font-semibold'>Rental<span className='text-red-700'> Deals</span></h2>
            
-            <div className='grid py-6 px-20 grid-rows-1'>
+            <div className='grid py-5 px-20 grid-rows-1'>
                 <h3 className='text-red-700 pb-2 font-medium'>Exceptional Car Rental Deals in the UAE</h3>
                 <p className='pb-10'>Discover unparalleled car rental services across all emirates in the UAE with our exclusive offers tailored to your needs. Whether you hold a visit visa or an Emirates ID, our streamlined rental process ensures you get on the road quickly and efficiently. Embrace the freedom to explore the UAE with our extensive fleet of well-maintained vehicles, designed to cater to both luxury and budget preferences.</p>
                 <h3 className='text-red-700 pb-2 font-medium'>Flexible Payment Methods</h3>
