@@ -1,12 +1,12 @@
 import React from 'react'
 import CarList from '../../../components/cars/CarList'
 
-const SedanPage = () => {
+const HatchbackPage = () => {
   return (
     <>
-      {/* <CarList /> */}
+        <CarList />
     </>
   )
 }
 
-export default SedanPage
+export default HatchbackPage

@@ -88,3 +88,7 @@ background-color : #0000;
 .section-carlist{
   min-height: 450px;
 }
+
+.badge-info{
+  background-color: #B91C1C !important;
+}

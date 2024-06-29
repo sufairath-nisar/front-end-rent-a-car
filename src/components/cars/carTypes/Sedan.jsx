@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import CardCar from '../CardCar'
-import Pagination from '../Pagination'
+import React, { useState, useEffect } from 'react';
+import CardCar from '../CardCar';
+import Pagination from '../Pagination';
+
 
 const Sedan = () => {
   const [totalPages, setTotalPages] = useState(4) // Example value

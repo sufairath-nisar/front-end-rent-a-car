@@ -1,69 +1,86 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Button from './Button';
+<div className='grid grid-cols-5 mb-4 gap-3'>
+<div className='flex items-center justify-center'>
+  <img src='/images/icons/feature-icon.png' className='w-6' />
+  <p className='pl-1'>YES</p>
+</div>
 
-const OurLocations = () => {
-  const [locations, setLocations] = useState([]);
-  const [selectedLocation, setSelectedLocation] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
+<div className='flex items-center justify-center'>
+  <img src='/images/icons/feature-icon-seat.png' className='w-6'/>
+  <p className='pl-1'>4</p>
+</div>
 
-  useEffect(() => {
-    axios.get('http://localhost:3000/api/v1/clients/') // Adjust URL as per your backend setup
-      .then(response => {
-        setLocations(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching locations:', error);
-      });
-  }, []);
+<div className='flex items-center justify-center'>
+  <img src='/images/icons/feature-icon-leather.png' className='w-6'/>
+  <p className='pl-1'>YES</p>
+</div>
 
-  const handleSearch = () => {
-    axios.get(`http://localhost:3000/api/v1/clients/search/byAddress?address=${searchQuery}`)
-      .then(response => {
-        setLocations(response.data);
-      })
-      .catch(error => {
-        console.error('Error searching locations:', error);
-      });
-  };
+<div className='flex items-center justify-center'>
+  <img src='/images/icons/feature-icon-navigation.png' className='w-6'/>
+  <p className='pl-1'>YES</p>
+</div>
 
-  const handleButtonClick = (locationName) => {
-    const location = locations.find(loc => loc.name === locationName);
-    setSelectedLocation(location);
-  };
+<div className='flex items-center justify-center'>
+  <img src='/images/icons/feature-icon-alloywheel.png' className='w-6'/>
+  <p className='pl-1'>YES</p>
+</div>
 
-  return (
-    <div>
-      <h2 className="text-2xl font-semibold mb-4">Our Locations</h2>
-      <div className="mb-4">
-        <input 
-          type="text" 
-          value={searchQuery} 
-          onChange={(e) => setSearchQuery(e.target.value)} 
-          placeholder="Search by address" 
-          className="border p-2 rounded mr-2"
-        />
-        <Button text="Search" onClick={handleSearch} className="p-2 bg-blue-500 text-white rounded" />
-      </div>
-      <div className="button-group grid grid-cols-1 md:grid-cols-6 gap-2 mb-4">
-        {locations.map((location, index) => (
-          <Button 
-            key={index} 
-            text={location.name} 
-            onClick={() => handleButtonClick(location.name)}
-            className="w-full md:w-auto"
-          />
-        ))}
-      </div>
-      {selectedLocation && (
-        <div className="location-details p-4 border border-gray-200 rounded shadow-sm">
-          <h3 className="text-xl font-semibold mb-2">{selectedLocation.name}</h3>
-          <p className="mb-1"><strong>Address:</strong> {selectedLocation.address}</p>
-          <p><strong>Phone:</strong> {selectedLocation.ph}</p>
-        </div>
-      )}
-    </div>
-  );
-};
+<div className='flex items-center justify-center'>
+  <img src='/images/icons/feature-icon-apple.png' className='w-6'/>
+  <p className='pl-1'>YES</p>
+</div>
 
-export default OurLocations;
+<div className='flex items-center justify-center'>
+  <img src='/images/icons/feature-icon-rear-camera.png' className='w-6'/>
+  <p className='pl-1'>YES</p>
+</div>
+
+<div className='flex items-center justify-center'>
+  <img src='/images/icons/feature-icon-remote.png' className='w-6'/>
+  <p className='pl-1'>YES</p>
+</div>
+
+<div className='flex items-center justify-center'>
+  <img src='/images/icons/feature-icon-door.png' className='w-6'/>
+  <p className='pl-1'>4</p>
+</div>
+
+<div className='flex items-center justify-center'>
+  <img src='/images/icons/feature-icon-aux.png' className='w-6'/>
+  <p className='pl-1'>YES</p>
+</div>
+
+<div className='flex items-center justify-center'>
+  <img src='/images/icons/feature-icon-sensor.png' className='w-8'/>
+  <p className='pl-1'>YES</p>
+</div>
+
+<div className='flex items-center justify-center'>
+  <img src='/images/icons/feature-icon-airbag.png' className='w-6'/>
+  <p className='pl-1'>YES</p>
+</div>
+
+<div className='flex items-center justify-center'>
+  <img src='/images/icons/feature-icon-foglamp.png' className='w-6'/>
+  <p className='pl-1'>YES</p>
+</div>
+
+<div className='flex items-center justify-center'>
+  <img src='/images/icons/feature-icon-cruise-control.png' className='w-6'/>
+  <p className='pl-1'>YES</p>
+</div>
+
+<div className='flex items-center justify-center'>
+  <img src='/images/icons/feature-icon-mp3.png' className='w-6'/>
+  <p className='pl-1'>YES</p>
+</div>
+
+<div className='flex items-center justify-center'>
+  <img src='/images/icons/feature-icon-usb.png' className='w-6'/>
+  <p className='pl-1'>NO</p>
+</div>
+
+<div className='flex items-center justify-center'>
+  <img src='/images/icons/feature-icon-passengers.png' className='w-6'/>
+  <p className='pl-1'>4</p>
+</div>
+</div>

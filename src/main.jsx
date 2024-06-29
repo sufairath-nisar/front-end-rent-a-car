@@ -23,6 +23,7 @@ import WhychooseusPage from './pages/clients/WhychooseusPage';
 import OurlocationsPage from './pages/clients/OurlocationsPage';
 import ContactusPage from './pages/clients/ContactusPage';
 import SafetyPage from './pages/clients/SafetyPage';
+import CarList from './components/cars/CarList';
 
 
 const router = createBrowserRouter([
@@ -62,9 +63,9 @@ const router = createBrowserRouter([
         element: <SafetyPage />
       },
       {
-        element: <SedanPage />,
-        path: "/cars/types/sedan"
-  },
+        path: "/cars/types/:value",
+        element: <CarList />,
+      },
   {
     path: "/cars/brands/nissan",
     element: <NissanPage />

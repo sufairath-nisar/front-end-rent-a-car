@@ -123,7 +123,7 @@ export const Home = () => {
         </div>        
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 section-outline pt-8 pb-16">
+    <div className="grid grid-cols-1 md:grid-cols-2 section-outline pt-8 pb-16">
         <div className='flex pl-16 pr-9 md:pr-0 pb-16 flex-col justify-center h-full'>
             <h3 className='text-red-700  pb-6 font-medium'>Rent a car across the UAE</h3>
             <p>With a comprehensive fleet of new and highly maintained vehicles, Shift Car Rental offers the best car hire deals in Dubai, Abu Dhabi and norther Emirates. And with award-winning services, you can always expect the highest quality standards.</p>
@@ -131,7 +131,7 @@ export const Home = () => {
 
         <div className='text-center grid-cols-1'>
             <h2 className='font-medium'>CHOOSE YOUR <span className='text-red-700'>RIDE</span></h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 pt-5 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 pt-5 gap-4">
               <Link to="/cars/all-cars" className="flex flex-col items-center cursor-pointer">
                   <div  className='place-items-center cursor-pointer text-center'>   
                       <img src='/images/icons/icon-red-outline-all.png' alt="Car"/>
