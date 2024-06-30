@@ -1,7 +1,7 @@
 import React from 'react'
 import Button from './Button';
 
-import Sedan from '../cars/carTypes/Sedan';
+// import Sedan from '../cars/carTypes/Sedan';
 import { Link } from 'react-router-dom';
 
 const Search = () => {
@@ -28,10 +28,10 @@ const Search = () => {
         <div className="grid md:grid-cols-6 mt-3 gap-1 place-items-center">
 
           <div className='grid-cols-1 border-r border-gray-300 w-full'>
-            <Link to="/cars/types/sedan" className="flex flex-col items-center cursor-pointer">
+            {/* <Link to="/cars/types/sedan" className="flex flex-col items-center cursor-pointer"> */}
               <img src='/images/icons/home-icon-sedan.png' alt="Sedan" />
               <p>Sedan</p>
-            </Link>
+            {/* </Link> */}
           </div>
 
           <div className='grid-cols-1 border-r border-gray-300 w-full'>

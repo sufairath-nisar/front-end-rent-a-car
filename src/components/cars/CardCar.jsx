@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '../clients/Button';
+import Car from '../../../../../BACK-END/models/carModel';
 
 const CardCar = ({ car }) => {
     console.log('Rendering car:', car);
@@ -18,7 +19,7 @@ const CardCar = ({ car }) => {
     const features = car.features[0];
     
     return (
-        <div className="card bg-base-100 -z-50 grid grid-rows-2 shadow-xl">
+        <div className="card bg-base-100 -z-50  shadow-xl">
 
            
             <figure className="px-2 pt-3">
@@ -30,9 +31,14 @@ const CardCar = ({ car }) => {
             </figure>
 
             <div className="card-body justify-center pb-6 pt-2 flex text-center">
-                <h2 className="card-title mb-5 text-center">{car.carName}</h2>
+                <h2 className="card-title mb-5 justify-center text-center">{car.carName}</h2>
+                {/* <div className='grid grid-cols-3'> */}
+                    {/* <div className="badge badge-primary badge-outline"><h4>AED {car.priceperday}</h4><p>/ Day</p></div>
+                    <div className="badge badge-secondary badge-outline"><h4>AED {car.priceperweek}</h4><p>/ Week</p></div>
+                    <div className="badge badge-accent badge-outline"><h4>AED {car.pricepermonth}</h4><p>/ Month</p></div> */}
+                {/* </div> */}
 
-                <div className='grid grid-cols-4 mb-6 gap-2'>
+                <div className='grid grid-cols-4 mb-6 gap-x-2 gap-y-4'>
                    
                     <FeatureItem icon='/images/icons/feature-icon.png' value={features.bluetooth} className='w-6'/>
                     <FeatureItem icon='/images/icons/feature-icon-seat.png' value={features.seats} className='w-6'/>

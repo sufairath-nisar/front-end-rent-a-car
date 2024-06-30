@@ -6,9 +6,9 @@ import SignupPage from './pages/clients/SignupPage';
 import SigninPage from './pages/clients/SigninPage';
 import { HomePage } from './pages/clients/HomePage';
 import HomeLayout from './layouts/HomeLayout';
-import Sedan from './components/cars/carTypes/Sedan';
-import path from 'path';
-import SedanPage from './pages/cars/types/SedanPage';
+// import Sedan from './components/cars/carTypes/Sedan';
+// import path from 'path';
+// import SedanPage from './pages/cars/types/SedanPage';
 import NissanPage from './pages/cars/brands/NissanPage';
 import InfinitiPage from './pages/cars/brands/InfinitiPage';
 import KiaPage from './pages/cars/brands/KiaPage';
@@ -88,7 +88,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/cars/brands/renault",
-    element: <RenaultPage />
+    element: <RenaultPage  />
   },
   {
     path: "/cars/brands/hyundai",

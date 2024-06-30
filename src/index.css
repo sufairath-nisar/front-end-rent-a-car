@@ -92,3 +92,9 @@ background-color : #0000;
 .badge-info{
   background-color: #B91C1C !important;
 }
+.section-carList{
+  min-height: 450px;
+}
+.no-cars{
+  color:yellow;
+}
