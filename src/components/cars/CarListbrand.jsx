@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import CardCar from './CardCar';
-import Pagination from './Pagination'; 
+import Pagination from './Pagination';
 
 
 
@@ -13,7 +13,7 @@ const capitalizeFirstLetter = (str) => {
     return formattedStr.charAt(0).toUpperCase() + formattedStr.slice(1);
 };
 
-const CarList = () => {
+const CarListbrand = () => {
     const { value } = useParams();
     const [cars, setCars] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -24,7 +24,7 @@ const CarList = () => {
     useEffect(() => {
         const fetchCars = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/api/v1/clients/get-cars/types/${value}`);
+                const response = await axios.get(`http://localhost:3000/api/v1/clients/get-cars/brand/${value}`);
                 
                 console.log('Fetched cars:', response.data);
                 setCars(response.data);
@@ -41,15 +41,14 @@ const CarList = () => {
         fetchCars();
     }, [value]); 
 
-  const indexOfLastCar = currentPage * carsPerPage;
-  const indexOfFirstCar = indexOfLastCar - carsPerPage;
-  const currentCars = cars.slice(indexOfFirstCar, indexOfLastCar);
-  const totalPages = Math.ceil(cars.length / carsPerPage);
-
-  const handlePageClick = (page) => {
-    setCurrentPage(page);
-  };
-
+    const indexOfLastCar = currentPage * carsPerPage;
+    const indexOfFirstCar = indexOfLastCar - carsPerPage;
+    const currentCars = cars.slice(indexOfFirstCar, indexOfLastCar);
+    const totalPages = Math.ceil(cars.length / carsPerPage);
+  
+    const handlePageClick = (page) => {
+      setCurrentPage(page);
+    };
 
     if (loading) {
         return <div className='flex justify-center md:h-64 items-center text-red-700'>Loading cars...</div>;
@@ -66,10 +65,10 @@ const CarList = () => {
     return (
         
         <div className='section-carList text-center pt-32 pb-16'>
-            <h2 className='text-red-700 font-semibold pt-1'>{capitalizeFirstLetter(value)} Cars</h2>
+            <h2 className='text-red-700 font-semibold'>{capitalizeFirstLetter(value)} Cars</h2>
             {cars.length === 0 ? (
                     <div className='flex justify-center md:h-64 items-center'>
-                        <h3 className='justify-center items-center text-red-700'>No cars available</h3>
+                         <h3 className='justify-center items-center text-red-700'>No cars available</h3>
                     </div>
                 ) : (
                     <div className='grid md:grid-cols-3 grid-cols-1 gap-x-2 md:gap-x-7 gap-y-12 pb-16 pt-12 px-5 md:px-16'>
@@ -80,12 +79,11 @@ const CarList = () => {
                 )}
 
             <div className='grid grid-rows-1  justify-center'>
-                 <Pagination totalPages={totalPages} currentPage={currentPage} onPageClick={handlePageClick} />
+                <Pagination totalPages={totalPages} currentPage={currentPage} onPageClick={handlePageClick} />
             </div>
         </div>
-        
-       
+         
     );
 };
 
-export default CarList;
+export default CarListbrand;

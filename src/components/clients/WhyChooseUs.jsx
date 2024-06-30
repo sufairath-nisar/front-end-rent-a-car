@@ -3,8 +3,8 @@ import React from 'react'
 const WhyChooseUs = () => {
   return (
     <>
-        <div className=' py-14 px-24 '>
-            <h2 className='font-semibold text-center pb-8'>Why <span className='text-red-700'>Emirates Drive</span> is Your Premier Choice for Car Rentals</h2>
+        <div className=' md:pb-16 md:pt-32 md:px-24 px-4 py-10 '>
+            <h2 className='font-semibold md:text-center pb-8'>Why <span className='text-red-700'>Emirates Drive</span> is Your Premier Choice for Car Rentals</h2>
         
             <div className='grid grid-rows-1'>
                 <p className='pb-8  first-line:tracking-widest first-letter:text-7xl first-letter:font-bold first-letter:text-red-700 first-letter:mr-3 first-letter:float-left'><span className='text-red-700'>Emirates Drive</span>, since its inception in 2000, has led the car rental industry in the UAE, offering exceptional service and high-quality vehicles to clients throughout all emirates. Our two decades of experience have enabled us to refine our offerings, ensuring we consistently meet and exceed the expectations of our valued customers. With a profound understanding of the local market and a steadfast commitment to excellence, Emirates Drive is the premier choice for car rentals in the UAE.</p>

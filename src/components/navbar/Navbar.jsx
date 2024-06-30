@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 const Navbar = () => {
   const navLinks = [
     { path: "/", value: "Home" },
-    { path: "/cars", value: "Cars" },
+    { path: "/cars", value: "Cars", hasSubmenu: true },
     { path: "/rental-deals", value: "Rental deals" },
     { path: "/why-choose-us", value: "Why choose us" },
     { path: "/our-locations", value: "Our locations" },
@@ -24,27 +24,26 @@ const Navbar = () => {
     {
       value: "Category",
       subLinks: [
-        { path: "/cars/category/all", value: "All Cars" },
         { path: "/cars/category/small", value: "Small" },
         { path: "/cars/category/medium", value: "Medium" },
         { path: "/cars/category/crossover", value: "Crossover" },
-        { path: "/cars/category/suv", value: "SUV" },
+        { path: "/cars/category/SUV", value: "SUV" },
         { path: "/cars/category/luxury", value: "Luxury" },
         { path: "/cars/category/commercial", value: "Commercial" },
       ],
     },
     {
-      value: "Brands",
+      value: "Brand",
       subLinks: [
-        { path: "/cars/brands/nissan", value: "Nissan" },
-        { path: "/cars/brands/infiniti", value: "Infiniti" },
-        { path: "/cars/brands/kia", value: "KIA" },
-        { path: "/cars/brands/mitsubishi", value: "Mitsubishi" },
-        { path: "/cars/brands/chevrolet", value: "Chevrolet" },
-        { path: "/cars/brands/renault", value: "Renault" },
-        { path: "/cars/brands/hyundai", value: "Hyundai" },
-        { path: "/cars/brands/mg", value: "MG" },
-        { path: "/cars/brands/toyota", value: "Toyota" },
+        { path: "/cars/brand/nissan", value: "Nissan" },
+        { path: "/cars/brand/infiniti", value: "Infiniti" },
+        { path: "/cars/brand/KIA", value: "KIA" },
+        { path: "/cars/brand/mitsubishi", value: "Mitsubishi" },
+        { path: "/cars/brand/chevrolet", value: "Chevrolet" },
+        { path: "/cars/brand/renault", value: "Renault" },
+        { path: "/cars/brand/hyundai", value: "Hyundai" },
+        { path: "/cars/brand/MG", value: "MG" },
+        { path: "/cars/brand/toyota", value: "Toyota" },
       ],
     },
   ];
@@ -55,25 +54,45 @@ const Navbar = () => {
   ];
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [openSubmenuIndex, setOpenSubmenuIndex] = useState(null);
+  const [activeCarsLink, setActiveCarsLink] = useState(false); // State to track active state of Cars link
+  const [activeSubmenuIndex, setActiveSubmenuIndex] = useState(null); // State to track active submenu item
+  const [activeSubLink, setActiveSubLink] = useState(null); // State to track active sub-link
 
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);
+    setActiveCarsLink(!activeCarsLink); // Toggle active state of Cars link
   };
 
   const handleSubmenuToggle = (index) => {
-    setOpenSubmenuIndex(openSubmenuIndex === index ? null : index);
+    setActiveSubmenuIndex(activeSubmenuIndex === index ? null : index);
+    setActiveCarsLink(true); // Ensure Cars link remains active when submenu is opened
   };
 
   const handleDropdownBlur = (e) => {
     if (!e.currentTarget.contains(e.relatedTarget)) {
       setIsDropdownOpen(false);
-      setOpenSubmenuIndex(null);
+      // Do not reset activeCarsLink here to maintain its active state when a submenu is active
     }
   };
 
+  const handleNavLinkClick = () => {
+    setIsDropdownOpen(false);
+    setActiveSubmenuIndex(null);
+    // Reset activeCarsLink when another nav link (outside of Cars) is clicked
+    setActiveCarsLink(false);
+    // Reset active sub-link when a nav link is clicked
+    setActiveSubLink(null);
+  };
+
+  const handleSubLinkClick = (path) => {
+    setIsDropdownOpen(false); // Close dropdown when a sub-link is clicked
+    setActiveSubmenuIndex(null); // Clear active submenu index
+    // Set active sub-link to the clicked sub-link path
+    setActiveSubLink(path);
+  };
+
   return (
-    <div className="flex flex-wrap justify-between items-center p-2 text-2xl shadow-lg top-0 sticky bg-white">
+    <div className="fixed top-0 left-0 right-0 z-30 flex flex-wrap justify-between items-center p-2 text-2xl shadow-lg bg-white">
       <div className="flex items-center">
         <img src="/images/logo1.jpeg" className="h-16 w-48" alt="Logo" />
       </div>
@@ -96,19 +115,16 @@ const Navbar = () => {
           />
         </svg>
       </button>
-      <div className={`${isDropdownOpen ? 'block' : 'hidden'} w-full md:flex md:items-center md:w-auto`}>
+      <div className={`${isDropdownOpen ? "block" : "hidden"} w-full md:flex md:items-center md:w-auto`}>
         <ul className="flex flex-col md:flex-row items-center md:gap-x-5 text-base">
           {navLinks.map((link, index) => (
             <li key={index} className="relative">
-              {link.value === "Cars" ? (
-                <div
-                  className="dropdown z-50"
-                  onBlur={handleDropdownBlur}
-                >
+              {link.hasSubmenu ? (
+                <div className="dropdown z-50" onBlur={handleDropdownBlur}>
                   <button
                     tabIndex={0}
                     onClick={handleDropdownToggle}
-                    className={`btn-ghost m-1 ${isDropdownOpen ? "text-red-600" : "text-hover"}`}
+                    className={`btn-ghost m-1 ${activeCarsLink ? "text-red-700" : "text-hover"}`}
                   >
                     Cars
                   </button>
@@ -120,19 +136,24 @@ const Navbar = () => {
                       {carDropdownLinks.map((carLink, carIndex) => (
                         <li key={carIndex} className="relative">
                           <button
-                            className={`w-full text-left hover:text-red-500 hover:bg-red-50 ${openSubmenuIndex === carIndex ? "bg-red-50 text-red-600" : "text-hover"}`}
+                            className={`w-full text-left hover:text-red-500 hover:bg-red-50 ${
+                              activeSubmenuIndex === carIndex ? "text-red-700" : "text-hover"
+                            }`}
                             onClick={() => handleSubmenuToggle(carIndex)}
-                            style={openSubmenuIndex === carIndex ? { color: "#DC2626", backgroundColor: "#FEF2F2" } : {}}
+                            style={activeSubmenuIndex === carIndex ? { color: "#DC2626", backgroundColor: "#FEF2F2" } : {}}
                           >
                             {carLink.value}
                           </button>
-                          {openSubmenuIndex === carIndex && (
-                            <ul className="absolute top-0 left-full bg-white shadow rounded-box w-52">
+                          {activeSubmenuIndex === carIndex && (
+                            <ul className="absolute top-0 p-2 left-full bg-white shadow rounded-box w-52">
                               {carLink.subLinks.map((subLink, subIndex) => (
                                 <li key={subIndex}>
                                   <NavLink
                                     to={subLink.path}
-                                    className={({ isActive }) => isActive ? "text-red-600 bg-red-50" : "hover:bg-red-50 text-hover"}
+                                    onClick={() => handleSubLinkClick(subLink.path)} // Handle click on sub-links to close dropdown
+                                    className={({ isActive }) =>
+                                      isActive || activeSubLink === subLink.path ? "bg-red-700 text-white" : "text-hover sublink-hover"
+                                    }
                                   >
                                     {subLink.value}
                                   </NavLink>
@@ -148,7 +169,8 @@ const Navbar = () => {
               ) : (
                 <NavLink
                   to={link.path}
-                  className={({ isActive }) => isActive ? "text-red-600" : "text-hover"}
+                  onClick={handleNavLinkClick} // Handle click on regular nav links to reset Cars state
+                  className={({ isActive }) => isActive ? "text-red-700" : "text-hover"}
                 >
                   {link.value}
                 </NavLink>
@@ -157,17 +179,16 @@ const Navbar = () => {
           ))}
         </ul>
       </div>
-      <div className={`${isDropdownOpen ? 'block' : 'hidden'} w-full md:flex md:items-center md:w-auto`}>
+      <div className={`${isDropdownOpen ? "block" : "hidden"} w-full md:flex md:items-center md:w-auto`}>
         <ul className="flex flex-col md:flex-row items-center md:gap-x-5 text-base">
           {authLinks.map((link, index) => (
             <li key={index}>
               <NavLink
                 to={link.path}
-                className={({ isActive }) => isActive ? "text-red-500" : "text-red-700 text-hover"}
+                onClick={handleNavLinkClick} // Handle click on auth links to reset Cars state
+                className={({ isActive }) => isActive ? "text-red-700" : "text-red-700 text-hover"}
               >
-                <button className="btn btn-active btn-link text-red-700 text-hover">
-                  {link.value}
-                </button>
+                <button className="btn btn-active btn-link text-red-700 text-hover">{link.value}</button>
               </NavLink>
             </li>
           ))}

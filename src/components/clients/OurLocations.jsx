@@ -52,7 +52,7 @@ const OurLocations = () => {
   };
 
   return (
-    <div className="our-locations text-center p-16">
+    <div className="our-locations text-center pt-32 pb-16 px-16">
       <h2 className="font-semibold  mb-12">Our <span className='text-red-700'>Locations</span></h2>
       <div className="city-buttons grid grid-cols-1 md:grid-cols-6 gap-4">
         {cityOptions.map((city) => (
@@ -77,7 +77,7 @@ const OurLocations = () => {
          
             {filteredLocations.map((location) => (
               <div key={location._id} className="location-item flex flex-col"> 
-                <p className='text-red-700  mb-2'>{location.name}</p>
+                <p className='text-red-700  mb-2'>{location.name.toUpperCase()}</p>
                 <div className="flex items-center mb-2">
                   <IoLocationSharp className="h-5 w-5 mr-2 text-gray-500" /> 
                   <p className="address-text">{location.address}</p> 

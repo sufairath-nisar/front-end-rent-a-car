@@ -1,30 +1,68 @@
-import React, { useState } from 'react';
+// Pagination.jsx
+import React from 'react';
 
-
-const Pagination = ({ totalPages }) => {
-  const [selectedPage, setSelectedPage] = useState(1)
-
+const Pagination = ({ totalPages, currentPage, onPageClick }) => {
   const handlePageClick = (page) => {
-    setSelectedPage(page)
-  }
+    onPageClick(page);
+  };
 
-  return (
-    <div className="join">
-      {[...Array(totalPages)].map((_, index) => {
-        const page = index + 1
-        const isSelected = page === selectedPage
-        return (
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(i);
+    }
+
+    // Determine which page numbers to display based on the total pages
+    let displayedPages = [];
+    if (totalPages <= 3) {
+      displayedPages = pageNumbers; // Show all pages if total pages <= 3
+    } else {
+      if (currentPage <= 2) {
+        displayedPages = pageNumbers.slice(0, 3); // Show first 3 pages
+      } else if (currentPage >= totalPages - 1) {
+        displayedPages = pageNumbers.slice(totalPages - 3, totalPages); // Show last 3 pages
+      } else {
+        displayedPages = pageNumbers.slice(currentPage - 1, currentPage + 2); // Show 3 pages around the current page
+      }
+    }
+
+    return (
+      <>
+        {currentPage > 1 && (
+          <button
+            className="join-item btn btn-square bg-white text-black hover:bg-red-100"
+            onClick={() => handlePageClick(currentPage - 1)}
+          >
+            {'<'}
+          </button>
+        )}
+        {displayedPages.map((page) => (
           <button
             key={page}
-            className={`join-item btn btn-square ${isSelected ? 'bg-red-700 text-white' : 'bg-white text-black'} hover:bg-red-100`}
+            className={`join-item btn btn-square ${page === currentPage ? 'bg-red-700 text-white' : 'bg-white text-black'} hover:bg-red-100`}
             onClick={() => handlePageClick(page)}
           >
             {page}
           </button>
-        )
-      })}
-    </div>
-  )
-}
+        ))}
+        {currentPage < totalPages && (
+          <button
+            className="join-item btn btn-square bg-white text-black hover:bg-red-100"
+            onClick={() => handlePageClick(currentPage + 1)}
+          >
+            {'>'}
+          </button>
+        )}
+      </>
+    );
+  };
 
-export default Pagination
+  return (
+    <div className="join">
+      {renderPageNumbers()}
+    </div>
+  );
+};
+
+export default Pagination;

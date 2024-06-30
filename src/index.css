@@ -25,10 +25,15 @@
     
   }
 
- 
+
+  
+.sublink-hover:hover{
+  @apply bg-red-50;
+  @apply text-red-700;
+}
 
 .text-hover:hover {
-    @apply text-red-600;
+    @apply text-red-700;   
 }
 
 /* Home */

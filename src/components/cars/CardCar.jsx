@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '../clients/Button';
-import Car from '../../../../../BACK-END/models/carModel';
+
 
 const CardCar = ({ car }) => {
     console.log('Rendering car:', car);
@@ -19,7 +19,7 @@ const CardCar = ({ car }) => {
     const features = car.features[0];
     
     return (
-        <div className="card bg-base-100 -z-50  shadow-xl">
+        <div className="card bg-base-100 -z-50  shadow-2xl">
 
            
             <figure className="px-2 pt-3">
@@ -31,14 +31,17 @@ const CardCar = ({ car }) => {
             </figure>
 
             <div className="card-body justify-center pb-6 pt-2 flex text-center">
-                <h2 className="card-title mb-5 justify-center text-center">{car.carName}</h2>
-                {/* <div className='grid grid-cols-3'> */}
-                    {/* <div className="badge badge-primary badge-outline"><h4>AED {car.priceperday}</h4><p>/ Day</p></div>
-                    <div className="badge badge-secondary badge-outline"><h4>AED {car.priceperweek}</h4><p>/ Week</p></div>
-                    <div className="badge badge-accent badge-outline"><h4>AED {car.pricepermonth}</h4><p>/ Month</p></div> */}
-                {/* </div> */}
+                <div className='grid mb-2 grid-rows-1'>
+                     <h2 className="card-title mb-1 justify-center text-center text-red-700">{car.carName}</h2>
+                     <p className='font-semibold text-slate-500'>{car.km}<span className=' text-sm'> km</span></p>
+                </div>
+                <div className='grid gap-1 pb-5 grid-cols-3'>
+                    <div className="inline-flex items-center rounded-md bg-pink-50 px-1 py-1  font-semibold text-red-700 text-sm ring-1 ring-inset ring-pink-700/10 "><p>AED <span>{car.priceperday}</span><br /><span className='text-xs text-slate-500'>Per Day</span></p></div>
+                    <div className="inline-flex items-center rounded-md bg-pink-50 px-1 py-1  font-semibold text-red-700 text-sm ring-1 ring-inset ring-pink-700/10 "><p>AED <span>{car.priceperweek}</span><br /><span className='text-xs text-slate-500'>Per Week</span></p></div>
+                    <div className="inline-flex items-center rounded-md bg-pink-50 px-1 py-1  font-semibold text-red-700 text-sm ring-1 ring-inset ring-pink-700/10 "><p>AED <span>{car.pricepermonth}</span><br /><span className='text-xs text-slate-500'>Per Month</span></p></div>
+                </div>
 
-                <div className='grid grid-cols-4 mb-6 gap-x-2 gap-y-4'>
+                <div className='grid grid-cols-4 mb-10 gap-x-4 gap-y-4'>
                    
                     <FeatureItem icon='/images/icons/feature-icon.png' value={features.bluetooth} className='w-6'/>
                     <FeatureItem icon='/images/icons/feature-icon-seat.png' value={features.seats} className='w-6'/>
@@ -82,9 +85,9 @@ const FeatureItem = ({ icon, value }) => {
     }
 
     return (
-        <div className='flex items-center justify-center'>
+        <div className='flex '>
             <img src={icon} className='w-6' alt="Feature icon" />
-            <p className='pl-1'>{displayValue}</p>
+            <p className='pl-2 text-left'>{displayValue}</p>
         </div>
     );
 };

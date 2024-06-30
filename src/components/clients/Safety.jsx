@@ -7,7 +7,7 @@ const Safety = () => {
             
             <h2 className='pb-5  text-center font-semibold'>Emirates<span className='text-red-700'> Drive</span></h2>
            
-            <div className='grid py-6 px-24 grid-rows-1'>
+            <div className='grid py-6 px-5 md:px-24 grid-rows-1'>
                 <h3 className='text-red-700 pb-2 font-medium'>1. Comprehensive Safety Inspections</h3>
                 <p className='pb-10'>At our company, safety is our top priority. Each vehicle in our inventory undergoes a rigorous multi-point inspection before being added to our fleet. Our certified technicians check everything from the brakes and tires to the engine and electrical systems to ensure that each vehicle meets the highest safety standards. We believe that our customers deserve peace of mind, knowing that their vehicle is safe and reliable.</p>
                 <h3 className='text-red-700 pb-2 font-medium'>2. Regular Maintenance Schedules</h3>

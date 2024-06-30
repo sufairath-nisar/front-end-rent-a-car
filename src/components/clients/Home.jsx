@@ -26,9 +26,9 @@ export const Home = () => {
   return (
     <>
 
-    <div className="home-banner pb-5 min-h-screen">
+    <div className="home-banner md:pt-16 pt-28 pb-5 min-h-screen">
       <div className="grid md:grid-cols-3 grid-cols-1 gap-4 place-items-center">
-        <div className='pl-14 ml-5'>
+        <div className='md:pl-14  md:ml-5  max-[600px]:p-5'>
           <h1 className='font-bold leading-8'>
             Find, book and rent a car <span className='text-red-700'>Easily</span>
           </h1>
@@ -49,57 +49,57 @@ export const Home = () => {
           <h2 className='font-medium'>Explore <span className='text-red-700'>Brands</span></h2>
         </div>
             
-        <div className="grid grid-cols-1 gap-3 px-10 md:grid-cols-9 ">
-          <div className='grid-cols-1'>
-            <Link to="/cars/brands/nissan">
+        <div className="grid grid-cols-2 gap-4 md:px-10 px-16 md:grid-cols-9 justify-center">
+          <div className='grid-cols-1 justify-center flex'>
+            <Link to="/cars/brand/nissan">
               <CardBrand name="Nissan"  path="/images/nissan-logo.png"/>
             </Link>
           </div>
 
-          <div className='grid-cols-1'>
-            <Link to="/cars/brands/chevrolet">
+          <div className='grid-cols-1 justify-center flex'>
+            <Link to="/cars/brand/chevrolet">
               <CardBrand name="Chevrolet"  path="/images/chevrolet-logo.png"/>
             </Link>
           </div>
 
-          <div className='grid-cols-1'>
-            <Link to="/cars/brands/hyundai">
+          <div className='grid-cols-1 justify-center flex'>
+            <Link to="/cars/brand/hyundai">
               <CardBrand name="Hyundai"  path="/images/hyundai-logo.png"/>
             </Link>
           </div>
 
-          <div className='grid-cols-1'>
-            <Link to="/cars/brands/infiniti">
+          <div className='grid-cols-1 justify-center flex'>
+            <Link to="/cars/brand/infiniti">
               <CardBrand name="Infiniti"  path="/images/infiniti-logo.png"/>
             </Link>
           </div>
 
-          <div className='grid-cols-1'>
-            <Link to="/cars/brands/kia">
+          <div className='grid-cols-1 justify-center flex'>
+            <Link to="/cars/brand/kia">
               <CardBrand name="Kia"  path="/images/kia-logo.png"/>
             </Link>
           </div>
 
-          <div className='grid-cols-1'>
-              <Link to="/cars/brands/mg">
+          <div className='grid-cols-1 justify-center flex'>
+              <Link to="/cars/brand/mg">
                 <CardBrand name="MG"  path="/images/mg-logo.png"/>
               </Link>
           </div>
 
-          <div className='grid-cols-1'>
-              <Link to="/cars/brands/mistubishi">
+          <div className='grid-cols-1 justify-center flex'>
+              <Link to="/cars/brand/mistubishi">
                   <CardBrand name="Mistubishi"  path="/images/mistubishi-logo.webp"/>
               </Link>
           </div>
 
-          <div className='grid-cols-1'>
-              <Link to="/cars/brands/renault">
+          <div className='grid-cols-1 justify-center flex'>
+              <Link to="/cars/brand/renault">
                 <CardBrand name="Renault"  path="/images/renault-logo.png"/>
               </Link>
           </div>
 
-          <div className='grid-cols-1'>
-              <Link to="/cars/brands/toyota">
+          <div className='grid-cols-1 justify-center flex'>
+              <Link to="/cars/brand/toyota">
                 <CardBrand name="Toyota"  path="/images/toyota-logo.png"/>
               </Link>
           </div>
@@ -131,7 +131,7 @@ export const Home = () => {
 
         <div className='text-center grid-cols-1'>
             <h2 className='font-medium'>CHOOSE YOUR <span className='text-red-700'>RIDE</span></h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 pt-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 pt-5  max-[600px]:px-16 gap-4">
               <Link to="/cars/all-cars" className="flex flex-col items-center cursor-pointer">
                   <div  className='place-items-center cursor-pointer text-center'>   
                       <img src='/images/icons/icon-red-outline-all.png' alt="Car"/>
@@ -139,35 +139,35 @@ export const Home = () => {
                   </div>
               </Link>
               
-              <Link to="/cars/small-cars" className="flex flex-col items-center cursor-pointer">
+              <Link to="/cars/category/small" className="flex flex-col items-center cursor-pointer">
                   <div  className='place-items-center cursor-pointer text-center'>   
                       <img src='/images/icons/icon-red-outline-small.png' alt="Car"/>
                       <p>Small</p>
                   </div>
               </Link>
 
-              <Link to="/cars/medium-cars" className="flex flex-col items-center cursor-pointer">
+              <Link to="/cars/category/medium" className="flex flex-col items-center cursor-pointer">
                   <div  className='place-items-center cursor-pointer text-center'>   
                       <img src='/images/icons/icon-red-outline-medium.png' alt="Car"/>
                       <p>Medium</p>
                   </div>
               </Link>
 
-              <Link to="/cars/crossover" className="flex flex-col items-center cursor-pointer">
+              <Link to="/cars/category/crossover" className="flex flex-col items-center cursor-pointer">
                   <div className='place-items-center cursor-pointer text-center'>   
                       <img src='/images/icons/icon-red-outline-crossover.png' alt="Car" />
                       <p>Crossover</p>
                   </div>
               </Link>
 
-              <Link to="/cars/suv" className="flex flex-col items-center cursor-pointer">
+              <Link to="/cars/category/suv" className="flex flex-col items-center cursor-pointer">
                   <div className='place-items-center cursor-pointer text-center'> 
                       <img src='/images/icons/icon-red-outline-suv.png' alt="Car"/>
                       <p>SUV</p>
                   </div>
               </Link>     
                 
-              <Link to="/cars/luxury" className="flex flex-col items-center cursor-pointer">
+              <Link to="/cars/category/luxury" className="flex flex-col items-center cursor-pointer">
                     <div  className='place-items-center cursor-pointer text-center'>                      
                       <img src='/images/icons/icon-red-outline-luxury.png' alt="Car"/>
                       <p>Luxury</p>                 
