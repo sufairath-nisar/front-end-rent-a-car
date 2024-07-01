@@ -103,3 +103,7 @@ background-color : #0000;
 .no-cars{
   color:yellow;
 }
+
+.link-hover:hover {
+  @apply text-red-400;   
+}

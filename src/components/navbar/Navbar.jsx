@@ -180,15 +180,15 @@ const Navbar = () => {
         </ul>
       </div>
       <div className={`${isDropdownOpen ? "block" : "hidden"} w-full md:flex md:items-center md:w-auto`}>
-        <ul className="flex flex-col md:flex-row items-center md:gap-x-5 text-base">
+        <ul className="flex flex-col md:flex-row items-center md:gap-x-1 text-base">
           {authLinks.map((link, index) => (
             <li key={index}>
               <NavLink
                 to={link.path}
                 onClick={handleNavLinkClick} // Handle click on auth links to reset Cars state
-                className={({ isActive }) => isActive ? "text-red-700" : "text-red-700 text-hover"}
+                className={({ isActive }) => isActive ? "text-red-400" : "text-red-700 link-hover"}
               >
-                <button className="btn btn-active btn-link text-red-700 text-hover">{link.value}</button>
+                <button className="btn btn-active btn-link text-red-700 link-hover">{link.value}</button>
               </NavLink>
             </li>
           ))}

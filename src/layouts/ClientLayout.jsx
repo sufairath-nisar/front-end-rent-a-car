@@ -1,21 +1,21 @@
 import { Outlet } from "react-router-dom";
-import Navbar from "../components/navbar/Navbar";
+import ClientNavbar from "../components/navbar/clientNavbar";
 import Footer from "../components/footer/Footer";
 
-const HomeLayout = () => {
+const ClientLayout = () => {
   return (
     <>
       <nav>
-        <Navbar />
+        <ClientNavbar />
       </nav>
 
       <Outlet />
-      
+
       <footer>
-        <Footer />
+       <Footer />
       </footer>
     </>
   );
 };
 
-export default HomeLayout;
+export default ClientLayout;

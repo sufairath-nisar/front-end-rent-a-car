@@ -29,6 +29,8 @@ import CarListcategory from './components/cars/CarListcategory';
 // import CarListsearchPage from './pages/cars/CarListsearchPage';
 import CarListSearch from './components/cars/CarListSearch';
 import AllCarsPage from './pages/cars/AllCarsPage';
+import ClientLayout from './layouts/ClientLayout';
+import SettingsPage from './pages/clients/SettingsPage';
 
 
 const router = createBrowserRouter([
@@ -86,13 +88,68 @@ const router = createBrowserRouter([
       {
         path: "/cars/all-cars",
         element: <AllCarsPage />      
-      }
-  
+      },  
     ],
-
   },
- 
 
+  {
+    element: <ClientLayout />,
+    children: [
+      {
+        path: "/clients",
+        element: <HomePage />,
+      },
+      {
+        path: "/clients/rental-deals",
+        element: <RentaldealsPage />
+      },
+      {
+        path: "/clients/our-locations",
+        element: <OurlocationsPage />
+      },
+      {
+        path: "/clients/contact-us",
+        element: <ContactusPage />
+      },
+      {
+        path: "/clients/why-choose-us",
+        element: <WhychooseusPage />
+      },
+      {
+        path: "/clients/logout",
+        element: <HomePage />,
+      },
+      {
+        path: "/clients/account-settings",
+        element: <SettingsPage />,
+      },
+      {
+        path: "/clients/more-safety",
+        element: <SafetyPage />
+      },
+      {
+        path: "/clients/cars/types/:value",
+        element: <CarList />,
+      },
+      {
+        path: "/clients/cars/brand/:value",
+        element: <CarListbrand />
+      },
+      {
+        path: "/clients/cars/category/:value",
+        element: <CarListcategory />
+      },
+      {
+        path: "/clients/cars/search-cars/:searchTerm",
+        element: <CarListSearch />       
+      },
+      {
+        path: "/clients/cars/all-cars",
+        element: <AllCarsPage />      
+      },  
+    ],
+ 
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(

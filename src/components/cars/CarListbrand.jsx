@@ -3,6 +3,9 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import CardCar from './CardCar';
 import Pagination from './Pagination';
+import { Link } from 'react-router-dom';
+import Button from '../clients/Button';
+
 
 
 
@@ -51,7 +54,7 @@ const CarListbrand = () => {
     };
 
     if (loading) {
-        return <div className='flex justify-center md:h-64 items-center text-red-700'>Loading cars...</div>;
+        return <div className='flex justify-center h-64 items-center italic text-red-700'>Loading cars...</div>;
     }
 
     if (error) {
@@ -65,13 +68,18 @@ const CarListbrand = () => {
     return (
         
         <div className='section-carList text-center pt-32 pb-16'>
-            <h2 className='text-red-700 font-semibold'>{capitalizeFirstLetter(value)} Cars</h2>
+            <h2 className='text-red-700 font-semibold pt-2'>{capitalizeFirstLetter(value)} Cars</h2>
+            <div className=" pb-5 flex justify-center pt-4 md:pt-0 md:justify-end md:mr-16">
+                <Link to="/cars/all-cars" className="cursor-pointer">
+                    <Button text="View All Cars >>" />
+                </Link>
+            </div>
             {cars.length === 0 ? (
                     <div className='flex justify-center md:h-64 items-center'>
                          <h3 className='justify-center items-center text-red-700'>No cars available</h3>
                     </div>
                 ) : (
-                    <div className='grid md:grid-cols-3 grid-cols-1 gap-x-2 md:gap-x-7 gap-y-12 pb-16 pt-12 px-5 md:px-16'>
+                    <div className='grid md:grid-cols-3 grid-cols-1 gap-x-2 md:gap-x-7 gap-y-12 pb-16  px-5 md:px-16'>
                         {currentCars.map((car) => (
                             <CardCar key={car._id} car={car} />
                         ))}
