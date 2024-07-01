@@ -1,196 +1,298 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import axios from "axios";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import Button from "./Button";
 
-const Navbar = () => {
-  const navLinks = [
-    { path: "/", value: "Home" },
-    { path: "/cars", value: "Cars", hasSubmenu: true },
-    { path: "/rental-deals", value: "Rental deals" },
-    { path: "/why-choose-us", value: "Why choose us" },
-    { path: "/our-locations", value: "Our locations" },
-    { path: "/contact-us", value: "Contact us" },
-  ];
+const schema = yup.object().shape({
+  email: yup.string().email().required().min(3).max(30),
+  password: yup.string().required().min(6),
+  role: yup.string().oneOf(["personal", "corporate"]).required(),
+  firstName: yup.string().required('First name is a required field').max(50),
+  lastName: yup.string().required('Last name is a required field').max(50),
+  nationality: yup.string().required().max(50),
+  license: yup.string().required().max(50),
+  ph: yup.string()
+    .required('Phone number is a required field')
+    .max(20)
+    .matches(/^\+?[1-9]\d{1,14}$/, 'Please enter a valid phone number'),
+  address: yup.string().required().max(50),
+  companyName: yup.string()
+    .when('role', {
+      is: 'corporate',
+      then: (schema) => schema.required('Company name is required for corporate role').max(50),
+    }),
+  position: yup.string()
+    .when('role', {
+      is: 'corporate',
+      then: (schema) => schema.required('Position is required for corporate role').max(50),
+    }),
+  trn: yup.string()
+    .when('role', {
+      is: 'corporate',
+      then: (schema) => schema.required('TRN is required for corporate role').max(50),
+    }),
+});
 
-  const carDropdownLinks = [
-    {
-      value: "Types",
-      subLinks: [
-        { path: "/cars/types/sedan", value: "Sedan" },
-        { path: "/cars/types/hatchback", value: "Hatchback" },
-        { path: "/cars/types/crossover-SUV", value: "Crossover SUV" },
-        { path: "/cars/types/large-SUV", value: "Large SUV" },
-      ],
-    },
-    {
-      value: "Category",
-      subLinks: [
-        { path: "/cars/category/small", value: "Small" },
-        { path: "/cars/category/medium", value: "Medium" },
-        { path: "/cars/category/crossover", value: "Crossover" },
-        { path: "/cars/category/SUV", value: "SUV" },
-        { path: "/cars/category/luxury", value: "Luxury" },
-        { path: "/cars/category/commercial", value: "Commercial" },
-      ],
-    },
-    {
-      value: "Brand",
-      subLinks: [
-        { path: "/cars/brand/nissan", value: "Nissan" },
-        { path: "/cars/brand/infiniti", value: "Infiniti" },
-        { path: "/cars/brand/KIA", value: "KIA" },
-        { path: "/cars/brand/mitsubishi", value: "Mitsubishi" },
-        { path: "/cars/brand/chevrolet", value: "Chevrolet" },
-        { path: "/cars/brand/renault", value: "Renault" },
-        { path: "/cars/brand/hyundai", value: "Hyundai" },
-        { path: "/cars/brand/MG", value: "MG" },
-        { path: "/cars/brand/toyota", value: "Toyota" },
-      ],
-    },
-  ];
+// Helper function to capitalize the first letter of a string
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
-  const authLinks = [
-    { path: "/clients/signup", value: "Signup" },
-    { path: "/clients/signin", value: "Signin" },
-  ];
+export default function Signup() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(schema) });
 
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [activeCarsLink, setActiveCarsLink] = useState(false); // State to track active state of Cars link
-  const [activeSubmenuIndex, setActiveSubmenuIndex] = useState(null); // State to track active submenu item
+  const [role, setRole] = useState("personal");
 
-  const handleDropdownToggle = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-    setActiveCarsLink(!activeCarsLink); // Toggle active state of Cars link
-  };
-
-  const handleSubmenuToggle = (index) => {
-    setActiveSubmenuIndex(activeSubmenuIndex === index ? null : index);
-    setActiveCarsLink(true); // Ensure Cars link remains active when submenu is opened
-  };
-
-  const handleDropdownBlur = (e) => {
-    if (!e.currentTarget.contains(e.relatedTarget)) {
-      setIsDropdownOpen(false);
-      // Do not reset activeCarsLink here to maintain its active state when a submenu is active
+  const onSubmit = async (data) => {
+    console.log("Form data submitted:", data);
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/v1/clients/signup",
+        data,
+        {
+          withCredentials: true,
+        },
+      );
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
     }
   };
 
-  const handleNavLinkClick = () => {
-    setIsDropdownOpen(false);
-    setActiveSubmenuIndex(null);
-    // Reset activeCarsLink when another nav link (outside of Cars) is clicked
-    setActiveCarsLink(false);
-  };
-
-  const handleSubLinkClick = () => {
-    setIsDropdownOpen(false); // Close dropdown when a sub-link is clicked
-    setActiveSubmenuIndex(null); // Clear active submenu index
-  };
-
   return (
-    <div className="flex flex-wrap justify-between items-center p-2 text-2xl shadow-lg top-0 sticky bg-white">
-      <div className="flex items-center">
-        <img src="/images/logo1.jpeg" className="h-16 w-48" alt="Logo" />
+    <div className="place-content-center pb-20 pt-28 md:pt-36 bg-gradient-to-r from-red-500 to-white">
+      <div className="justify-center pb-5 grid grid-rows-1">
+         <h2 className="font-semibold">Create an <span className="text-red-700">Account</span></h2>
       </div>
-      <button
-        className="block md:hidden px-2 text-gray-700 focus:outline-none"
-        onClick={handleDropdownToggle}
-      >
-        <svg
-          className="h-6 w-6"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
+       
+      <div className="flex place-content-center">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-y-2 bg-white shadow-grey-100 shadow-2xl rounded-md  px-4 py-4  md:py-12 md:px-8 w-11/12 md:w-3/5"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
-      </button>
-      <div className={`${isDropdownOpen ? "block" : "hidden"} w-full md:flex md:items-center md:w-auto`}>
-        <ul className="flex flex-col md:flex-row items-center md:gap-x-5 text-base">
-          {navLinks.map((link, index) => (
-            <li key={index} className="relative">
-              {link.hasSubmenu ? (
-                <div className="dropdown z-50" onBlur={handleDropdownBlur}>
-                  <button
-                    tabIndex={0}
-                    onClick={handleDropdownToggle}
-                    className={`btn-ghost m-1 ${activeCarsLink ? "text-red-600" : "text-hover"}`}
-                  >
-                    Cars
-                  </button>
-                  {isDropdownOpen && (
-                    <ul
-                      tabIndex={0}
-                      className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
-                    >
-                      {carDropdownLinks.map((carLink, carIndex) => (
-                        <li key={carIndex} className="relative">
-                          <button
-                            className={`w-full text-left hover:text-red-500 hover:bg-red-50 ${
-                              activeSubmenuIndex === carIndex ? "bg-red-50 text-red-600" : "text-hover"
-                            }`}
-                            onClick={() => handleSubmenuToggle(carIndex)}
-                            style={activeSubmenuIndex === carIndex ? { color: "#DC2626", backgroundColor: "#FEF2F2" } : {}}
-                          >
-                            {carLink.value}
-                          </button>
-                          {activeSubmenuIndex === carIndex && (
-                            <ul className="absolute top-0 left-full bg-white shadow rounded-box w-52">
-                              {carLink.subLinks.map((subLink, subIndex) => (
-                                <li key={subIndex}>
-                                  <NavLink
-                                    to={subLink.path}
-                                    onClick={handleSubLinkClick} // Handle click on sub-links to close dropdown
-                                    className={({ isActive }) => isActive
-                                    ? "text-white bg-red-700"
-                                    : "hover:bg-red-50 text-hover"}
-                                  >
-                                    {subLink.value}
-                                  </NavLink>
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+          <div className="flex justify-center items-center">
+            <input
+              type="radio"
+              id="personal"
+              value="personal"
+              {...register("role")}
+              checked={role === "personal"}
+              onChange={() => setRole("personal")}
+              className="appearance-none w-3 h-3 border border-gray-500 rounded-full cursor-pointer  focus:ring-2 focus:ring-offset-2  focus:ring-red-400 focus:outline-none checked:bg-red-700 checked:ring-2 checked:ring-offset-2 checked:ring-red-700 checked:border-red-700 mr-2"
+            />
+            <label htmlFor="personal" className="mr-4">Personal</label>
+            <input
+              type="radio"
+              id="corporate"
+              value="corporate"
+              {...register("role")}
+              checked={role === "corporate"}
+              onChange={() => setRole("corporate")}
+              className="appearance-none w-3 h-3 border border-gray-500 rounded-full cursor-pointer  focus:ring-2 focus:ring-offset-2  focus:ring-red-400 focus:outline-none checked:bg-red-700 checked:ring-2 checked:ring-offset-2 checked:ring-red-700 checked:border-red-700 mr-2"
+            />
+            <label htmlFor="corporate">Corporate</label>
+          </div>
+          {errors.role && <p className="text-red-700">{capitalizeFirstLetter(errors.role.message)}</p>}
+
+          <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-12">
+              <div className="md:col-span-6">
+                <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">Email</label>
+                <div className="mt-2">
+                    <input
+                    {...register("email")}
+                    placeholder="Email"
+                    className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
+                    />
+                    {errors.email && <p className="text-red-700">{capitalizeFirstLetter(errors.email.message)}</p>}         
+                  </div>
+              </div>
+
+            <div className="md:col-span-6">
+              <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">Password</label>
+              <div className="mt-2">
+                  <input
+                  {...register("password")}
+                  type="password"
+                  placeholder="Password"
+                  className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
+                  />
+                  {errors.password && <p className="text-red-700">{capitalizeFirstLetter(errors.password.message)}</p>}         
+              </div>
+            </div>
+          </div>
+          
+
+          <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-12">
+              <div className="md:col-span-6">
+                <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">First name</label>
+
+                <div className="mt-2">
+                  <input
+                    {...register("firstName")}
+                    placeholder="First Name"
+                    className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
+                  />
+                  {errors.firstName && <p className="text-red-700">{capitalizeFirstLetter(errors.firstName.message)}</p>}
                 </div>
-              ) : (
-                <NavLink
-                  to={link.path}
-                  onClick={handleNavLinkClick} // Handle click on regular nav links to reset Cars state
-                  className={({ isActive }) => isActive ? "text-red-600" : "text-hover"}
-                >
-                  {link.value}
-                </NavLink>
-              )}
-            </li>
-          ))}
-        </ul>
+              </div>
+
+              <div className="md:col-span-6">
+                <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">Last name</label>
+                <div className="mt-2">
+                    <input
+                      {...register("lastName")}
+                      placeholder="Last Name"
+                      className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
+                    />
+                    {errors.lastName && <p className="text-red-700">{capitalizeFirstLetter(errors.lastName.message)}</p>}
+                </div>
+              </div>
+          </div>
+
+
+          <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-12">
+          <div className="md:col-span-6">
+                <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">Address</label>
+                <div className="mt-2">
+                      <input
+                      {...register("address")}
+                      placeholder="Address"
+                      className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
+                      />
+                      {errors.address && <p className="text-red-700">{capitalizeFirstLetter(errors.address.message)}</p>}
+                </div>
+              </div>
+
+              <div className="md:col-span-6">
+                <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">Nationality</label>
+
+                <div className="mt-2">
+                    <input
+                    {...register("nationality")}
+                    placeholder="Nationality"
+                    className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
+                    />
+                    {errors.nationality && <p className="text-red-700">{capitalizeFirstLetter(errors.nationality.message)}</p>}
+
+                </div>
+              </div>             
+          </div>
+
+
+          <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-12">
+          <div className="md:col-span-6">
+                <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">Phone number</label>
+                <div className="mt-2">
+                    <input
+                    {...register("ph")} 
+                    placeholder="Phone"
+                    className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
+                    />
+                    {errors.ph && <p className="text-red-700">{capitalizeFirstLetter(errors.ph.message)}</p>}    
+                </div>
+              </div>
+
+              <div className="md:col-span-6">
+                <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">License number</label>
+
+                <div className="mt-2">
+                    <input
+                    {...register("license")}
+                    placeholder="License"
+                    className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
+                  /> 
+                  {errors.license && <p className="text-red-700">{capitalizeFirstLetter(errors.license.message)}</p>}
+
+                </div>
+              </div>             
+          </div>
+        
+          
+          {role === "corporate" && (
+            <>
+
+              <div className="mt-4 grid grid-cols-12 gap-x-6 gap-y-8 ">
+                <div className="md:col-span-6">
+                    <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">Position</label>
+                    <div className="mt-2">
+                    <input
+                      {...register("position")}
+                        placeholder="Position"
+                        className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
+                      />
+                      {errors.position && <p className="text-red-700">{capitalizeFirstLetter(errors.position.message)}</p>}  
+                    </div>
+                </div>
+
+                  <div className="md:col-span-6">
+                    <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">TRN</label>
+
+                    <div className="mt-2">
+                    <input
+                        {...register("trn")}
+                        placeholder="TRN"
+                        className="block w-full  border  bg-grey-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
+                        />
+                        {errors.trn && <p className="text-red-700">{capitalizeFirstLetter(errors.trn.message)}</p>} 
+                    </div>
+                  </div>             
+              </div> 
+
+              <div className="mt-4 grid grid-cols-1 gap-x-6  ">
+                    <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">Company name</label>
+                    <div className="mt-2">
+                      <input
+                      {...register("companyName")}
+                      placeholder="Company Name"
+                      className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
+                      />
+                      {errors.companyName && <p className="text-red-700">{capitalizeFirstLetter(errors.companyName.message)}</p>} 
+                    </div>
+              </div>
+          
+                         
+          
+            </>
+          )}
+          
+
+          <div className="mt-10  gap-x-6 gap-y-8 ">
+            <div className="grid md:grid-cols-3">
+              <div className="grid md:col-start-2">
+                <Button text="Create Account" className="font-semibold"/>
+              </div>
+            </div>
+             
+             <div className="justify-center pt-3">
+             <p className="justify-center text-center text-sm font-medium leading-6 text-gray-900">
+                Already have an account?{"  "}
+                <Link to="/clients/signin" className=" btn-link link-hover text-sm font-medium text-red-700">
+                  Sign in
+                </Link>
+              </p>
+
+              {/* <p>
+                
+                <Link to="/clients/forgot-password" className="text-sm font-medium text-red-700">
+                  Forgot password?
+                </Link>
+              </p> */}
+
+             </div>
+             
+          </div>
+
+
+        </form>
       </div>
-      <div className={`${isDropdownOpen ? "block" : "hidden"} w-full md:flex md:items-center md:w-auto`}>
-        <ul className="flex flex-col md:flex-row items-center md:gap-x-5 text-base">
-          {authLinks.map((link, index) => (
-            <li key={index}>
-              <NavLink
-                to={link.path}
-                onClick={handleNavLinkClick} // Handle click on auth links to reset Cars state
-                className={({ isActive }) => isActive ? "text-red-500" : "text-red-700 text-hover"}
-              >
-                <button className="btn btn-active btn-link text-red-700 text-hover">{link.value}</button>
-              </NavLink>
-            </li>
-          ))}
-        </ul>
-      </div>
+       
     </div>
   );
-};
-
-export default Navbar;
+}

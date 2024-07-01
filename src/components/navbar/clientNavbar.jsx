@@ -5,47 +5,47 @@ import { faCog } from '@fortawesome/free-solid-svg-icons';
 
 const ClientNavbar = () => {
   const navLinks = [
-    { path: "/", value: "Home" },
-    { path: "/cars", value: "Cars", hasSubmenu: true },
-    { path: "/rental-deals", value: "Rental deals" },
-    { path: "/why-choose-us", value: "Why choose us" },
-    { path: "/our-locations", value: "Our locations" },
-    { path: "/contact-us", value: "Contact us" },
+    { path: "/clients", value: "Home" },
+    { path: "/clients/cars", value: "Cars", hasSubmenu: true },
+    { path: "/clients/rental-deals", value: "Rental deals" },
+    { path: "/clients/why-choose-us", value: "Why choose us" },
+    { path: "/clients/our-locations", value: "Our locations" },
+    { path: "/clients/contact-us", value: "Contact us" },
   ];
 
   const carDropdownLinks = [
     {
       value: "Types",
       subLinks: [
-        { path: "/cars/types/sedan", value: "Sedan" },
-        { path: "/cars/types/hatchback", value: "Hatchback" },
-        { path: "/cars/types/crossover-SUV", value: "Crossover SUV" },
-        { path: "/cars/types/large-SUV", value: "Large SUV" },
+        { path: "/clients/cars/types/sedan", value: "Sedan" },
+        { path: "/clients/cars/types/hatchback", value: "Hatchback" },
+        { path: "/clients/cars/types/crossover-SUV", value: "Crossover SUV" },
+        { path: "/clients/cars/types/large-SUV", value: "Large SUV" },
       ],
     },
     {
       value: "Category",
       subLinks: [
-        { path: "/cars/category/small", value: "Small" },
-        { path: "/cars/category/medium", value: "Medium" },
-        { path: "/cars/category/crossover", value: "Crossover" },
-        { path: "/cars/category/SUV", value: "SUV" },
-        { path: "/cars/category/luxury", value: "Luxury" },
-        { path: "/cars/category/commercial", value: "Commercial" },
+        { path: "/clients/cars/category/small", value: "Small" },
+        { path: "/clients/cars/category/medium", value: "Medium" },
+        { path: "/clients/cars/category/crossover", value: "Crossover" },
+        { path: "/clients/cars/category/SUV", value: "SUV" },
+        { path: "/clients/cars/category/luxury", value: "Luxury" },
+        { path: "/clients/cars/category/commercial", value: "Commercial" },
       ],
     },
     {
       value: "Brand",
       subLinks: [
-        { path: "/cars/brand/nissan", value: "Nissan" },
-        { path: "/cars/brand/infiniti", value: "Infiniti" },
-        { path: "/cars/brand/KIA", value: "KIA" },
-        { path: "/cars/brand/mitsubishi", value: "Mitsubishi" },
-        { path: "/cars/brand/chevrolet", value: "Chevrolet" },
-        { path: "/cars/brand/renault", value: "Renault" },
-        { path: "/cars/brand/hyundai", value: "Hyundai" },
-        { path: "/cars/brand/MG", value: "MG" },
-        { path: "/cars/brand/toyota", value: "Toyota" },
+        { path: "/clients/cars/brand/nissan", value: "Nissan" },
+        { path: "/clients/cars/brand/infiniti", value: "Infiniti" },
+        { path: "/clients/cars/brand/KIA", value: "KIA" },
+        { path: "/clients/cars/brand/mitsubishi", value: "Mitsubishi" },
+        { path: "/clients/cars/brand/chevrolet", value: "Chevrolet" },
+        { path: "/clients/cars/brand/renault", value: "Renault" },
+        { path: "/clients/cars/brand/hyundai", value: "Hyundai" },
+        { path: "/clients/cars/brand/MG", value: "MG" },
+        { path: "/clients/cars/brand/toyota", value: "Toyota" },
       ],
     },
   ];
@@ -123,12 +123,21 @@ const ClientNavbar = () => {
             <li key={index} className="relative">
               {link.hasSubmenu ? (
                 <div className="dropdown z-50" onBlur={handleDropdownBlur}>
-                  <button
+                   <button
                     tabIndex={0}
                     onClick={handleDropdownToggle}
-                    className={`btn-ghost m-1 ${activeCarsLink ? "text-red-700" : "text-hover"}`}
+                    className={`btn-ghost m-1 flex items-center ${activeCarsLink ? "text-red-700" : "text-hover"}`}
                   >
-                    Cars
+                    <span className="flex items-center">
+                      Cars
+                      <svg className="h-4 w-4 ml-1 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                      <path
+                          fillRule="evenodd"
+                          d="M10 15a1 1 0 0 1-.707-.293l-5-5a1 1 0 0 1 1.414-1.414L10 12.586l4.293-4.293a1 1 0 1 1 1.414 1.414l-5 5A1 1 0 0 1 10 15z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </span>
                   </button>
                   {isDropdownOpen && (
                     <ul

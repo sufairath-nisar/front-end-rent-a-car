@@ -3,7 +3,7 @@ import Signin from "../../components/clients/Signin";
 
 const SigninPage = () => {
   return (
-    <div className="flex h-screen items-center justify-center">
+    <div >
       <Signin />
     </div>
   );

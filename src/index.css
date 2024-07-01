@@ -107,3 +107,27 @@ background-color : #0000;
 .link-hover:hover {
   @apply text-red-400;   
 }
+
+.border-newstyle-focus:focus{
+  @apply border-red-700 !important;
+  @apply ring-red-700 !important;
+}
+
+.radio-button:checked {
+  background-color: red;
+  border-color: red;
+}
+
+.height-edited{
+  @apply h-60 !important;
+}
+
+.alert-success{
+  @apply bg-red-50;
+  @apply border-red-700;
+}
+
+.alert-warning{
+  @apply bg-red-50;
+  @apply border-red-700;
+}

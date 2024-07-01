@@ -5,7 +5,6 @@ import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "./Button";
-import Alertsuccess from "./Alertsuccess";
 
 const schema = yup.object().shape({
   email: yup.string().email().required().min(3).max(30),
@@ -37,7 +36,7 @@ const schema = yup.object().shape({
     }),
 });
 
-//to capitalize the first letter of a string
+// Helper function to capitalize the first letter of a string
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -50,8 +49,7 @@ export default function Signup() {
   } = useForm({ resolver: yupResolver(schema) });
 
   const [role, setRole] = useState("personal");
-  const [showAlert, setShowAlert] = useState(false); 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate(); // Use navigate for redirection
 
   const onSubmit = async (data) => {
     console.log("Form data submitted:", data);
@@ -64,19 +62,15 @@ export default function Signup() {
         }
       );
       console.log(res.data);
-      setShowAlert(true);
-      setTimeout(() => {
-        setShowAlert(false);
-        navigate("/clients");
-      }, 2000); 
-    } 
-    catch (error) {
+      alert("Successfully registered!"); // Show alert
+      navigate("/clients"); // Redirect to the home page
+    } catch (error) {
       console.log(error);
     }
   };
 
   return (
-    <div className="place-content-center pb-20 pt-28 md:pt-36 bg-gradient-to-r from-red-500 to-white relative" >
+    <div className="place-content-center pb-20 pt-28 md:pt-36 bg-gradient-to-r from-red-500 to-white">
       <div className="justify-center pb-5 grid grid-rows-1">
         <h2 className="font-semibold">
           Create an <span className="text-red-700">Account</span>
@@ -86,19 +80,8 @@ export default function Signup() {
       <div className="flex place-content-center">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-y-2 bg-white shadow-grey-100 shadow-2xl rounded-md px-4 py-4 md:py-12 md:px-8 w-11/12 md:w-3/5"           
+          className="flex flex-col gap-y-2 bg-white shadow-grey-100 shadow-2xl rounded-md  px-4 py-4  md:py-12 md:px-8 w-11/12 md:w-3/5"
         >
-
-          <div
-            className={`${
-              showAlert ? "block" : "hidden"
-            } bg-opacity-80  backdrop-filter backdrop-blur-md absolute top-0 left-0 h-full w-full flex justify-center items-center z-10`}
-            
-          >
-            <Alertsuccess text="Your account is now active! Book your adventure now!" />
-          </div>
-
-
           <div className="flex justify-center items-center">
             <input
               type="radio"
@@ -121,7 +104,7 @@ export default function Signup() {
             />
             <label htmlFor="corporate">Corporate</label>
           </div>
-          {errors.role && <p className="text-red-700 text-sm font-medium">{capitalizeFirstLetter(errors.role.message)}</p>}
+          {errors.role && <p className="text-red-700">{capitalizeFirstLetter(errors.role.message)}</p>}
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-12">
             <div className="md:col-span-6">
@@ -132,7 +115,7 @@ export default function Signup() {
                   placeholder="Email"
                   className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
                 />
-                {errors.email && <p className="text-red-700 text-sm font-medium">{capitalizeFirstLetter(errors.email.message)}</p>}
+                {errors.email && <p className="text-red-700">{capitalizeFirstLetter(errors.email.message)}</p>}
               </div>
             </div>
 
@@ -145,7 +128,7 @@ export default function Signup() {
                   placeholder="Password"
                   className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
                 />
-                {errors.password && <p className="text-red-700 text-sm font-medium">{capitalizeFirstLetter(errors.password.message)}</p>}
+                {errors.password && <p className="text-red-700">{capitalizeFirstLetter(errors.password.message)}</p>}
               </div>
             </div>
           </div>
@@ -159,7 +142,7 @@ export default function Signup() {
                   placeholder="First Name"
                   className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
                 />
-                {errors.firstName && <p className="text-red-700 text-sm font-medium">{capitalizeFirstLetter(errors.firstName.message)}</p>}
+                {errors.firstName && <p className="text-red-700">{capitalizeFirstLetter(errors.firstName.message)}</p>}
               </div>
             </div>
 
@@ -171,7 +154,7 @@ export default function Signup() {
                   placeholder="Last Name"
                   className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
                 />
-                {errors.lastName && <p className="text-red-700 text-sm font-medium">{capitalizeFirstLetter(errors.lastName.message)}</p>}
+                {errors.lastName && <p className="text-red-700">{capitalizeFirstLetter(errors.lastName.message)}</p>}
               </div>
             </div>
           </div>
@@ -180,12 +163,12 @@ export default function Signup() {
             <div className="md:col-span-6">
               <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">Address</label>
               <div className="mt-2">
-                <textarea
+                <input
                   {...register("address")}
                   placeholder="Address"
                   className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
                 />
-                {errors.address && <p className="text-red-700 text-sm font-medium">{capitalizeFirstLetter(errors.address.message)}</p>}
+                {errors.address && <p className="text-red-700">{capitalizeFirstLetter(errors.address.message)}</p>}
               </div>
             </div>
 
@@ -197,7 +180,7 @@ export default function Signup() {
                   placeholder="Nationality"
                   className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
                 />
-                {errors.nationality && <p className="text-red-700 text-sm font-medium">{capitalizeFirstLetter(errors.nationality.message)}</p>}
+                {errors.nationality && <p className="text-red-700">{capitalizeFirstLetter(errors.nationality.message)}</p>}
               </div>
             </div>
           </div>
@@ -211,7 +194,7 @@ export default function Signup() {
                   placeholder="Phone"
                   className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
                 />
-                {errors.ph && <p className="text-red-700 text-sm font-medium">{capitalizeFirstLetter(errors.ph.message)}</p>}
+                {errors.ph && <p className="text-red-700">{capitalizeFirstLetter(errors.ph.message)}</p>}
               </div>
             </div>
 
@@ -223,7 +206,7 @@ export default function Signup() {
                   placeholder="License"
                   className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
                 />
-                {errors.license && <p className="text-red-700 text-sm font-medium">{capitalizeFirstLetter(errors.license.message)}</p>}
+                {errors.license && <p className="text-red-700">{capitalizeFirstLetter(errors.license.message)}</p>}
               </div>
             </div>
           </div>
@@ -239,7 +222,7 @@ export default function Signup() {
                       placeholder="Position"
                       className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
                     />
-                    {errors.position && <p className="text-red-700 text-sm font-medium">{capitalizeFirstLetter(errors.position.message)}</p>}
+                    {errors.position && <p className="text-red-700">{capitalizeFirstLetter(errors.position.message)}</p>}
                   </div>
                 </div>
 
@@ -251,7 +234,7 @@ export default function Signup() {
                       placeholder="TRN"
                       className="block w-full  border  bg-grey-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
                     />
-                    {errors.trn && <p className="text-red-700 text-sm font-medium">{capitalizeFirstLetter(errors.trn.message)}</p>}
+                    {errors.trn && <p className="text-red-700">{capitalizeFirstLetter(errors.trn.message)}</p>}
                   </div>
                 </div>
               </div>
@@ -264,7 +247,7 @@ export default function Signup() {
                     placeholder="Company Name"
                     className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
                   />
-                  {errors.companyName && <p className="text-red-700 text-sm font-medium">{capitalizeFirstLetter(errors.companyName.message)}</p>}
+                  {errors.companyName && <p className="text-red-700">{capitalizeFirstLetter(errors.companyName.message)}</p>}
                 </div>
               </div>
             </>

@@ -6,6 +6,7 @@ import Search from './Search';
 import CarouselTestimonial from './CarouselTestimonial';
 import CardBrand from './CardBrand';
 import CardDocuments from './CardDocuments';
+import Alertsuccess from './Alertsuccess';
 
 export const Home = () => {
   const titleEmiratis = "Emiratis & UAE Residents";
@@ -25,11 +26,11 @@ export const Home = () => {
 
   return (
     <>
-
+  
     <div className="home-banner md:pt-16 pt-28 pb-5 min-h-screen">
       <div className="grid md:grid-cols-3 grid-cols-1 gap-4 place-items-center">
         <div className='md:pl-14  md:ml-5  max-[600px]:p-5'>
-          <h1 className='font-bold leading-8'>
+          <h1 className='font-bold leading-8'>      
             Find, book and rent a car <span className='text-red-700'>Easily</span>
           </h1>
           <p className='pt-5'>
@@ -43,6 +44,7 @@ export const Home = () => {
       <Search />
     </div>
 
+    
     <div className='section-brands  pb-16 pt-12 bg-gradient-to-r from-red-700 to-white'>
         
         <div className='pb-10 grid grid-cols-1 text-center'>

@@ -124,10 +124,21 @@ const Navbar = () => {
                   <button
                     tabIndex={0}
                     onClick={handleDropdownToggle}
-                    className={`btn-ghost m-1 ${activeCarsLink ? "text-red-700" : "text-hover"}`}
+                    className={`btn-ghost m-1 flex items-center ${activeCarsLink ? "text-red-700" : "text-hover"}`}
                   >
-                    Cars
+                    <span className="flex items-center">
+                      Cars
+                      <svg className="h-4 w-4 ml-1 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                      <path
+                          fillRule="evenodd"
+                          d="M10 15a1 1 0 0 1-.707-.293l-5-5a1 1 0 0 1 1.414-1.414L10 12.586l4.293-4.293a1 1 0 1 1 1.414 1.414l-5 5A1 1 0 0 1 10 15z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </span>
                   </button>
+
+
                   {isDropdownOpen && (
                     <ul
                       tabIndex={0}

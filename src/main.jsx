@@ -88,6 +88,10 @@ const router = createBrowserRouter([
       {
         path: "/cars/all-cars",
         element: <AllCarsPage />      
+      },
+      {
+        path: "clients/logout",
+        element: <HomePage />,
       },  
     ],
   },
@@ -115,10 +119,7 @@ const router = createBrowserRouter([
         path: "/clients/why-choose-us",
         element: <WhychooseusPage />
       },
-      {
-        path: "/clients/logout",
-        element: <HomePage />,
-      },
+    
       {
         path: "/clients/account-settings",
         element: <SettingsPage />,
