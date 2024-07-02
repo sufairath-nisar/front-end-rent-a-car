@@ -36,3 +36,5 @@ const Login = () => {
   )
 }
 export default Login
+
+<ReCAPTCHA sitekey={import.meta.env.VITE_SITE_KEY} ref={recaptcha}/>
