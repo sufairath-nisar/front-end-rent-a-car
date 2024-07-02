@@ -1,276 +1,38 @@
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import axios from "axios";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import Button from "./Button";
+import React from 'react';
+import { FaGoogle } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
+import { MdOutlinePhoneAndroid } from "react-icons/md";
+import { Link } from 'react-router-dom';
+import ReCAPTCHA from "react-google-recaptcha";
 
-const schema = yup.object().shape({
-  email: yup.string().email().required().min(3).max(30),
-  password: yup.string().required().min(6),
-  role: yup.string().oneOf(["personal", "corporate"]).required(),
-  firstName: yup.string().required('First name is a required field').max(50),
-  lastName: yup.string().required('Last name is a required field').max(50),
-  nationality: yup.string().required().max(50),
-  license: yup.string().required().max(50),
-  ph: yup.string()
-    .required('Phone number is a required field')
-    .max(20)
-    .matches(/^\+?[1-9]\d{1,14}$/, 'Please enter a valid phone number'),
-  address: yup.string().required().max(50),
-  companyName: yup.string()
-    .when('role', {
-      is: 'corporate',
-      then: (schema) => schema.required('Company name is required for corporate role').max(50),
-    }),
-  position: yup.string()
-    .when('role', {
-      is: 'corporate',
-      then: (schema) => schema.required('Position is required for corporate role').max(50),
-    }),
-  trn: yup.string()
-    .when('role', {
-      is: 'corporate',
-      then: (schema) => schema.required('TRN is required for corporate role').max(50),
-    }),
-});
-
-// Helper function to capitalize the first letter of a string
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-export default function Signup() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) });
-
-  const [role, setRole] = useState("personal");
-  const navigate = useNavigate(); // Use navigate for redirection
-
-  const onSubmit = async (data) => {
-    console.log("Form data submitted:", data);
-    try {
-      const res = await axios.post(
-        "http://localhost:3000/api/v1/clients/signup",
-        data,
-        {
-          withCredentials: true,
-        }
-      );
-      console.log(res.data);
-      alert("Successfully registered!"); // Show alert
-      navigate("/clients"); // Redirect to the home page
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+const Login = () => {
   return (
-    <div className="place-content-center pb-20 pt-28 md:pt-36 bg-gradient-to-r from-red-500 to-white">
-      <div className="justify-center pb-5 grid grid-rows-1">
-        <h2 className="font-semibold">
-          Create an <span className="text-red-700">Account</span>
-        </h2>
-      </div>
-
-      <div className="flex place-content-center">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-y-2 bg-white shadow-grey-100 shadow-2xl rounded-md  px-4 py-4  md:py-12 md:px-8 w-11/12 md:w-3/5"
-        >
-          <div className="flex justify-center items-center">
-            <input
-              type="radio"
-              id="personal"
-              value="personal"
-              {...register("role")}
-              checked={role === "personal"}
-              onChange={() => setRole("personal")}
-              className="appearance-none w-3 h-3 border border-gray-500 rounded-full cursor-pointer  focus:ring-2 focus:ring-offset-2  focus:ring-red-400 focus:outline-none checked:bg-red-700 checked:ring-2 checked:ring-offset-2 checked:ring-red-700 checked:border-red-700 mr-2"
-            />
-            <label htmlFor="personal" className="mr-4">Personal</label>
-            <input
-              type="radio"
-              id="corporate"
-              value="corporate"
-              {...register("role")}
-              checked={role === "corporate"}
-              onChange={() => setRole("corporate")}
-              className="appearance-none w-3 h-3 border border-gray-500 rounded-full cursor-pointer  focus:ring-2 focus:ring-offset-2  focus:ring-red-400 focus:outline-none checked:bg-red-700 checked:ring-2 checked:ring-offset-2 checked:ring-red-700 checked:border-red-700 mr-2"
-            />
-            <label htmlFor="corporate">Corporate</label>
-          </div>
-          {errors.role && <p className="text-red-700">{capitalizeFirstLetter(errors.role.message)}</p>}
-
-          <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-12">
-            <div className="md:col-span-6">
-              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">Email</label>
-              <div className="mt-2">
-                <input
-                  {...register("email")}
-                  placeholder="Email"
-                  className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
-                />
-                {errors.email && <p className="text-red-700">{capitalizeFirstLetter(errors.email.message)}</p>}
-              </div>
-            </div>
-
-            <div className="md:col-span-6">
-              <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">Password</label>
-              <div className="mt-2">
-                <input
-                  {...register("password")}
-                  type="password"
-                  placeholder="Password"
-                  className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
-                />
-                {errors.password && <p className="text-red-700">{capitalizeFirstLetter(errors.password.message)}</p>}
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-12">
-            <div className="md:col-span-6">
-              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">First name</label>
-              <div className="mt-2">
-                <input
-                  {...register("firstName")}
-                  placeholder="First Name"
-                  className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
-                />
-                {errors.firstName && <p className="text-red-700">{capitalizeFirstLetter(errors.firstName.message)}</p>}
-              </div>
-            </div>
-
-            <div className="md:col-span-6">
-              <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">Last name</label>
-              <div className="mt-2">
-                <input
-                  {...register("lastName")}
-                  placeholder="Last Name"
-                  className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
-                />
-                {errors.lastName && <p className="text-red-700">{capitalizeFirstLetter(errors.lastName.message)}</p>}
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-12">
-            <div className="md:col-span-6">
-              <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">Address</label>
-              <div className="mt-2">
-                <input
-                  {...register("address")}
-                  placeholder="Address"
-                  className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
-                />
-                {errors.address && <p className="text-red-700">{capitalizeFirstLetter(errors.address.message)}</p>}
-              </div>
-            </div>
-
-            <div className="md:col-span-6">
-              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">Nationality</label>
-              <div className="mt-2">
-                <input
-                  {...register("nationality")}
-                  placeholder="Nationality"
-                  className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
-                />
-                {errors.nationality && <p className="text-red-700">{capitalizeFirstLetter(errors.nationality.message)}</p>}
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-12">
-            <div className="md:col-span-6">
-              <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">Phone number</label>
-              <div className="mt-2">
-                <input
-                  {...register("ph")}
-                  placeholder="Phone"
-                  className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
-                />
-                {errors.ph && <p className="text-red-700">{capitalizeFirstLetter(errors.ph.message)}</p>}
-              </div>
-            </div>
-
-            <div className="md:col-span-6">
-              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">License number</label>
-              <div className="mt-2">
-                <input
-                  {...register("license")}
-                  placeholder="License"
-                  className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
-                />
-                {errors.license && <p className="text-red-700">{capitalizeFirstLetter(errors.license.message)}</p>}
-              </div>
-            </div>
-          </div>
-
-          {role === "corporate" && (
-            <>
-              <div className="mt-4 grid grid-cols-12 gap-x-6 gap-y-8">
-                <div className="md:col-span-6">
-                  <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">Position</label>
-                  <div className="mt-2">
-                    <input
-                      {...register("position")}
-                      placeholder="Position"
-                      className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
-                    />
-                    {errors.position && <p className="text-red-700">{capitalizeFirstLetter(errors.position.message)}</p>}
-                  </div>
-                </div>
-
-                <div className="md:col-span-6">
-                  <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">TRN</label>
-                  <div className="mt-2">
-                    <input
-                      {...register("trn")}
-                      placeholder="TRN"
-                      className="block w-full  border  bg-grey-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
-                    />
-                    {errors.trn && <p className="text-red-700">{capitalizeFirstLetter(errors.trn.message)}</p>}
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-4 grid grid-cols-1 gap-x-6">
-                <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">Company name</label>
-                <div className="mt-2">
-                  <input
-                    {...register("companyName")}
-                    placeholder="Company Name"
-                    className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
-                  />
-                  {errors.companyName && <p className="text-red-700">{capitalizeFirstLetter(errors.companyName.message)}</p>}
-                </div>
-              </div>
-            </>
-          )}
-
-          <div className="mt-10  gap-x-6 gap-y-8 ">
-            <div className="grid md:grid-cols-3">
-              <div className="grid md:col-start-2">
-                <Button text="Create Account" className="font-semibold" />
-              </div>
-            </div>
-
-            <div className="justify-center pt-3">
-              <p className="justify-center text-center text-sm font-medium leading-6 text-gray-900">
-                Already have an account?{"  "}
-                <Link to="/clients/signin" className=" btn-link link-hover text-sm font-medium text-red-700">
-                  Sign in
-                </Link>
-              </p>
-            </div>
-          </div>
+    <div className='w-[90%] mx-auto my-20 flex flex-col items-center justify-center font-poppins'>
+        <h1 className="mb-3 text-4xl font-bold text-[#403F3F] uppercase tracking-wider">
+            Login
+          </h1>
+          
+          <p className="mb-10 text-gray-500 font-medium text-sm">
+          Not Registered? Register <Link className="underline text-[#32B7C5] font-bold" to={'/register'}>Here</Link>
+          </p>
+        <form className='w-[30%] mx-auto flex flex-col items-center gap-5'>
+        <label className="input input-bordered flex items-center gap-2 w-full">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" /><path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" /></svg>
+  <input type="text" className="grow" placeholder="Email" />
+</label>
+<label className="input input-bordered flex items-center gap-2 w-full">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path fillRule="evenodd" d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z" clipRule="evenodd" /></svg>
+  <input type="password" className="grow focus:outline-none focus:border-none" placeholder='Password' />
+  </label>
+  <button type='submit' className='w-full text-white bg-[#403F3F] py-3 rounded-lg uppercase font-medium'>Login</button>
+    <h1 className='font-medium text-sm'>Or Login With</h1>
+  <div className='w-full flex items-center gap-5 justify-center'>
+    <button type='button' className='w-10 h-10 bg-[#403F3F] rounded-lg text-white flex items-center justify-center'><FaGoogle /></button>
+    <button type='button' className='w-10 h-10 bg-[#403F3F] rounded-lg text-white flex items-center justify-center'><FaXTwitter /></button>
+    <button type='button' className='w-10 h-10 bg-[#403F3F] rounded-lg text-white flex items-center justify-center'><MdOutlinePhoneAndroid /></button>
+  </div>
         </form>
-      </div>
     </div>
-  );
+  )
 }
+export default Login

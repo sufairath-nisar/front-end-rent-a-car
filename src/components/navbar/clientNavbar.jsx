@@ -5,7 +5,7 @@ import { faCog } from '@fortawesome/free-solid-svg-icons';
 
 const ClientNavbar = () => {
   const navLinks = [
-    { path: "/clients", value: "Home" },
+    { path: "/client", value: "Home" },
     { path: "/clients/cars", value: "Cars", hasSubmenu: true },
     { path: "/clients/rental-deals", value: "Rental deals" },
     { path: "/clients/why-choose-us", value: "Why choose us" },

@@ -67,7 +67,7 @@ export default function Signup() {
       setShowAlert(true);
       setTimeout(() => {
         setShowAlert(false);
-        navigate("/clients");
+        navigate("/client");
       }, 2000); 
     } 
     catch (error) {

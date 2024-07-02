@@ -100,7 +100,7 @@ const router = createBrowserRouter([
     element: <ClientLayout />,
     children: [
       {
-        path: "/clients",
+        path: "/client",
         element: <HomePage />,
       },
       {
