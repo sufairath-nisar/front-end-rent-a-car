@@ -1,58 +1,56 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCog } from '@fortawesome/free-solid-svg-icons';
 
-const ClientNavbar = () => {
+const Navbar = () => {
   const navLinks = [
-    { path: "/client", value: "Home" },
-    { path: "/clients/cars", value: "Cars", hasSubmenu: true },
-    { path: "/clients/rental-deals", value: "Rental deals" },
-    { path: "/clients/why-choose-us", value: "Why choose us" },
-    { path: "/clients/our-locations", value: "Our locations" },
-    { path: "/clients/contact-us", value: "Contact us" },
+    { path: "/", value: "Home" },
+    { path: "/cars", value: "Cars", hasSubmenu: true },
+    { path: "/rental-deals", value: "Rental deals" },
+    { path: "/why-choose-us", value: "Why choose us" },
+    { path: "/our-locations", value: "Our locations" },
+    { path: "/contact-us", value: "Contact us" },
   ];
 
   const carDropdownLinks = [
     {
       value: "Types",
       subLinks: [
-        { path: "/clients/cars/types/sedan", value: "Sedan" },
-        { path: "/clients/cars/types/hatchback", value: "Hatchback" },
-        { path: "/clients/cars/types/crossover-SUV", value: "Crossover SUV" },
-        { path: "/clients/cars/types/large-SUV", value: "Large SUV" },
+        { path: "/cars/types/sedan", value: "Sedan" },
+        { path: "/cars/types/hatchback", value: "Hatchback" },
+        { path: "/cars/types/crossover-SUV", value: "Crossover SUV" },
+        { path: "/cars/types/large-SUV", value: "Large SUV" },
       ],
     },
     {
       value: "Category",
       subLinks: [
-        { path: "/clients/cars/category/small", value: "Small" },
-        { path: "/clients/cars/category/medium", value: "Medium" },
-        { path: "/clients/cars/category/crossover", value: "Crossover" },
-        { path: "/clients/cars/category/SUV", value: "SUV" },
-        { path: "/clients/cars/category/luxury", value: "Luxury" },
-        { path: "/clients/cars/category/commercial", value: "Commercial" },
+        { path: "/cars/category/small", value: "Small" },
+        { path: "/cars/category/medium", value: "Medium" },
+        { path: "/cars/category/crossover", value: "Crossover" },
+        { path: "/cars/category/SUV", value: "SUV" },
+        { path: "/cars/category/luxury", value: "Luxury" },
+        { path: "/cars/category/commercial", value: "Commercial" },
       ],
     },
     {
       value: "Brand",
       subLinks: [
-        { path: "/clients/cars/brand/nissan", value: "Nissan" },
-        { path: "/clients/cars/brand/infiniti", value: "Infiniti" },
-        { path: "/clients/cars/brand/KIA", value: "KIA" },
-        { path: "/clients/cars/brand/mitsubishi", value: "Mitsubishi" },
-        { path: "/clients/cars/brand/chevrolet", value: "Chevrolet" },
-        { path: "/clients/cars/brand/renault", value: "Renault" },
-        { path: "/clients/cars/brand/hyundai", value: "Hyundai" },
-        { path: "/clients/cars/brand/MG", value: "MG" },
-        { path: "/clients/cars/brand/toyota", value: "Toyota" },
+        { path: "/cars/brand/nissan", value: "Nissan" },
+        { path: "/cars/brand/infiniti", value: "Infiniti" },
+        { path: "/cars/brand/KIA", value: "KIA" },
+        { path: "/cars/brand/mitsubishi", value: "Mitsubishi" },
+        { path: "/cars/brand/chevrolet", value: "Chevrolet" },
+        { path: "/cars/brand/renault", value: "Renault" },
+        { path: "/cars/brand/hyundai", value: "Hyundai" },
+        { path: "/cars/brand/MG", value: "MG" },
+        { path: "/cars/brand/toyota", value: "Toyota" },
       ],
     },
   ];
 
   const authLinks = [
-    { path: "/", value: "Logout" },
-    { path: "/clients/account-settings", value: "Settings", icon: faCog },
+    { path: "/clients/signup", value: "Signup" },
+    { path: "/clients/signin", value: "Signin" },
   ];
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -80,22 +78,18 @@ const ClientNavbar = () => {
   const handleNavLinkClick = () => {
     setIsDropdownOpen(false);
     setActiveSubmenuIndex(null);
+    // Reset activeCarsLink when another nav link (outside of Cars) is clicked
     setActiveCarsLink(false);
+    // Reset active sub-link when a nav link is clicked
     setActiveSubLink(null);
   };
 
   const handleSubLinkClick = (path) => {
-    setIsDropdownOpen(false); 
-    setActiveSubmenuIndex(null); 
+    setIsDropdownOpen(false); // Close dropdown when a sub-link is clicked
+    setActiveSubmenuIndex(null); // Clear active submenu index
+    // Set active sub-link to the clicked sub-link path
     setActiveSubLink(path);
   };
-
-  const handleLogoutClick = () => {
-    setIsLogoutClicked(true);
-    navigate("/client");
-  };
-
-  
 
   return (
     <div className="fixed top-0 left-0 right-0 z-30 flex flex-wrap justify-between items-center p-2 text-2xl shadow-lg bg-white">
@@ -127,7 +121,7 @@ const ClientNavbar = () => {
             <li key={index} className="relative">
               {link.hasSubmenu ? (
                 <div className="dropdown z-50" onBlur={handleDropdownBlur}>
-                   <button
+                  <button
                     tabIndex={0}
                     onClick={handleDropdownToggle}
                     className={`btn-ghost m-1 flex items-center ${activeCarsLink ? "text-red-700" : "text-hover"}`}
@@ -143,6 +137,8 @@ const ClientNavbar = () => {
                       </svg>
                     </span>
                   </button>
+
+
                   {isDropdownOpen && (
                     <ul
                       tabIndex={0}
@@ -184,7 +180,7 @@ const ClientNavbar = () => {
               ) : (
                 <NavLink
                   to={link.path}
-                  onClick={handleNavLinkClick} 
+                  onClick={handleNavLinkClick} // Handle click on regular nav links to reset Cars state
                   className={({ isActive }) => isActive ? "text-red-700" : "text-hover"}
                 >
                   {link.value}
@@ -200,17 +196,10 @@ const ClientNavbar = () => {
             <li key={index}>
               <NavLink
                 to={link.path}
-                onClick={handleNavLinkClick} 
+                onClick={handleNavLinkClick} // Handle click on auth links to reset Cars state
                 className={({ isActive }) => isActive ? "text-red-400" : "text-red-700 link-hover"}
               >
-
-                {link.icon ? (
-                  <FontAwesomeIcon icon={link.icon} className="mr-2" />
-                ) : (
-                  <button className="btn btn-active btn-link text-red-700 link-hover">
-                    {link.value}
-                  </button>
-                )}
+                <button className="btn btn-active btn-link text-red-700 link-hover">{link.value}</button>
               </NavLink>
             </li>
           ))}
@@ -220,4 +209,4 @@ const ClientNavbar = () => {
   );
 };
 
-export default ClientNavbar;
+export default Navbar;

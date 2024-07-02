@@ -54,40 +54,36 @@ const Navbar = () => {
   ];
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [activeCarsLink, setActiveCarsLink] = useState(false); // State to track active state of Cars link
-  const [activeSubmenuIndex, setActiveSubmenuIndex] = useState(null); // State to track active submenu item
-  const [activeSubLink, setActiveSubLink] = useState(null); // State to track active sub-link
-
+  const [activeCarsLink, setActiveCarsLink] = useState(false); 
+  const [activeSubmenuIndex, setActiveSubmenuIndex] = useState(null); 
+  const [activeSubLink, setActiveSubLink] = useState(null); 
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);
-    setActiveCarsLink(!activeCarsLink); // Toggle active state of Cars link
+    setActiveCarsLink(!activeCarsLink); 
   };
 
   const handleSubmenuToggle = (index) => {
     setActiveSubmenuIndex(activeSubmenuIndex === index ? null : index);
-    setActiveCarsLink(true); // Ensure Cars link remains active when submenu is opened
+    setActiveCarsLink(true); 
   };
 
   const handleDropdownBlur = (e) => {
     if (!e.currentTarget.contains(e.relatedTarget)) {
       setIsDropdownOpen(false);
-      // Do not reset activeCarsLink here to maintain its active state when a submenu is active
+      
     }
   };
 
   const handleNavLinkClick = () => {
     setIsDropdownOpen(false);
     setActiveSubmenuIndex(null);
-    // Reset activeCarsLink when another nav link (outside of Cars) is clicked
     setActiveCarsLink(false);
-    // Reset active sub-link when a nav link is clicked
     setActiveSubLink(null);
   };
 
   const handleSubLinkClick = (path) => {
-    setIsDropdownOpen(false); // Close dropdown when a sub-link is clicked
-    setActiveSubmenuIndex(null); // Clear active submenu index
-    // Set active sub-link to the clicked sub-link path
+    setIsDropdownOpen(false); 
+    setActiveSubmenuIndex(null); 
     setActiveSubLink(path);
   };
 
@@ -161,7 +157,7 @@ const Navbar = () => {
                                 <li key={subIndex}>
                                   <NavLink
                                     to={subLink.path}
-                                    onClick={() => handleSubLinkClick(subLink.path)} // Handle click on sub-links to close dropdown
+                                    onClick={() => handleSubLinkClick(subLink.path)} 
                                     className={({ isActive }) =>
                                       isActive || activeSubLink === subLink.path ? "bg-red-700 text-white" : "text-hover sublink-hover"
                                     }
@@ -180,7 +176,7 @@ const Navbar = () => {
               ) : (
                 <NavLink
                   to={link.path}
-                  onClick={handleNavLinkClick} // Handle click on regular nav links to reset Cars state
+                  onClick={handleNavLinkClick} 
                   className={({ isActive }) => isActive ? "text-red-700" : "text-hover"}
                 >
                   {link.value}
@@ -196,10 +192,13 @@ const Navbar = () => {
             <li key={index}>
               <NavLink
                 to={link.path}
-                onClick={handleNavLinkClick} // Handle click on auth links to reset Cars state
-                className={({ isActive }) => isActive ? "text-red-400" : "text-red-700 link-hover"}
+                onClick={handleNavLinkClick} 
+                className={({ isActive }) =>
+                  isActive ? "text-red-400 font-semibold px-3 text-sm" : "text-red-700 btn-link px-3 gap-2 font-semibold  text-sm link-hover"
+                }
               >
-                <button className="btn btn-active btn-link text-red-700 link-hover">{link.value}</button>
+              
+                {link.value}
               </NavLink>
             </li>
           ))}

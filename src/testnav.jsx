@@ -51,7 +51,7 @@ const ClientNavbar = () => {
   ];
 
   const authLinks = [
-    { path: "/", value: "Logout" },
+    { path: "/clients/logout", value: "Logout" },
     { path: "/clients/account-settings", value: "Settings", icon: faCog },
   ];
 
@@ -80,22 +80,18 @@ const ClientNavbar = () => {
   const handleNavLinkClick = () => {
     setIsDropdownOpen(false);
     setActiveSubmenuIndex(null);
+    // Reset activeCarsLink when another nav link (outside of Cars) is clicked
     setActiveCarsLink(false);
+    // Reset active sub-link when a nav link is clicked
     setActiveSubLink(null);
   };
 
   const handleSubLinkClick = (path) => {
-    setIsDropdownOpen(false); 
-    setActiveSubmenuIndex(null); 
+    setIsDropdownOpen(false); // Close dropdown when a sub-link is clicked
+    setActiveSubmenuIndex(null); // Clear active submenu index
+    // Set active sub-link to the clicked sub-link path
     setActiveSubLink(path);
   };
-
-  const handleLogoutClick = () => {
-    setIsLogoutClicked(true);
-    navigate("/client");
-  };
-
-  
 
   return (
     <div className="fixed top-0 left-0 right-0 z-30 flex flex-wrap justify-between items-center p-2 text-2xl shadow-lg bg-white">
@@ -184,7 +180,7 @@ const ClientNavbar = () => {
               ) : (
                 <NavLink
                   to={link.path}
-                  onClick={handleNavLinkClick} 
+                  onClick={handleNavLinkClick} // Handle click on regular nav links to reset Cars state
                   className={({ isActive }) => isActive ? "text-red-700" : "text-hover"}
                 >
                   {link.value}
@@ -200,10 +196,9 @@ const ClientNavbar = () => {
             <li key={index}>
               <NavLink
                 to={link.path}
-                onClick={handleNavLinkClick} 
+                onClick={handleNavLinkClick} // Handle click on auth links to reset Cars state
                 className={({ isActive }) => isActive ? "text-red-400" : "text-red-700 link-hover"}
               >
-
                 {link.icon ? (
                   <FontAwesomeIcon icon={link.icon} className="mr-2" />
                 ) : (

@@ -89,10 +89,10 @@ const router = createBrowserRouter([
         path: "/cars/all-cars",
         element: <AllCarsPage />      
       },
-      {
-        path: "clients/logout",
-        element: <HomePage />,
-      },  
+      // {
+      //   path: "clients/logout",
+      //   element: <HomePage />,
+      // },  
     ],
   },
 
