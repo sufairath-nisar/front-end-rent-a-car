@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
+import DarkMode from "../DarkMode";
 
 const Navbar = () => {
   const navLinks = [
@@ -88,7 +89,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-30 flex flex-wrap justify-between items-center p-2 text-2xl shadow-lg bg-white">
+    <div className="fixed top-0 left-0 right-0 z-30 flex flex-wrap justify-between items-center  p-2 text-2xl shadow-lg bg-white">
       <div className="flex items-center">
         <img src="/images/logo1.jpeg" className="h-16 w-48" alt="Logo" />
       </div>
@@ -177,7 +178,7 @@ const Navbar = () => {
                 <NavLink
                   to={link.path}
                   onClick={handleNavLinkClick} 
-                  className={({ isActive }) => isActive ? "text-red-700" : "text-hover"}
+                  className={({ isActive }) => isActive ? "text-red-700 " : "text-hover"}
                 >
                   {link.value}
                 </NavLink>
@@ -186,23 +187,25 @@ const Navbar = () => {
           ))}
         </ul>
       </div>
-      <div className={`${isDropdownOpen ? "block" : "hidden"} w-full md:flex md:items-center md:w-auto`}>
-        <ul className="flex flex-col md:flex-row items-center md:gap-x-1 text-base">
-          {authLinks.map((link, index) => (
-            <li key={index}>
-              <NavLink
-                to={link.path}
-                onClick={handleNavLinkClick} 
-                className={({ isActive }) =>
-                  isActive ? "text-red-400 font-semibold px-3 text-sm" : "text-red-700 btn-link px-3 gap-2 font-semibold  text-sm link-hover"
-                }
-              >
-              
-                {link.value}
-              </NavLink>
-            </li>
-          ))}
-        </ul>
+      <div className="flex items-center space-x-4"> {/* Add a flex container for right-aligned items */}
+        <div className={`${isDropdownOpen ? "block" : "hidden"} w-full md:flex md:items-center md:w-auto`}>
+          <ul className="flex flex-col md:flex-row items-center md:gap-x-1 text-base">
+            {authLinks.map((link, index) => (
+              <li key={index}>
+                <NavLink
+                  to={link.path}
+                  onClick={handleNavLinkClick}
+                  className={({ isActive }) =>
+                    isActive ? "text-red-400 font-semibold px-3 text-sm" : "text-red-700 btn-link px-3 gap-2 font-semibold text-sm link-hover"
+                  }
+                >
+                  {link.value}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <DarkMode /> {/* Add the DarkMode component */}
       </div>
     </div>
   );

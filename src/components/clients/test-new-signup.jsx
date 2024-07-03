@@ -6,7 +6,6 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "./Button";
 import Alertsuccess from "./Alertsuccess";
-import AlertFail from "./AlertFail";
 
 const schema = yup.object().shape({
   email: yup.string().email().required().min(3).max(30),
@@ -14,7 +13,7 @@ const schema = yup.object().shape({
   role: yup.string().oneOf(["personal", "corporate"]).required(),
   firstName: yup.string().required('First name is a required field').max(50),
   lastName: yup.string().required('Last name is a required field').max(50),
-  nationality: yup.string().required('Nationality is a required field').max(50),
+  nationality: yup.string().required().max(50),
   license: yup.string().required().max(50),
   ph: yup.string()
     .required('Phone number is a required field')
@@ -39,9 +38,9 @@ const schema = yup.object().shape({
 });
 
 const countries = [
-  { label: "United States", value: "United States" },
-  { label: "Canada", value: "Canada" },
-  { label: "United Kingdom", value: "United Kingdom" },
+  { label: "United States", value: "US", flag: "🇺🇸" },
+  { label: "Canada", value: "CA", flag: "🇨🇦" },
+  { label: "United Kingdom", value: "GB", flag: "🇬🇧" },
   // Add more countries as needed
 ];
 
@@ -49,25 +48,6 @@ const countries = [
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
-
-// async function checkEmailExists(email) {
-//   try {
-//     const response = await axios.get(
-//       `http://localhost:3000/api/v1/clients/get-a-client`,
-//       { withCredentials: true }
-//     );
-//     console.log(`${email}`)
-//     console.log('Fetched clients:', response.data);
-//     if(response.data.length>0)
-//       {
-//         return response.data.exists; 
-//       }
-    
-//   } catch (error) {
-//     console.error("Error checking email:", error);
-//     return false; // Return false on error or if email doesn't exist
-//   }
-// }
 
 export default function Signup() {
   const {
@@ -78,31 +58,11 @@ export default function Signup() {
 
   const [role, setRole] = useState("personal");
   const [showAlert, setShowAlert] = useState(false); 
-  const [emailExists, setEmailExists] = useState(false);
   const navigate = useNavigate(); 
-  
 
   const onSubmit = async (data) => {
-    console.log("testing data", data);
-   
+    console.log("Form data submitted:", data);
     try {
-      const response = await axios.get(
-        `http://localhost:3000/api/v1/clients/get-a-client?email=${data.email}`,
-        { withCredentials: true }        
-      );
-      console.log("response=",response);
-
-      if (response.data) {
-        setEmailExists(true);
-        console.error("Client already exists with the provided email:", data.email);
-        return;
-      }
-
-     
-    } 
-    catch (error) {
-      console.error("Error during signup:", error);
-      console.error("Response data:", error.response?.data);
       const res = await axios.post(
         "http://localhost:3000/api/v1/clients/signup",
         data,
@@ -116,17 +76,14 @@ export default function Signup() {
         setShowAlert(false);
         navigate("/client");
       }, 2000); 
-    }
-  };
-
-  const handleEmailChange = () => {
-    if (emailExists) {
-      setEmailExists(false);
+    } 
+    catch (error) {
+      console.log(error);
     }
   };
 
   return (
-    <div className="place-content-center pb-20 pt-28 md:pt-36 bg-signup relative" >
+    <div className="place-content-center pb-20 pt-28 md:pt-36 bg-gradient-to-r from-red-500 to-white relative" >
       <div className="justify-center pb-5 grid grid-rows-1">
         <h2 className="font-semibold">
           Create an <span className="text-red-700">Account</span>
@@ -136,12 +93,8 @@ export default function Signup() {
       <div className="flex place-content-center">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col md:gap-y-2 bg-white shadow-grey-100 shadow-2xl rounded-md px-4 py-6 md:py-12 md:px-8 w-11/12 md:w-3/5"           
+          className="flex flex-col gap-y-2 bg-white shadow-grey-100 shadow-2xl rounded-md px-4 py-4 md:py-12 md:px-8 w-11/12 md:w-3/5"           
         >
-
-          {emailExists && (
-            <AlertFail text="Email already exists! Please use a different email address." />
-          )}
 
           <div
             className={`${
@@ -185,7 +138,6 @@ export default function Signup() {
                   {...register("email")}
                   placeholder="Email"
                   className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
-                  onChange={handleEmailChange} 
                 />
                 {errors.email && <p className="text-red-700 text-sm font-medium">{capitalizeFirstLetter(errors.email.message)}</p>}
               </div>
@@ -245,17 +197,13 @@ export default function Signup() {
             </div>
 
             <div className="md:col-span-6">
-               <label htmlFor="nationality" className="block text-sm font-medium leading-6 text-gray-900">Nationality</label>
+              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">Nationality</label>
               <div className="mt-2">
-                <select
+                {/* <input
                   {...register("nationality")}
-                  className="block w-full border bg-red-50 px-2 py-1.5 text-sm text-gray-900 border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
-                >
-                  <option value="">Select Nationality</option>
-                  {countries.map((country) => (
-                    <option key={country.value} value={country.value}>{country.label}</option>
-                  ))}
-                </select>
+                  placeholder="Nationality"
+                  className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
+                /> */}
                 {errors.nationality && <p className="text-red-700 text-sm font-medium">{capitalizeFirstLetter(errors.nationality.message)}</p>}
               </div>
             </div>
@@ -308,7 +256,7 @@ export default function Signup() {
                     <input
                       {...register("trn")}
                       placeholder="TRN"
-                      className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
+                      className="block w-full  border  bg-grey-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
                     />
                     {errors.trn && <p className="text-red-700 text-sm font-medium">{capitalizeFirstLetter(errors.trn.message)}</p>}
                   </div>

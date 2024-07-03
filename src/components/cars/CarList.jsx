@@ -70,8 +70,8 @@ const CarList = () => {
         <div className='section-carList text-center pt-32 pb-16'>
             <h2 className='text-red-700 font-semibold pt-2'>{capitalizeFirstLetter(value)} Cars</h2>
             <div className=" pb-5 flex justify-center pt-4 md:pt-0 md:justify-end md:mr-16">
-                <Link to="/cars/all-cars" className="cursor-pointer">
-                    <Button text="View All Cars >>" />
+                <Link to="/cars/all-cars" className="cursor-pointer text-red-700 btn-link px-3 gap-2 font-semibold  text-md">
+                   View All Cars 
                 </Link>
             </div>
             {cars.length === 0 ? (

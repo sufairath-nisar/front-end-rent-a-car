@@ -5,7 +5,7 @@ const Safety = () => {
     <>
           <div className='py-16'>
             
-            <h2 className='pb-5  text-center font-semibold'>Emirates<span className='text-red-700'> Drive</span></h2>
+            <h2 className='pb-5 pt-20 text-center font-semibold'>Emirates<span className='text-red-700'> Drive</span></h2>
            
             <div className='grid py-6 px-5 md:px-24 grid-rows-1'>
                 <h3 className='text-red-700 pb-2 font-medium'>1. Comprehensive Safety Inspections</h3>

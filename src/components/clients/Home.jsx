@@ -27,18 +27,21 @@ export const Home = () => {
   return (
     <>
   
-    <div className="home-banner md:pt-16 pt-28 pb-5 min-h-screen">
-      <div className="grid md:grid-cols-3 grid-cols-1 gap-4 place-items-center">
-        <div className='md:pl-14  md:ml-5  max-[600px]:p-5'>
+    <div className="home-banner md:pt-30 pt-32 ">
+      <div className="grid md:grid-cols-2 grid-cols-1  place-items-center">
+        <div className='md:pl-14  md:ml-5  max-[600px]:p-5 pr-28'>
           <h1 className='font-bold leading-8'>      
             Find, book and rent a car <span className='text-red-700'>Easily</span>
           </h1>
-          <p className='pt-5'>
+          <p className='pt-5 pb-5'>
             Discover the convenience of renting a car with us. Whether for business or leisure, enjoy a seamless experience with our wide selection of vehicles, competitive prices, and exceptional customer service.
           </p>
         </div>
-        <div className="flex justify-center items-center pt-5 w-full h-full md:col-span-2 grid-cols-1">
-          <img className="object-full w-10/12" src="/images/banner-h-img.jpg" alt="image" />
+        <div className="flex justify-center items-center pt-5 w-full h-full md:mr-24 md:grid-cols-1 ">
+          <div className='bg-car-banner md:w-full md:h-72 bg-no-repeat  md:bg-cover'>
+              {/* <img className="object-full w-10/12" src="/images/banner-h-img.jpg" alt="image" /> */}
+          </div>
+          {/* <img className="object-full w-10/12" src="/images/banner-h-img.jpg" alt="image" /> */}
         </div>
       </div> 
       <Search />
@@ -227,7 +230,7 @@ export const Home = () => {
       </div>
     </div>
 
-    <div className='section-testimonials bg-no-repeat bg-cover pb-16 bg-center bg-[url("/images/redquotes7.jpg")]'>
+    <div className='section-testimonials bg-no-repeat bg-cover pb-16 bg-center bg-testimonial '>
         
               <div className='pb-10 grid grid-cols-1 text-center'>
                 <h2 className='font-medium'>Our Delighted<span className='text-red-700'> Clients</span></h2>

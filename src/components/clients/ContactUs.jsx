@@ -39,9 +39,9 @@ const ContactUs = () => {
   };
 
   return (
-    <div className='pb-20 pt-32 px-4'>
+    <div className='pb-20 pt-32 px-4 '>
       <h2 className='text-center pb-8 font-semibold'>Contact <span className='text-red-700'>us</span></h2>
-      <div className="p-8 px-2 gap-4 max-w-lg mx-auto shadow-2xl shadow-red-200 section-contact-us">
+      <div className="p-8 px-2 gap-4 max-w-lg mx-auto shadow-2xl shadow-red-200 section-contact-us bg-contact">
             {alert.message && (
               <div
                 className={`py-2 px-4 mb-4 ${
@@ -51,7 +51,7 @@ const ContactUs = () => {
                 {alert.message}
               </div>
             )}
-            <form onSubmit={handleSubmit} className='px-5'>
+            <form onSubmit={handleSubmit} className='px-5 '>
               <div className="mb-6">
                 <label htmlFor="fromEmail" className="block text-sm font-medium text-gray-700">
                   Your Email:

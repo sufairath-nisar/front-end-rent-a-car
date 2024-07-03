@@ -1,9 +1,13 @@
 /** @type {import('tailwindcss').Config} */
+import daisyui from "daisyui";
+
 export default {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class', // Enable dark mode with class strategy
+
   theme: {
     extend: {
       fontFamily: {
@@ -12,15 +16,25 @@ export default {
       lineHeight: {
         '8': '3rem', 
       },
+     
     },
   },
-  plugins: [],
-  plugins: [
-    require('daisyui'),
-  ],  
-  
-}
+  plugins: [daisyui],
+  daisyui: {
+    themes: [
+      {
+        light: {
+          ...require("daisyui/src/theming/themes")["light"],
+         
+        },
+      },
+      {
+        night: {  
+          ...require("daisyui/src/theming/themes")["night"],
+          // "red-700" : "#000000",
 
-
-
-
+        },
+      },
+    ],
+  },
+};

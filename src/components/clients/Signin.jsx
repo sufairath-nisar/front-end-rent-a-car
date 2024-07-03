@@ -73,7 +73,7 @@ export default function Signin() {
   };
 
   return (
-    <div className="min-h-96 place-content-center pb-20 pt-28 md:pt-36 bg-gradient-to-r from-red-500 to-white relative">
+    <div className="min-h-96 place-content-center pb-20 pt-28 md:pt-36 bg-signup relative">
     <div className="justify-center pb-5 grid grid-rows-1">
       <h2 className="text-center pb-8 font-semibold">
         Welcome Back! Please <span className="text-red-700">Log In</span>
