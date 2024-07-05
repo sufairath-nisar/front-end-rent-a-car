@@ -53,7 +53,7 @@ const CardCar = ({ car }) => {
                             <FeatureItem icon='/images/icons/feature-icon-remote.png' value={features.keylessEntry} className='w-6'/>
                             <FeatureItem icon='/images/icons/feature-icon-door.png' value={features.doors} className='w-6'/>
                             <FeatureItem icon='/images/icons/feature-icon-aux.png' value={features.AUX} className='w-6'/>
-                            <FeatureItem icon='/images/icons/feature-icon-sensor.png' value={features.parkingSensors} className='w-6'/>
+                            <FeatureItem icon='/images/icons/icon-parkingSensor.png' value={features.parkingSensors} className='w-6'/>
                             <FeatureItem icon='/images/icons/feature-icon-airbag.png' value={features.airBags} className='w-6'/>
                             <FeatureItem icon='/images/icons/feature-icon-foglamp.png' value={features.fogLamps} className='w-6'/>
                             <FeatureItem icon='/images/icons/feature-icon-cruise-control.png' value={features.cruiseControl} className='w-6'/>

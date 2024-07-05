@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
+import DarkMode from "../DarkMode";
 
 const ClientNavbar = () => {
   const navLinks = [
@@ -194,27 +195,31 @@ const ClientNavbar = () => {
           ))}
         </ul>
       </div>
-      <div className={`${isDropdownOpen ? "block" : "hidden"} w-full md:flex md:items-center md:w-auto`}>
-        <ul className="flex flex-col md:flex-row items-center md:gap-x-1 text-base">
-          {authLinks.map((link, index) => (
-            <li key={index}>
-              <NavLink
-                to={link.path}
-                onClick={handleNavLinkClick} 
-                className={({ isActive }) => isActive ? "text-red-400" : "text-red-700 link-hover"}
-              >
+      
+      <div className="flex items-center space-x-4"> {/* Add a flex container for right-aligned items */}
+          <div className={`${isDropdownOpen ? "block" : "hidden"} w-full md:flex md:items-center md:w-auto`}>
+            <ul className="flex flex-col md:flex-row items-center md:gap-x-1 text-base">
+              {authLinks.map((link, index) => (
+                <li key={index}>
+                  <NavLink
+                    to={link.path}
+                    onClick={handleNavLinkClick} 
+                    className={({ isActive }) => isActive ? "text-red-400" : "text-red-700 link-hover"}
+                  >
 
-                {link.icon ? (
-                  <FontAwesomeIcon icon={link.icon} className="mr-2" />
-                ) : (
-                  <button className="btn btn-active btn-link text-red-700 link-hover">
-                    {link.value}
-                  </button>
-                )}
-              </NavLink>
-            </li>
-          ))}
-        </ul>
+                    {link.icon ? (
+                      <FontAwesomeIcon icon={link.icon} className="mr-2" />
+                    ) : (
+                      <button className="btn btn-active btn-link text-red-700 link-hover">
+                        {link.value}
+                      </button>
+                    )}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </div>
+        <DarkMode />
       </div>
     </div>
   );

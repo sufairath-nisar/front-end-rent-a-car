@@ -1,118 +1,108 @@
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import Button from "./Button";
-import axios from "axios";
-import AlertFail from "./AlertFail"; // Ensure correct import
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import CardCar from './CardCar';
+import Pagination from './Pagination'; 
+import Button from '../clients/Button';
+import { Link } from 'react-router-dom';
 
-const schema = yup
-  .object({
-    email: yup.string().email().required(),
-    password: yup.string().required().min(6),
-  })
-  .required();
 
-  function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
 
-export default function Signin() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) });
+const capitalizeFirstLetter = (str) => {
+    // Remove hyphens and replace with spaces
+    const formattedStr = str.replace(/-/g, ' ');
+    // Capitalize first letter
+    return formattedStr.charAt(0).toUpperCase() + formattedStr.slice(1);
+};
 
-  const navigate = useNavigate();
-  const [alertMessage, setAlertMessage] = useState("");
+const CarList = () => {
+    const { value } = useParams();
+    const [cars, setCars] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const carsPerPage = 6; // Number of cars to display per page
 
-  const onSubmit = async (data) => {
-    console.log("Form data submitted:", data);
-    try {
-      const res = await axios.post(
-        "http://localhost:3000/api/v1/clients/signin",
-        data,
-        {
-          withCredentials: true,
-        }
-      );
-      console.log(res.data);
-      if (res.status === 200) {
-        navigate("/client");
-      } else {
-        setAlertMessage("An error occurred. Please try again.");
-      }
-    } catch (error) {
-      console.log(error);
-      if (error.response) {
-        if (error.response.status === 404) {
-          setAlertMessage("You are not registered.");
-        } else if (error.response.status === 401) {
-          setAlertMessage("Incorrect password! Please enter the correct password.");
-        } else {
-          setAlertMessage("An error occurred. Please try again.");
-        }
-      } else {
-        setAlertMessage("An error occurred. Please try again.");
-      }
-    }
+    useEffect(() => {
+        const fetchCars = async () => {
+            try {
+                const response = await axios.get(`http://localhost:3000/api/v1/clients/get-cars/types/${value}`);
+                
+                console.log('Fetched cars:', response.data);
+                setCars(response.data);
+
+                
+            } catch (error) {
+                console.error('Error fetching cars:', error);
+                setError(error.response ? error.response.data : 'Error fetching cars');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCars();
+    }, [value]); 
+
+  const indexOfLastCar = currentPage * carsPerPage;
+  const indexOfFirstCar = indexOfLastCar - carsPerPage;
+  const currentCars = cars.slice(indexOfFirstCar, indexOfLastCar);
+  const totalPages = Math.ceil(cars.length / carsPerPage);
+
+  const handlePageClick = (page) => {
+    setCurrentPage(page);
   };
 
-  return (
-    <div className="min-h-96 place-content-center pb-20 pt-28 md:pt-36 bg-gradient-to-r from-red-500 to-white relative">
-      <div className="justify-center pb-5 grid grid-rows-1">
-        <h2 className="text-center pb-8 font-semibold">
-          Welcome Back! Please <span className="text-red-700">Log In</span>
-        </h2>
-      </div>
-      <div className="flex place-content-center">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col bottom-36 w-72 md:w-96 gap-y-2 mb-0 bg-white shadow-grey-100 shadow-2xl rounded-md px-4 py-4 md:py-12 md:px-8"
-        >
-          {alertMessage && <AlertFail text={alertMessage} />}
 
-          <div className="mt-2">
-            <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-              Email address
-            </label>
-            <input
-              {...register("email")}
-              placeholder="email"
-              className="block w-full border bg-red-50 px-2 py-1.5 text-sm text-gray-900 border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
-            />
-            {errors.email && <p className="text-sm font-medium text-red-700">{capitalizeFirstLetter(errors.email.message)}</p>}
-          </div>
+    if (loading) {
+        return <div className='flex justify-center h-64 items-center italic text-red-700'>Loading cars...</div>;
+    }
 
-          <div className="mt-2">
-            <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-              Password
-            </label>
-            <input
-              type="password"
-              {...register("password")}
-              placeholder="password"
-              className="block w-full border bg-red-50 px-2 py-1.5 text-sm text-gray-900 border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
-            />
-            {errors.password && <p  className="text-sm font-medium text-red-700">{capitalizeFirstLetter(errors.password.message)}</p>}
-          </div>
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
 
-          <div className="mt-10 gap-x-6 gap-y-8">
-            <div className="grid grid-cols-1">
-              <Button text="Login" className="font-semibold" />
+    // if (cars.length === 0) {
+    //     return <div>No cars available.</div>;
+    // }
+
+    return (
+        
+        <div className='section-carList text-center pt-32 pb-16'>
+            <h2 className='text-red-700 font-semibold pt-2'>{capitalizeFirstLetter(value)} Cars</h2>
+            <div className="pb-5 flex justify-center pt-4 md:pt-0 md:justify-end md:mr-16">
+            <div className="flex items-center ">
+                <div tabIndex={0} className="collapse w-full">
+                    <div className="collapse-title text-xl font-medium w-6">Filter</div>
+                    <div className="collapse-content w-full">
+                         <p>tabindex={0} attribute is necessary to make the div focusable</p>
+                     </div>
+                </div>
+                <Link to="/cars/all-cars" className="cursor-pointer text-red-700 btn-link px-3 gap-2 font-semibold text-md w-4/5">
+                    View All Cars
+                </Link>
             </div>
 
-            <p className="justify-center text-center pt-2 text-sm font-medium leading-6 text-gray-900">
-              Not registered yet?{" "}
-              <Link to="/clients/signup" className="btn-link link-hover text-sm font-medium text-red-700">
-                Signup
-              </Link>
-            </p>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-}
+            </div>
+
+            {cars.length === 0 ? (
+                    <div className='flex justify-center md:h-64 items-center'>
+                        <h3 className='justify-center items-center text-red-700'>No cars available</h3>
+                    </div>
+                ) : (
+                    <div className='grid md:grid-cols-3 grid-cols-1 gap-x-2 md:gap-x-7 gap-y-12 pb-16  px-5 md:px-16'>
+                        {currentCars.map((car) => (
+                            <CardCar key={car._id} car={car} />
+                        ))}
+                    </div>
+                )}
+
+            <div className='grid grid-rows-1  justify-center'>
+                 <Pagination totalPages={totalPages} currentPage={currentPage} onPageClick={handlePageClick} />
+            </div>
+        </div>
+        
+       
+    );
+};
+
+export default CarList;

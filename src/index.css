@@ -219,20 +219,28 @@ background-color : #0000;
   @apply text-red-400;
 }
 
- [data-theme="night"] .bg-car-banner{
-  background-image:url('/images/dark-banner-banner.png');
-  background-repeat:no-repeat; 
-} 
+[data-theme="night"] .bg-car-banner {
+  background-image: url('/images/dark-banner-banner.png');
+  background-repeat: no-repeat; 
+  background-size: cover; /* Ensure the image covers the container */
+  background-position: center; /* Center the image */
+}
 
 [data-theme="light"] .bg-car-banner {
   background-image: url('/images/banner-h-img.jpg');
-  background-position: right center;
-  
+  background-repeat: no-repeat;
+  background-size: cover; /* Ensure the image covers the container */
+  background-position: center; /* Center the image */
 }
 
 @media screen and (max-width: 992px) {
   .bg-car-banner {
-    background-size:100% !important;
-    background-position:center !important; 
+    background-size: cover !important; /* Ensure the image covers the container */
+    background-position: center !important; /* Center the image */
   }
 }
+
+[data-theme="night"] .search-input-night {
+  @apply bg-slate-200;
+}
+

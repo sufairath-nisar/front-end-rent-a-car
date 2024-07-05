@@ -37,8 +37,8 @@ export const Home = () => {
             Discover the convenience of renting a car with us. Whether for business or leisure, enjoy a seamless experience with our wide selection of vehicles, competitive prices, and exceptional customer service.
           </p>
         </div>
-        <div className="flex justify-center items-center pt-5 w-full h-full md:mr-24 md:grid-cols-1 ">
-          <div className='bg-car-banner md:w-full md:h-72 bg-no-repeat  md:bg-cover'>
+        <div className="flex justify-center items-center md:pt-5 w-full h-full md:mr-24 md:grid-cols-1">
+          <div className="bg-car-banner md:w-full md:h-72 w-full h-56 bg-no-repeat">
               {/* <img className="object-full w-10/12" src="/images/banner-h-img.jpg" alt="image" /> */}
           </div>
           {/* <img className="object-full w-10/12" src="/images/banner-h-img.jpg" alt="image" /> */}
@@ -87,7 +87,7 @@ export const Home = () => {
 
           <div className='grid-cols-1 justify-center flex'>
               <Link to="/cars/brand/mg">
-                <CardBrand name="MG"  path="/images/mg-logo.png"/>
+                <CardBrand name="MG"  path="/images/logo-mg-new.png"/>
               </Link>
           </div>
 

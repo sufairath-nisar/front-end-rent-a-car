@@ -22,8 +22,6 @@ const AllCars = () => {
     pricePerWeekMax: '',
     pricePerMonthMin: '',
     pricePerMonthMax: '',
-    brand: '',
-    carName: ''
   });
 
   useEffect(() => {
@@ -67,36 +65,37 @@ const AllCars = () => {
 
     let filtered = cars;
 
-    // Apply all filters
     if (filters.priceMin && filters.priceMin !== '') {
       filtered = filtered.filter(car => car.priceperday >= parseFloat(filters.priceMin));
+      console.log(`Filtered by priceMin (${filters.priceMin}):`, filtered);
     }
     if (filters.priceMax && filters.priceMax !== '') {
       filtered = filtered.filter(car => car.priceperday <= parseFloat(filters.priceMax));
+      console.log(`Filtered by priceMax (${filters.priceMax}):`, filtered);
     }
     if (filters.kmMin && filters.kmMin !== '') {
       filtered = filtered.filter(car => car.km >= parseFloat(filters.kmMin));
+      console.log(`Filtered by kmMin (${filters.kmMin}):`, filtered);
     }
     if (filters.kmMax && filters.kmMax !== '') {
       filtered = filtered.filter(car => car.km <= parseFloat(filters.kmMax));
+      console.log(`Filtered by kmMax (${filters.kmMax}):`, filtered);
     }
     if (filters.pricePerWeekMin && filters.pricePerWeekMin !== '') {
       filtered = filtered.filter(car => car.priceperweek >= parseFloat(filters.pricePerWeekMin));
+      console.log(`Filtered by pricePerWeekMin (${filters.pricePerWeekMin}):`, filtered);
     }
     if (filters.pricePerWeekMax && filters.pricePerWeekMax !== '') {
       filtered = filtered.filter(car => car.priceperweek <= parseFloat(filters.pricePerWeekMax));
+      console.log(`Filtered by pricePerWeekMax (${filters.pricePerWeekMax}):`, filtered);
     }
     if (filters.pricePerMonthMin && filters.pricePerMonthMin !== '') {
       filtered = filtered.filter(car => car.pricepermonth >= parseFloat(filters.pricePerMonthMin));
+      console.log(`Filtered by pricePerMonthMin (${filters.pricePerMonthMin}):`, filtered);
     }
     if (filters.pricePerMonthMax && filters.pricePerMonthMax !== '') {
       filtered = filtered.filter(car => car.pricepermonth <= parseFloat(filters.pricePerMonthMax));
-    }
-    if (filters.brand && filters.brand !== '') {
-      filtered = filtered.filter(car => car.brand.toLowerCase().includes(filters.brand.toLowerCase()));
-    }
-    if (filters.carName && filters.carName !== '') {
-      filtered = filtered.filter(car => car.carName.toLowerCase().includes(filters.carName.toLowerCase()));
+      console.log(`Filtered by pricePerMonthMax (${filters.pricePerMonthMax}):`, filtered);
     }
 
     setFilteredCars(filtered);
@@ -216,28 +215,6 @@ const AllCars = () => {
                       className="input input-bordered text-slate-700 rounded-none h-10 w-full focus:outline-none focus:border-red-700 focus:ring-red-700 focus:ring-1"
                     />
                   </div>
-                </div>
-                <div className="mb-5">
-                  <h4 className="font-semibold mb-1 text-red-700">Brand</h4>
-                  <input
-                    type="text"
-                    name="brand"
-                    value={filters.brand}
-                    onChange={handleFilterChange}
-                    placeholder="Brand"
-                    className="input input-bordered text-slate-700 rounded-none h-10 w-full focus:outline-none focus:border-red-700 focus:ring-red-700 focus:ring-1"
-                  />
-                </div>
-                <div className="mb-5">
-                  <h4 className="font-semibold mb-1 text-red-700">Car Name</h4>
-                  <input
-                    type="text"
-                    name="carName"
-                    value={filters.carName}
-                    onChange={handleFilterChange}
-                    placeholder="Car Name"
-                    className="input input-bordered text-slate-700 rounded-none h-10 w-full focus:outline-none focus:border-red-700 focus:ring-red-700 focus:ring-1"
-                  />
                 </div>
               </div>
               <Button onClick={applyFilters} text="Apply Filters" className="text-base font-medium" />
