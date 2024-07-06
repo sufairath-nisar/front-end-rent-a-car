@@ -1,212 +1,307 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import CardCar from './CardCar'; 
+import Pagination from './Pagination';
+import Button from '../clients/Button';
+import { Link } from 'react-router-dom';
 
-const Navbar = () => {
-  const navLinks = [
-    { path: "/", value: "Home" },
-    { path: "/cars", value: "Cars", hasSubmenu: true },
-    { path: "/rental-deals", value: "Rental deals" },
-    { path: "/why-choose-us", value: "Why choose us" },
-    { path: "/our-locations", value: "Our locations" },
-    { path: "/contact-us", value: "Contact us" },
-  ];
+const AllCars = () => {
+  const [cars, setCars] = useState([]);
+  const [filteredCars, setFilteredCars] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const carsPerPage = 6; // Number of cars to display per page
 
-  const carDropdownLinks = [
-    {
-      value: "Types",
-      subLinks: [
-        { path: "/cars/types/sedan", value: "Sedan" },
-        { path: "/cars/types/hatchback", value: "Hatchback" },
-        { path: "/cars/types/crossover-SUV", value: "Crossover SUV" },
-        { path: "/cars/types/large-SUV", value: "Large SUV" },
-      ],
-    },
-    {
-      value: "Category",
-      subLinks: [
-        { path: "/cars/category/small", value: "Small" },
-        { path: "/cars/category/medium", value: "Medium" },
-        { path: "/cars/category/crossover", value: "Crossover" },
-        { path: "/cars/category/SUV", value: "SUV" },
-        { path: "/cars/category/luxury", value: "Luxury" },
-        { path: "/cars/category/commercial", value: "Commercial" },
-      ],
-    },
-    {
-      value: "Brand",
-      subLinks: [
-        { path: "/cars/brand/nissan", value: "Nissan" },
-        { path: "/cars/brand/infiniti", value: "Infiniti" },
-        { path: "/cars/brand/KIA", value: "KIA" },
-        { path: "/cars/brand/mitsubishi", value: "Mitsubishi" },
-        { path: "/cars/brand/chevrolet", value: "Chevrolet" },
-        { path: "/cars/brand/renault", value: "Renault" },
-        { path: "/cars/brand/hyundai", value: "Hyundai" },
-        { path: "/cars/brand/MG", value: "MG" },
-        { path: "/cars/brand/toyota", value: "Toyota" },
-      ],
-    },
-  ];
+  const [dropdownOpen, setDropdownOpen] = useState(false); // State to manage dropdown visibility
 
-  const authLinks = [
-    { path: "/clients/signup", value: "Signup" },
-    { path: "/clients/signin", value: "Signin" },
-  ];
+  const [filters, setFilters] = useState({
+    priceMin: '',
+    priceMax: '',
+    kmMin: '',
+    kmMax: '',
+    pricePerWeekMin: '',
+    pricePerWeekMax: '',
+    pricePerMonthMin: '',
+    pricePerMonthMax: '',
+    brand: '',
+    carName: ''
+  });
 
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [activeCarsLink, setActiveCarsLink] = useState(false); // State to track active state of Cars link
-  const [activeSubmenuIndex, setActiveSubmenuIndex] = useState(null); // State to track active submenu item
-  const [activeSubLink, setActiveSubLink] = useState(null); // State to track active sub-link
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/v1/clients/get-all-cars');
+        console.log('Fetched cars:', response.data);
 
-  const handleDropdownToggle = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-    setActiveCarsLink(!activeCarsLink); // Toggle active state of Cars link
+        if (Array.isArray(response.data)) {
+          setCars(response.data);
+          setFilteredCars(response.data); // Set initial filtered cars
+        } else {
+          console.error('Expected an array but got:', response.data);
+          setError('Unexpected response format');
+        }
+      } catch (error) {
+        console.error('Error fetching cars:', error);
+        setError('Error fetching cars');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCars();
+  }, []);
+
+  const handlePageClick = (page) => {
+    setCurrentPage(page);
   };
 
-  const handleSubmenuToggle = (index) => {
-    setActiveSubmenuIndex(activeSubmenuIndex === index ? null : index);
-    setActiveCarsLink(true); // Ensure Cars link remains active when submenu is opened
+  const applyFilters = () => {
+    console.log('Applying filters:', filters);
+
+    let filtered = cars.filter(car => {
+      // Filter by price, km, price per week, price per month
+      if (filters.priceMin && parseFloat(car.priceperday) < parseFloat(filters.priceMin)) {
+        return false;
+      }
+      if (filters.priceMax && parseFloat(car.priceperday) > parseFloat(filters.priceMax)) {
+        return false;
+      }
+      if (filters.kmMin && parseFloat(car.km) < parseFloat(filters.kmMin)) {
+        return false;
+      }
+      if (filters.kmMax && parseFloat(car.km) > parseFloat(filters.kmMax)) {
+        return false;
+      }
+      if (filters.pricePerWeekMin && parseFloat(car.priceperweek) < parseFloat(filters.pricePerWeekMin)) {
+        return false;
+      }
+      if (filters.pricePerWeekMax && parseFloat(car.priceperweek) > parseFloat(filters.pricePerWeekMax)) {
+        return false;
+      }
+      if (filters.pricePerMonthMin && parseFloat(car.pricepermonth) < parseFloat(filters.pricePerMonthMin)) {
+        return false;
+      }
+      if (filters.pricePerMonthMax && parseFloat(car.pricepermonth) > parseFloat(filters.pricePerMonthMax)) {
+        return false;
+      }
+
+      // Filter by brand (case insensitive and partial match)
+      if (filters.brand) {
+        const lowercaseBrandFilter = filters.brand.trim().toLowerCase().replace(/\s+/g, '');
+        console.log(lowercaseBrandFilter);
+        const lowercaseCarBrand = typeof car.brand === 'string' ? car.brand.trim().toLowerCase().replace(/\s+/g, '') : '';
+        console.log(lowercaseCarBrand);
+        if (lowercaseBrandFilter && !lowercaseCarBrand.includes(lowercaseBrandFilter)) {
+          return false;
+        }
+      }
+      
+      // Filter by carName (case insensitive and exact match without spaces)
+      const trimmedCarNameFilter = filters.carName.trim().toLowerCase().replace(/\s+/g, '');
+      const trimmedCar = car.carName.trim().toLowerCase().replace(/\s+/g, '');
+      
+      if (trimmedCarNameFilter && trimmedCarNameFilter !== trimmedCar) {
+        return false;
+      }
+
+      return true;
+    });
+
+    setFilteredCars(filtered);
+    setCurrentPage(1); // Reset to first page after applying filters
+
+    console.log('Filtered cars:', filtered);
   };
 
-  const handleDropdownBlur = (e) => {
-    if (!e.currentTarget.contains(e.relatedTarget)) {
-      setIsDropdownOpen(false);
-      // Do not reset activeCarsLink here to maintain its active state when a submenu is active
-    }
+  useEffect(() => {
+    applyFilters(); // Apply filters whenever the filter state changes
+  }, [filters]);
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
   };
 
-  const handleNavLinkClick = () => {
-    setIsDropdownOpen(false);
-    setActiveSubmenuIndex(null);
-    // Reset activeCarsLink when another nav link (outside of Cars) is clicked
-    setActiveCarsLink(false);
-    // Reset active sub-link when a nav link is clicked
-    setActiveSubLink(null);
+  const closeDropdown = () => {
+    setDropdownOpen(false);
   };
 
-  const handleSubLinkClick = (path) => {
-    setIsDropdownOpen(false); // Close dropdown when a sub-link is clicked
-    setActiveSubmenuIndex(null); // Clear active submenu index
-    // Set active sub-link to the clicked sub-link path
-    setActiveSubLink(path);
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters(prevFilters => ({
+      ...prevFilters,
+      [name]: value.trim() // Trim whitespace
+    }));
   };
+
+  if (loading) {
+    return <div className='flex justify-center md:h-64 items-center text-red-700'>Loading cars...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  const totalCars = filteredCars.length;
+  const totalPages = Math.ceil(totalCars / carsPerPage);
+  const indexOfLastCar = currentPage * carsPerPage;
+  const indexOfFirstCar = indexOfLastCar - carsPerPage;
+  const currentCars = filteredCars.slice(indexOfFirstCar, indexOfLastCar);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-30 flex flex-wrap justify-between items-center p-2 text-2xl shadow-lg bg-white">
-      <div className="flex items-center">
-        <img src="/images/logo1.jpeg" className="h-16 w-48" alt="Logo" />
-      </div>
-      <button
-        className="block md:hidden px-2 text-gray-700 focus:outline-none"
-        onClick={handleDropdownToggle}
-      >
-        <svg
-          className="h-6 w-6"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
-      </button>
-      <div className={`${isDropdownOpen ? "block" : "hidden"} w-full md:flex md:items-center md:w-auto`}>
-        <ul className="flex flex-col md:flex-row items-center md:gap-x-5 text-base">
-          {navLinks.map((link, index) => (
-            <li key={index} className="relative">
-              {link.hasSubmenu ? (
-                <div className="dropdown z-50" onBlur={handleDropdownBlur}>
-                  <button
-                    tabIndex={0}
-                    onClick={handleDropdownToggle}
-                    className={`btn-ghost m-1 flex items-center ${activeCarsLink ? "text-red-700" : "text-hover"}`}
-                  >
-                    <span className="flex items-center">
-                      Cars
-                      <svg className="h-4 w-4 ml-1 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
-                      <path
-                          fillRule="evenodd"
-                          d="M10 15a1 1 0 0 1-.707-.293l-5-5a1 1 0 0 1 1.414-1.414L10 12.586l4.293-4.293a1 1 0 1 1 1.414 1.414l-5 5A1 1 0 0 1 10 15z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </span>
-                  </button>
+    <div>
+      <h2 className='text-red-700 justify-center text-center pt-32 md:pt-36 font-semibold'>All Cars</h2>
 
+      <div className=" flex justify-center pt-4 md:pt-10 md:justify-end md:mr-16 section-filter">
+        <div className="flex items-center h-2">
+          <div tabIndex={0} role="button" className="dropdown md:dropdown-left bg-transparent border-none shadow-none btn m-1 hover:bg-transparent hover:text-red-400 px-3 gap-2 font-semibold text-base relative md:pt-0 pt-4">
+            <div>
+              <Link className="cursor-pointer text-red-700 btn-link px-3 gap-2 font-semibold text-md" onClick={toggleDropdown}>
+                Filter
+              </Link>
+            </div>
+            {dropdownOpen && (
+              <ul className="dropdown-content menu bg-base-100 rounded-box z-10 w-72 md:w-96 p-6 shadow-xl shadow-red-100 absolute md:static top-10 md:top-auto left-0 md:left-auto right-0 md:right-auto">
+                <div>
+                  <div className="mb-5">
+                    <h4 className="font-semibold mb-1 text-red-700">Brand</h4>
+                    <input
+                      type="text"
+                      name="brand"
+                      value={filters.brand}
+                      onChange={handleFilterChange}
+                      placeholder="Brand"
+                      className="input input-bordered text-slate-700 rounded-none h-10 w-full focus:outline-none focus:border-red-700 focus:ring-red-700 focus:ring-1"
+                    />
+                  </div>
+                  <div className="mb-5">
+                    <h4 className="font-semibold mb-1 text-red-700">Car Model</h4>
+                    <input
+                      type="text"
+                      name="carName"
+                      value={filters.carName}
+                      onChange={handleFilterChange}
+                      placeholder="Car Name"
+                      className="input input-bordered text-slate-700 rounded-none h-10 w-full focus:outline-none focus:border-red-700 focus:ring-red-700 focus:ring-1"
+                    />
+                  </div>
 
-                  {isDropdownOpen && (
-                    <ul
-                      tabIndex={0}
-                      className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
-                    >
-                      {carDropdownLinks.map((carLink, carIndex) => (
-                        <li key={carIndex} className="relative">
-                          <button
-                            className={`w-full text-left hover:text-red-500 hover:bg-red-50 ${
-                              activeSubmenuIndex === carIndex ? "text-red-700" : "text-hover"
-                            }`}
-                            onClick={() => handleSubmenuToggle(carIndex)}
-                            style={activeSubmenuIndex === carIndex ? { color: "#DC2626", backgroundColor: "#FEF2F2" } : {}}
-                          >
-                            {carLink.value}
-                          </button>
-                          {activeSubmenuIndex === carIndex && (
-                            <ul className="absolute top-0 p-2 left-full bg-white shadow rounded-box w-52">
-                              {carLink.subLinks.map((subLink, subIndex) => (
-                                <li key={subIndex}>
-                                  <NavLink
-                                    to={subLink.path}
-                                    onClick={() => handleSubLinkClick(subLink.path)} // Handle click on sub-links to close dropdown
-                                    className={({ isActive }) =>
-                                      isActive || activeSubLink === subLink.path ? "bg-red-700 text-white" : "text-hover sublink-hover"
-                                    }
-                                  >
-                                    {subLink.value}
-                                  </NavLink>
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                  <div className="mb-5">
+                    <h4 className="font-semibold mb-1 text-red-700">Price per day</h4>
+                    <div className="flex space-x-2">
+                      <input
+                        type="number"
+                        name="priceMin"
+                        value={filters.priceMin}
+                        onChange={handleFilterChange}
+                        placeholder="Min"
+                        className="input input-bordered text-slate-700 rounded-none h-10 w-full focus:outline-none focus:border-red-700 focus:ring-red-700 focus:ring-1"
+                      />
+                      <input
+                        type="number"
+                        name="priceMax"
+                        value={filters.priceMax}
+                        onChange={handleFilterChange}
+                        placeholder="Max"
+                        className="input input-bordered text-slate-700 rounded-none h-10 w-full focus:outline-none focus:border-red-700 focus:ring-red-700 focus:ring-1"
+                      />
+                    </div>
+                  </div>
+                  <div className="mb-5">
+                    <h4 className="font-semibold mb-1 text-red-700">Price per week</h4>
+                    <div className="flex space-x-2">
+                      <input
+                        type="number"
+                        name="pricePerWeekMin"
+                        value={filters.pricePerWeekMin}
+                        onChange={handleFilterChange}
+                        placeholder="Min"
+                        className="input input-bordered text-slate-700 rounded-none h-10 w-full focus:outline-none focus:border-red-700 focus:ring-red-700 focus:ring-1"
+                      />
+                      <input
+                        type="number"
+                        name="pricePerWeekMax"
+                        value={filters.pricePerWeekMax}
+                        onChange={handleFilterChange}
+                        placeholder="Max"
+                        className="input input-bordered text-slate-700 rounded-none h-10 w-full focus:outline-none focus:border-red-700 focus:ring-red-700 focus:ring-1"
+                      />
+                    </div>
+                  </div>
+                  <div className="mb-5">
+                    <h4 className="font-semibold mb-1 text-red-700">Price per month</h4>
+                    <div className="flex space-x-2">
+                      <input
+                        type="number"
+                        name="pricePerMonthMin"
+                        value={filters.pricePerMonthMin}
+                        onChange={handleFilterChange}
+                        placeholder="Min"
+                        className="input input-bordered text-slate-700 rounded-none h-10 w-full focus:outline-none focus:border-red-700 focus:ring-red-700 focus:ring-1"
+                      />
+                      <input
+                        type="number"
+                        name="pricePerMonthMax"
+                        value={filters.pricePerMonthMax}
+                        onChange={handleFilterChange}
+                        placeholder="Max"
+                        className="input input-bordered text-slate-700 rounded-none h-10 w-full focus:outline-none focus:border-red-700 focus:ring-red-700 focus:ring-1"
+                      />
+                    </div>
+                  </div>
+                  <div className="mb-5">
+                    <h4 className="font-semibold mb-1 text-red-700">Kilometers</h4>
+                    <div className="flex space-x-2">
+                      <input
+                        type="number"
+                        name="kmMin"
+                        value={filters.kmMin}
+                        onChange={handleFilterChange}
+                        placeholder="Min"
+                        className="input input-bordered text-slate-700 rounded-none h-10 w-full focus:outline-none focus:border-red-700 focus:ring-red-700 focus:ring-1"
+                      />
+                      <input
+                        type="number"
+                        name="kmMax"
+                        value={filters.kmMax}
+                        onChange={handleFilterChange}
+                        placeholder="Max"
+                        className="input input-bordered text-slate-700 rounded-none h-10 w-full focus:outline-none focus:border-red-700 focus:ring-red-700 focus:ring-1"
+                      />
+                    </div>
+                  </div>
                 </div>
-              ) : (
-                <NavLink
-                  to={link.path}
-                  onClick={handleNavLinkClick} // Handle click on regular nav links to reset Cars state
-                  className={({ isActive }) => isActive ? "text-red-700" : "text-hover"}
-                >
-                  {link.value}
-                </NavLink>
-              )}
-            </li>
-          ))}
-        </ul>
+                <Button onClick={closeDropdown} text="Apply Filters" className="text-base font-medium" />
+                {/* <Button onClick={closeDropdown} text="Close" /> */}
+              </ul>
+            )}
+          </div>
+          
+          <div className='pb-6'>
+              <Link className="cursor-pointer text-red-700 btn-link px-3 gap-2 font-semibold text-md md:pt-0 pt-4">
+                 Sort
+              </Link>
+          </div>
+          
+        </div>
       </div>
-      <div className={`${isDropdownOpen ? "block" : "hidden"} w-full md:flex md:items-center md:w-auto`}>
-        <ul className="flex flex-col md:flex-row items-center md:gap-x-1 text-base">
-          {authLinks.map((link, index) => (
-            <li key={index}>
-              <NavLink
-                to={link.path}
-                onClick={handleNavLinkClick} // Handle click on auth links to reset Cars state
-                className={({ isActive }) => isActive ? "text-red-400" : "text-red-700 link-hover"}
-              >
-                <button className="btn btn-active btn-link text-red-700 link-hover">{link.value}</button>
-              </NavLink>
-            </li>
-          ))}
-        </ul>
+
+      {totalCars === 0 && (
+        <div className='flex justify-center md:h-64 items-center'>
+          <h3 className='justify-center items-center text-red-700'>No cars available</h3>
+        </div>
+      )}
+
+      <div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-2 md:gap-x-7 gap-y-12 p-5 md:py-0 md:px-16 pb-16'>
+        {currentCars.map((car) => (
+          <CardCar key={car._id} car={car} />
+        ))}
+      </div>
+      <div className='grid grid-rows-1 pt-5 md:pt-16 pb-16 justify-center'>
+        <Pagination totalPages={totalPages} currentPage={currentPage} onPageClick={handlePageClick} />
       </div>
     </div>
   );
 };
 
-export default Navbar;
+export default AllCars;

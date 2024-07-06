@@ -244,3 +244,7 @@ background-color : #0000;
   @apply bg-slate-200;
 }
 
+input:-internal-autofill-selected {
+ @apply bg-red-600;
+}
+

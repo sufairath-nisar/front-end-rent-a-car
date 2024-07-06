@@ -3,27 +3,50 @@ import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import CardCar from './CardCar';
 import Pagination from './Pagination';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowUpShortWide, faArrowDownWideShort } from '@fortawesome/free-solid-svg-icons';
+import Button from '../clients/Button';
 
-const capitalizeFirstLetter = (str) => {
-    const formattedStr = str.replace(/-/g, ' ');
-    return formattedStr.charAt(0).toUpperCase() + formattedStr.slice(1);
-};
+
+// const capitalizeFirstLetter = (str) => {
+//     const formattedStr = str.replace(/-/g, ' ');
+//     return formattedStr.charAt(0).toUpperCase() + formattedStr.slice(1);
+// };
 
 const CarList = () => {
     const { value } = useParams();
     const [cars, setCars] = useState([]);
-    const [filteredCars, setFilteredCars] = useState([]);
+    const [filteredCars, setFilteredCars] = useState([]); // For filtered cars
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const carsPerPage = 6;
+
+    const [dropdownOpen, setDropdownOpen] = useState(false); 
+    const [sortDropdownOpen, setSortDropdownOpen] = useState(false); 
+    const [sortOption, setSortOption] = useState('');
+    const [sortOrder, setSortOrder] = useState('asc');
+  
+
 
     const [filters, setFilters] = useState({
         priceMin: '',
         priceMax: '',
         kmMin: '',
         kmMax: '',
+        pricePerWeekMin: '',
+        pricePerWeekMax: '',
+        pricePerMonthMin: '',
+        pricePerMonthMax: '',
+        carName: ''
     });
+    
+    // Capitalize function remains the same
+    const capitalizeFirstLetter = (str) => {
+        const formattedStr = str.replace(/-/g, ' ');
+        return formattedStr.charAt(0).toUpperCase() + formattedStr.slice(1);
+    };
+
 
     useEffect(() => {
         const fetchCars = async () => {
@@ -45,17 +68,9 @@ const CarList = () => {
 
     const handlePageClick = (page) => {
         setCurrentPage(page);
-    };
+      };
 
-    const handleFilterChange = (e) => {
-        const { name, value } = e.target;
-        setFilters((prevFilters) => ({
-            ...prevFilters,
-            [name]: value
-        }));
-    };
-
-    const applyFilters = () => {
+      const applyFilters = () => {
         console.log('Applying filters:', filters);
 
         let filtered = cars;
@@ -79,9 +94,91 @@ const CarList = () => {
 
         setFilteredCars(filtered);
         setCurrentPage(1); // Reset to first page after applying filters
+        sortCars(filtered); // Sort cars after filtering
 
         console.log('Filtered cars:', filtered);
     };
+
+    useEffect(() => {
+        applyFilters(); 
+      }, [filters]);
+    
+      useEffect(() => {
+        sortCars(filteredCars);
+      }, [sortOption, sortOrder]);
+
+    
+
+    const sortCars = (carsToSort) => {
+        let sortedCars = [...carsToSort];
+        const orderMultiplier = sortOrder === 'asc' ? 1 : -1;
+    
+        switch (sortOption) {
+            case 'carName':
+                sortedCars.sort((a, b) => orderMultiplier * a.carName.localeCompare(b.carName));
+                break;
+            case 'price':
+                sortedCars.sort((a, b) => orderMultiplier * (parseFloat(a.pricePerDay) - parseFloat(b.pricePerDay)));
+                break;
+            case 'km':
+                sortedCars.sort((a, b) => orderMultiplier * (parseFloat(a.km) - parseFloat(b.km)));
+                break;
+            case 'pricePerWeek':
+                sortedCars.sort((a, b) => orderMultiplier * (parseFloat(a.pricePerWeek) - parseFloat(b.pricePerWeek)));
+                break;
+            case 'pricePerMonth':
+                sortedCars.sort((a, b) => orderMultiplier * (parseFloat(a.pricePerMonth) - parseFloat(b.pricePerMonth)));
+                break;
+            default:
+                break;
+        }
+    
+        setFilteredCars(sortedCars);
+    };
+
+
+    useEffect(() => {
+        applyFilters();
+    }, [filters]);
+
+    const toggleDropdown = () => {
+        setDropdownOpen(!dropdownOpen);
+      };
+    
+      const toggleSortDropdown = () => {
+        setSortDropdownOpen(!sortDropdownOpen);
+      };
+    
+     
+    
+      const handleSortChange = (option) => {
+        if (option === sortOption) {
+          setSortOrder(prevOrder => (prevOrder === 'asc' ? 'desc' : 'asc'));
+        } else {
+          setSortOption(option);
+          setSortOrder('asc'); // Default to ascending order when changing sort option
+        }
+        setSortDropdownOpen(false);
+      };
+      
+      
+      const toggleSortOrder = () => {
+        setSortOrder((prevOrder) => (prevOrder === 'asc' ? 'desc' : 'asc'));
+      };
+    
+    
+      const closeDropdown = () => {
+        setDropdownOpen(false);
+      };
+    
+      const handleFilterChange = (e) => {
+        const { name, value } = e.target;
+        setFilters(prevFilters => ({
+          ...prevFilters,
+          [name]: value.trim() // Correct usage: Return the updated state correctly
+        }));
+      };
+      
 
     if (loading) {
         return <div className='flex justify-center h-64 items-center italic text-red-700'>Loading cars...</div>;
@@ -91,101 +188,164 @@ const CarList = () => {
         return <div>Error: {error}</div>;
     }
 
-    const indexOfLastCar = currentPage * carsPerPage;
-    const indexOfFirstCar = indexOfLastCar - carsPerPage;
-    const currentCars = filteredCars.slice(indexOfFirstCar, indexOfLastCar);
-    const totalPages = Math.ceil(filteredCars.length / carsPerPage);
+  const totalCars = filteredCars.length;
+  const totalPages = Math.ceil(totalCars / carsPerPage);
+  const indexOfLastCar = currentPage * carsPerPage;
+  const indexOfFirstCar = indexOfLastCar - carsPerPage;
+  const currentCars = filteredCars.slice(indexOfFirstCar, indexOfLastCar);
 
     return (
         <div className='section-carList text-center pt-32 pb-16'>
             <h2 className='text-red-700 font-semibold pt-2'>{capitalizeFirstLetter(value)} Cars</h2>
             <div className="pb-5 flex justify-center pt-4 md:pt-0 md:justify-end md:mr-16">
                 <div className="flex items-center">
-                    <div tabIndex={0} role="button" className="dropdown dropdown-left btn m-1">
-                        <div className="btn">Filter</div>
-                        <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-96 p-4 shadow-lg">
-                            <div>
-                                <div className="mb-2">
-                                    <h3 className="font-semibold mb-1">Price (per day)</h3>
-                                    <div className="flex space-x-2">
-                                        <input
-                                            type="number"
-                                            name="priceMin"
-                                            value={filters.priceMin}
-                                            onChange={handleFilterChange}
-                                            placeholder="Min"
-                                            className="input input-bordered w-full"
-                                        />
-                                        <input
-                                            type="number"
-                                            name="priceMax"
-                                            value={filters.priceMax}
-                                            onChange={handleFilterChange}
-                                            placeholder="Max"
-                                            className="input input-bordered w-full"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="mb-2">
-                                    <h3 className="font-semibold mb-1">KM</h3>
-                                    <div className="flex space-x-2">
-                                        <input
-                                            type="number"
-                                            name="kmMin"
-                                            value={filters.kmMin}
-                                            onChange={handleFilterChange}
-                                            placeholder="Min"
-                                            className="input input-bordered w-full"
-                                        />
-                                        <input
-                                            type="number"
-                                            name="kmMax"
-                                            value={filters.kmMax}
-                                            onChange={handleFilterChange}
-                                            placeholder="Max"
-                                            className="input input-bordered w-full"
-                                        />
-                                    </div>
-                                </div>
-                                {/* <div className="flex gap-x-2 mt-4">
-                                    <div className="flex-1 mb-1">
-                                        <input
-                                            type="number"
-                                            name="passengersCapacity"
-                                            value={filters.passengersCapacity}
-                                            onChange={handleFilterChange}
-                                            placeholder="Passengers Capacity"
-                                            className="input input-bordered w-full"
-                                        />
-                                    </div>
-                                    <div className="flex-1 mb-1">
-                                        <input
-                                            type="number"
-                                            name="doors"
-                                            value={filters.doors}
-                                            onChange={handleFilterChange}
-                                            placeholder="Doors"
-                                            className="input input-bordered w-full"
-                                        />
-                                    </div>
-                                    <div className="flex-1 mb-1">
-                                        <input
-                                            type="number"
-                                            name="seats"
-                                            value={filters.seats}
-                                            onChange={handleFilterChange}
-                                            placeholder="Seats"
-                                            className="input input-bordered w-full"
-                                        />
-                                    </div>
-                                </div> */}
+                <div tabIndex={0} role="button" className="dropdown md:dropdown-left bg-transparent border-none shadow-none btn m-1 hover:bg-transparent hover:text-red-400 px-3 gap-2 font-semibold text-base relative md:pt-0 pt-4">
+                <div>
+                <Link className="cursor-pointer text-red-700 btn-link px-3 gap-2 font-semibold text-md" onClick={toggleDropdown}>
+                    Filter
+                </Link>
+                </div>
+                    {dropdownOpen && (
+                    <ul className="dropdown-content menu bg-base-100 rounded-box z-10 w-72 md:w-96 md:p-8 p-6 shadow-xl shadow-red-100 absolute md:static top-10 md:top-auto left-0 md:left-auto right-0 md:right-auto">
+                        <div>
+                      
+                        <div className="mb-5">
+                            <h4 className="font-semibold mb-1 text-red-700">Car Model</h4>
+                            <input
+                            type="text"
+                            name="carName"
+                            value={filters.carName}
+                            onChange={handleFilterChange}
+                            placeholder="Car Name"
+                            className="input input-bordered text-slate-700 rounded-none h-10 w-full focus:outline-none focus:border-red-700 focus:ring-red-700 focus:ring-1"
+                            />
+                        </div>
+
+                        <div className="mb-5">
+                            <h4 className="font-semibold mb-1 text-red-700">Price per day</h4>
+                            <div className="flex space-x-2">
+                            <input
+                                type="number"
+                                name="priceMin"
+                                value={filters.priceMin}
+                                onChange={handleFilterChange}
+                                placeholder="Min"
+                                className="input input-bordered text-slate-700 rounded-none h-10 w-full focus:outline-none focus:border-red-700 focus:ring-red-700 focus:ring-1"
+                            />
+                            <input
+                                type="number"
+                                name="priceMax"
+                                value={filters.priceMax}
+                                onChange={handleFilterChange}
+                                placeholder="Max"
+                                className="input input-bordered text-slate-700 rounded-none h-10 w-full focus:outline-none focus:border-red-700 focus:ring-red-700 focus:ring-1"
+                            />
                             </div>
-                            <button onClick={applyFilters} className="btn btn-primary mt-2">Apply Filters</button>
-                        </ul>
-                    </div>
-                    <Link to="/cars/all-cars" className="cursor-pointer text-red-700 btn-link px-3 gap-2 font-semibold text-base">
-                        View All Cars
+                        </div>
+                        <div className="mb-5">
+                            <h4 className="font-semibold mb-1 text-red-700">Price per week</h4>
+                            <div className="flex space-x-2">
+                            <input
+                                type="number"
+                                name="pricePerWeekMin"
+                                value={filters.pricePerWeekMin}
+                                onChange={handleFilterChange}
+                                placeholder="Min"
+                                className="input input-bordered text-slate-700 rounded-none h-10 w-full focus:outline-none focus:border-red-700 focus:ring-red-700 focus:ring-1"
+                            />
+                            <input
+                                type="number"
+                                name="pricePerWeekMax"
+                                value={filters.pricePerWeekMax}
+                                onChange={handleFilterChange}
+                                placeholder="Max"
+                                className="input input-bordered text-slate-700 rounded-none h-10 w-full focus:outline-none focus:border-red-700 focus:ring-red-700 focus:ring-1"
+                            />
+                            </div>
+                        </div>
+                        <div className="mb-5">
+                            <h4 className="font-semibold mb-1 text-red-700">Price per month</h4>
+                            <div className="flex space-x-2">
+                            <input
+                                type="number"
+                                name="pricePerMonthMin"
+                                value={filters.pricePerMonthMin}
+                                onChange={handleFilterChange}
+                                placeholder="Min"
+                                className="input input-bordered text-slate-700 rounded-none h-10 w-full focus:outline-none focus:border-red-700 focus:ring-red-700 focus:ring-1"
+                            />
+                            <input
+                                type="number"
+                                name="pricePerMonthMax"
+                                value={filters.pricePerMonthMax}
+                                onChange={handleFilterChange}
+                                placeholder="Max"
+                                className="input input-bordered text-slate-700 rounded-none h-10 w-full focus:outline-none focus:border-red-700 focus:ring-red-700 focus:ring-1"
+                            />
+                            </div>
+                        </div>
+                        <div className="mb-5">
+                            <h4 className="font-semibold mb-1 text-red-700">Kilometers</h4>
+                            <div className="flex space-x-2">
+                            <input
+                                type="number"
+                                name="kmMin"
+                                value={filters.kmMin}
+                                onChange={handleFilterChange}
+                                placeholder="Min"
+                                className="input input-bordered text-slate-700 rounded-none h-10 w-full focus:outline-none focus:border-red-700 focus:ring-red-700 focus:ring-1"
+                            />
+                            <input
+                                type="number"
+                                name="kmMax"
+                                value={filters.kmMax}
+                                onChange={handleFilterChange}
+                                placeholder="Max"
+                                className="input input-bordered text-slate-700 rounded-none h-10 w-full focus:outline-none focus:border-red-700 focus:ring-red-700 focus:ring-1"
+                            />
+                            </div>
+                        </div>
+                        </div>
+                        <Button onClick={closeDropdown} text="Apply Filters" className="text-base font-medium" />
+                        {/* <Button onClick={closeDropdown} text="Close" /> */}
+                    </ul>
+                    )}
+                </div>
+
+
+                <div tabIndex={0} role="button" className="dropdown md:dropdown-left bg-transparent border-none shadow-none btn m-1 hover:bg-transparent hover:text-red-400 px-3 gap-2 font-semibold text-base relative md:pt-0 pt-4">
+                    <div>
+                    <Link className="cursor-pointer text-red-700 btn-link px-3 gap-2 font-semibold text-md" onClick={toggleSortDropdown}>
+                        Sort
                     </Link>
+                    </div>
+                    {sortDropdownOpen && (
+                    <div className="dropdown-content menu bg-base-100 rounded-box w-52 px-6 pt-4 pb-4 shadow-xl shadow-red-200 z-10 absolute">
+                        
+                        <ul className='text-start'>
+                            <li className={`menu-item ${sortOption === 'carName' ? 'text-red-700' : 'text-slate-600 hover:text-red-700'}`} onClick={() => handleSortChange('carName')}>Car Model </li>  
+                            <li className={`menu-item ${sortOption === 'km' ? 'text-red-700' : 'text-slate-600 hover:text-red-700'}`} onClick={() => handleSortChange('km')}>Kilometers</li>
+                            <li className={`menu-item ${sortOption === 'price' ? 'text-red-700' : 'text-slate-600 hover:text-red-700'}`} onClick={() => handleSortChange('price')}>Price Per Day</li>
+                            <li className={`menu-item ${sortOption === 'pricePerWeek' ? 'text-red-700' : 'text-slate-600 hover:text-red-700'}`} onClick={() => handleSortChange('pricePerWeek')}>Price Per Week</li>
+                            <li className={`menu-item ${sortOption === 'pricePerMonth' ? 'text-red-700' : 'text-slate-600 hover:text-red-700'}`} onClick={() => handleSortChange('pricePerMonth')}>Price Per Month</li>
+                        </ul>
+
+                        <div className="flex justify-end cursor-pointer" onClick={toggleSortOrder}>
+                        {sortOrder === 'asc' ? (
+                            <FontAwesomeIcon icon={faArrowUpShortWide} className="text-red-700 text-xl" />
+                        ) : (
+                            <FontAwesomeIcon icon={faArrowDownWideShort} className="text-red-700 text-xl" />
+                        )}
+                        </div>
+                    </div>
+                    )}
+                    
+                </div>
+        
+                <Link to="/cars/all-cars" className="cursor-pointer text-red-700 btn-link px-3 gap-2 font-semibold text-base">
+                        View All Cars
+                </Link>
+
                 </div>
             </div>
 
