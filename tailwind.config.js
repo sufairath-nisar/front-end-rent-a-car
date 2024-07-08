@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 import daisyui from "daisyui";
+import animations from '@midudev/tailwind-animations';
 
 export default {
   content: [
@@ -15,11 +16,11 @@ export default {
       },
       lineHeight: {
         '8': '3rem', 
-      },
+      },      
      
     },
   },
-  plugins: [daisyui],
+  plugins: [daisyui,animations],
   daisyui: {
     themes: [
       {

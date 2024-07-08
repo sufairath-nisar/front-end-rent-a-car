@@ -194,7 +194,7 @@ const AllCars = () => {
   };
 
   if (loading) {
-    return <div className='flex justify-center md:h-96 items-center text-red-700'>Loading cars...</div>;
+    return <div className='flex justify-center md:h-96 h-64 items-center text-red-700'>Loading cars...</div>;
   }
 
   if (error) {
@@ -339,18 +339,18 @@ const AllCars = () => {
           <div tabIndex={0} role="button" className="dropdown md:dropdown-left bg-transparent border-none shadow-none btn m-1 hover:bg-transparent hover:text-red-400 px-3 gap-2 font-semibold text-base relative md:pt-0 pt-4">
             <div>
               <Link className="cursor-pointer text-red-700 btn-link px-3 gap-2 font-semibold text-md" onClick={toggleSortDropdown}>
-                Sort By
+                Sort by
               </Link>
             </div>
             {sortDropdownOpen && (
               <div className="dropdown-content menu bg-base-100 rounded-box w-52 px-6 pt-4 pb-4 shadow-xl shadow-red-200 z-10 absolute">
                  
                   <ul className='text-start'>
-                    <li className={`menu-item py-1 ${sortOption === 'carName' ? 'text-red-700' : 'text-slate-600 hover:text-red-700'}`} onClick={() => handleSortChange('carName')}>Car Modal </li>  
-                    <li className={`menu-item py-1 ${sortOption === 'km' ? 'text-red-700' : 'text-slate-600 hover:text-red-700'}`} onClick={() => handleSortChange('km')}>Kilometers</li>
-                    <li className={`menu-item py-1 ${sortOption === 'price' ? 'text-red-700' : 'text-slate-600 hover:text-red-700'}`} onClick={() => handleSortChange('price')}>Price Per Day</li>
-                    <li className={`menu-item py-1 ${sortOption === 'pricePerWeek' ? 'text-red-700' : 'text-slate-600 hover:text-red-700'}`} onClick={() => handleSortChange('pricePerWeek')}>Price Per Week</li>
-                    <li className={`menu-item py-1 ${sortOption === 'pricePerMonth' ? 'text-red-700' : 'text-slate-600 hover:text-red-700'}`} onClick={() => handleSortChange('pricePerMonth')}>Price Per Month</li>
+                    <li className={`menu-item py-2 ${sortOption === 'carName' ? 'text-red-700' : 'text-slate-600 hover:text-red-700'}`} onClick={() => handleSortChange('carName')}>Car Modal </li>  
+                    <li className={`menu-item py-2 ${sortOption === 'km' ? 'text-red-700' : 'text-slate-600 hover:text-red-700'}`} onClick={() => handleSortChange('km')}>Kilometers</li>
+                    <li className={`menu-item py-2 ${sortOption === 'price' ? 'text-red-700' : 'text-slate-600 hover:text-red-700'}`} onClick={() => handleSortChange('price')}>Price Per Day</li>
+                    <li className={`menu-item py-2 ${sortOption === 'pricePerWeek' ? 'text-red-700' : 'text-slate-600 hover:text-red-700'}`} onClick={() => handleSortChange('pricePerWeek')}>Price Per Week</li>
+                    <li className={`menu-item py-2 ${sortOption === 'pricePerMonth' ? 'text-red-700' : 'text-slate-600 hover:text-red-700'}`} onClick={() => handleSortChange('pricePerMonth')}>Price Per Month</li>
                   </ul>
 
                   <div className="flex justify-end cursor-pointer" onClick={toggleSortOrder}>

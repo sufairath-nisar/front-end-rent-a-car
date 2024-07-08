@@ -20,14 +20,16 @@ const CardCar = ({ car }) => {
     
     return (
         <>
-            <div className="card bg-base-100 -z-50  shadow-2xl">
+            <div className="card  bg-base-100   shadow-2xl ">
+                    <figure className="px-2 pt-3 hover:scale-110 hover:rotate-3 ease-in-out duration-700">
                         
-                    <figure className="px-2 pt-3">
                         <img
                             src={car.image} 
                             alt={car.carName} 
                             className="rounded-xl"
                         />
+                    
+                       
                     </figure>
 
                     <div className="card-body justify-center pb-6 pt-2 flex text-center">

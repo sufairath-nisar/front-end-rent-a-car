@@ -4,6 +4,8 @@ import CardCar from './CardCar';
 import Pagination from './Pagination';
 import Button from '../clients/Button';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowUpShortWide, faArrowDownWideShort } from '@fortawesome/free-solid-svg-icons';
 
 const AllCars = () => {
   const [cars, setCars] = useState([]);
@@ -11,11 +13,12 @@ const AllCars = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const carsPerPage = 6; // Number of cars to display per page
+  const carsPerPage = 6; 
 
-  const [dropdownOpen, setDropdownOpen] = useState(false); // State to manage dropdown visibility
-  const [sortDropdownOpen, setSortDropdownOpen] = useState(false); // State to manage sort dropdown visibility
-  const [sortOption, setSortOption] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false); 
+  const [sortDropdownOpen, setSortDropdownOpen] = useState(false); 
+  const [sortOption, setSortOption] = useState('');
+  const [sortOrder, setSortOrder] = useState('asc');
 
   const [filters, setFilters] = useState({
     priceMin: '',
@@ -37,8 +40,9 @@ const AllCars = () => {
         console.log('Fetched cars:', response.data);
 
         if (Array.isArray(response.data)) {
-          setCars(response.data);
-          setFilteredCars(response.data); // Set initial filtered cars
+          const uniqueCars = getUniqueCarsByCarName(response.data);
+          setCars(uniqueCars);
+          setFilteredCars(uniqueCars); 
         } else {
           console.error('Expected an array but got:', response.data);
           setError('Unexpected response format');
@@ -54,6 +58,16 @@ const AllCars = () => {
     fetchCars();
   }, []);
 
+  const getUniqueCarsByCarName = (cars) => {
+    const uniqueCars = cars.reduce((acc, car) => {
+      if (!acc.some(existingCar => existingCar.carName.trim().toLowerCase() === car.carName.trim().toLowerCase())) {
+        acc.push(car);
+      }
+      return acc;
+    }, []);
+    return uniqueCars;
+  };
+
   const handlePageClick = (page) => {
     setCurrentPage(page);
   };
@@ -62,7 +76,7 @@ const AllCars = () => {
     console.log('Applying filters:', filters);
 
     let filtered = cars.filter(car => {
-      // Filter by price, km, price per week, price per month
+     
       if (filters.priceMin && parseFloat(car.priceperday) < parseFloat(filters.priceMin)) {
         return false;
       }
@@ -110,69 +124,43 @@ const AllCars = () => {
       return true;
     });
 
-    setFilteredCars(filtered);
+    const uniqueFilteredCars = getUniqueCarsByCarName(filtered);
+    setFilteredCars(uniqueFilteredCars);
     setCurrentPage(1); // Reset to first page after applying filters
-    sortCars(filtered); // Sort cars after filtering
+    sortCars(uniqueFilteredCars); // Sort cars after filtering
 
-    console.log('Filtered cars:', filtered);
+    console.log('Filtered cars:', uniqueFilteredCars);
   };
 
+
   useEffect(() => {
-    applyFilters(); // Apply filters whenever the filter state changes
+    applyFilters(); 
   }, [filters]);
 
   useEffect(() => {
-    sortCars(filteredCars); // Sort cars whenever the sort option changes
-  }, [sortOption]);
-
-  // const sortCars = (carsToSort) => {
-  //   let sortedCars = [...carsToSort];
-  //   switch (sortOption) {
-  //     case 'carNameAsc':
-  //       sortedCars.sort((a, b) => a.carName.localeCompare(b.carName));
-  //       break;
-  //     case 'carNameDesc':
-  //       sortedCars.sort((a, b) => b.carName.localeCompare(a.carName));
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  //   setFilteredCars(sortedCars);
-  // };
+    sortCars(filteredCars);
+  }, [sortOption, sortOrder]);
 
 
   const sortCars = (carsToSort) => {
     let sortedCars = [...carsToSort];
+    const orderMultiplier = sortOrder === 'asc' ? 1 : -1;
+
     switch (sortOption) {
-      case 'carNameAsc':
-        sortedCars.sort((a, b) => a.carName.localeCompare(b.carName));
+      case 'carName':
+        sortedCars.sort((a, b) => orderMultiplier * a.carName.localeCompare(b.carName));
         break;
-      case 'carNameDesc':
-        sortedCars.sort((a, b) => b.carName.localeCompare(a.carName));
+      case 'price':
+        sortedCars.sort((a, b) => orderMultiplier * (parseFloat(a.priceperday) - parseFloat(b.priceperday)));
         break;
-      case 'priceAsc':
-        sortedCars.sort((a, b) => parseFloat(a.priceperday) - parseFloat(b.priceperday));
+      case 'km':
+        sortedCars.sort((a, b) => orderMultiplier * (parseFloat(a.km) - parseFloat(b.km)));
         break;
-      case 'priceDesc':
-        sortedCars.sort((a, b) => parseFloat(b.priceperday) - parseFloat(a.priceperday));
+      case 'pricePerWeek':
+        sortedCars.sort((a, b) => orderMultiplier * (parseFloat(a.priceperweek) - parseFloat(b.priceperweek)));
         break;
-      case 'kmAsc':
-        sortedCars.sort((a, b) => parseFloat(a.km) - parseFloat(b.km));
-        break;
-      case 'kmDesc':
-        sortedCars.sort((a, b) => parseFloat(b.km) - parseFloat(a.km));
-        break;
-      case 'pricePerWeekAsc':
-        sortedCars.sort((a, b) => parseFloat(a.priceperweek) - parseFloat(b.priceperweek));
-        break;
-      case 'pricePerWeekDesc':
-        sortedCars.sort((a, b) => parseFloat(b.priceperweek) - parseFloat(a.priceperweek));
-        break;
-      case 'pricePerMonthAsc':
-        sortedCars.sort((a, b) => parseFloat(a.pricepermonth) - parseFloat(b.pricepermonth));
-        break;
-      case 'pricePerMonthDesc':
-        sortedCars.sort((a, b) => parseFloat(b.pricepermonth) - parseFloat(a.pricepermonth));
+      case 'pricePerMonth':
+        sortedCars.sort((a, b) => orderMultiplier * (parseFloat(a.pricepermonth) - parseFloat(b.pricepermonth)));
         break;
       default:
         break;
@@ -189,26 +177,22 @@ const AllCars = () => {
     setSortDropdownOpen(!sortDropdownOpen);
   };
 
+ 
+
   const handleSortChange = (option) => {
-    setSortOption(option);
+    if (option === sortOption) {
+      setSortOrder(prevOrder => (prevOrder === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortOption(option);
+      setSortOrder('asc'); // Default to ascending order when changing sort option
+    }
     setSortDropdownOpen(false);
   };
 
-  // const handleSortChange = (option) => {
-  //   setSortOption(option);
-  //   setSortDropdownOpen(false);
-  //   sortCars(filteredCars); // Sort cars when sort option changes
-  // };
+  const toggleSortOrder = () => {
+    setSortOrder((prevOrder) => (prevOrder === 'asc' ? 'desc' : 'asc'));
+  };
 
-  // const handleSortChange = (option) => {
-  //   setSortOption(option);
-  //   sortCars(filteredCars); // Call sortCars directly here
-  // };
-
-  // const handleSortChange = (option) => {
-  //   setSortOption(option);
-  // };
-  
 
   const closeDropdown = () => {
     setDropdownOpen(false);
@@ -223,7 +207,7 @@ const AllCars = () => {
   };
 
   if (loading) {
-    return <div className='flex justify-center md:h-64 items-center text-red-700'>Loading cars...</div>;
+    return <div className='flex justify-center md:h-96 h-64 items-center text-red-700'>Loading cars...</div>;
   }
 
   if (error) {
@@ -249,7 +233,7 @@ const AllCars = () => {
               </Link>
             </div>
             {dropdownOpen && (
-              <ul className="dropdown-content menu bg-base-100 rounded-box z-10 w-72 md:w-96 p-6 shadow-xl shadow-red-100 absolute md:static top-10 md:top-auto left-0 md:left-auto right-0 md:right-auto">
+              <ul className="dropdown-content menu bg-base-100 rounded-box z-10 w-72 md:w-96 md:p-8 p-6 shadow-xl shadow-red-100 absolute md:static top-10 md:top-auto left-0 md:left-auto right-0 md:right-auto">
                 <div>
                   <div className="mb-5">
                     <h4 className="font-semibold mb-1 text-red-700">Brand</h4>
@@ -365,57 +349,34 @@ const AllCars = () => {
             )}
           </div>
 
-
           <div tabIndex={0} role="button" className="dropdown md:dropdown-left bg-transparent border-none shadow-none btn m-1 hover:bg-transparent hover:text-red-400 px-3 gap-2 font-semibold text-base relative md:pt-0 pt-4">
             <div>
               <Link className="cursor-pointer text-red-700 btn-link px-3 gap-2 font-semibold text-md" onClick={toggleSortDropdown}>
-                Sort
+                Sort by
               </Link>
             </div>
             {sortDropdownOpen && (
-              <ul className="dropdown-content menu bg-base-100 rounded-box z-10 w-72 md:w-96 p-6 shadow-xl shadow-red-100 absolute md:static top-10 md:top-auto left-0 md:left-auto right-0 md:right-auto">
-                <li className="mb-2">
-                  <button onClick={() => handleSortChange('carNameAsc')}>Sort by Car Name Ascending</button>
-                </li>
-                <li className="mb-2">
-                  <button onClick={() => handleSortChange('carNameDesc')}>Sort by Car Name Descending</button>
-                </li>
-                <li className="mb-2">
-                  <button onClick={() => handleSortChange('kmAsc')}>Sort by km Ascending</button>
-                </li>
-                <li className="mb-2">
-                  <button onClick={() => handleSortChange('kmDesc')}>Sort by km Descending</button>
-                </li>
-                <li className="mb-2">
-                  <button onClick={() => handleSortChange('priceAsc')}>Sort by Price per day Ascending</button>
-                </li>
-                <li className="mb-2">
-                  <button onClick={() => handleSortChange('priceDesc')}>Sort by Price per day Descending</button>
-                </li>
-                <li className="mb-2">
-                  <button onClick={() => handleSortChange('pricePerWeekAsc')}>Sort by Price per week Ascending</button>
-                </li>
-                <li className="mb-2">
-                  <button onClick={() => handleSortChange('pricePerWeekDesc')}>Sort by Price per week  Descending</button>
-                </li>
-                <li className="mb-2">
-                  <button onClick={() => handleSortChange('pricePerMonthAsc')}>Sort by Price per month  Ascending</button>
-                </li>
-                <li className="mb-2">
-                  <button onClick={() => handleSortChange('pricePerMonthDesc')}>Sort by Price per month Descending</button>
-                </li>
-                
-              </ul>
-            )}
-          </div>
-        
+              <div className="dropdown-content menu bg-base-100 rounded-box w-52 px-6 pt-4 pb-4 shadow-xl shadow-red-200 z-10 absolute">
+                 
+                  <ul className='text-start'>
+                    <li className={`menu-item py-2 ${sortOption === 'carName' ? 'text-red-700' : 'text-slate-600 hover:text-red-700'}`} onClick={() => handleSortChange('carName')}>Car Modal </li>  
+                    <li className={`menu-item py-2 ${sortOption === 'km' ? 'text-red-700' : 'text-slate-600 hover:text-red-700'}`} onClick={() => handleSortChange('km')}>Kilometers</li>
+                    <li className={`menu-item py-2 ${sortOption === 'price' ? 'text-red-700' : 'text-slate-600 hover:text-red-700'}`} onClick={() => handleSortChange('price')}>Price Per Day</li>
+                    <li className={`menu-item py-2 ${sortOption === 'pricePerWeek' ? 'text-red-700' : 'text-slate-600 hover:text-red-700'}`} onClick={() => handleSortChange('pricePerWeek')}>Price Per Week</li>
+                    <li className={`menu-item py-2 ${sortOption === 'pricePerMonth' ? 'text-red-700' : 'text-slate-600 hover:text-red-700'}`} onClick={() => handleSortChange('pricePerMonth')}>Price Per Month</li>
+                  </ul>
 
-          
-          {/* <div className='pb-6'>
-              <Link className="cursor-pointer text-red-700 btn-link px-3 gap-2 font-semibold text-md md:pt-0 pt-4">
-                 Sort
-              </Link>
-          </div> */}
+                  <div className="flex justify-end cursor-pointer" onClick={toggleSortOrder}>
+                  {sortOrder === 'asc' ? (
+                    <FontAwesomeIcon icon={faArrowUpShortWide} className="text-red-700 text-xl" />
+                  ) : (
+                    <FontAwesomeIcon icon={faArrowDownWideShort} className="text-red-700 text-xl" />
+                  )}
+                </div>
+              </div>
+            )}
+            
+          </div>
           
         </div>
       </div>
@@ -426,7 +387,7 @@ const AllCars = () => {
         </div>
       )}
 
-      <div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-2 md:gap-x-7 gap-y-12 p-5 md:py-0 md:px-16 pb-16'>
+      <div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-2 md:gap-x-7 gap-y-12 p-5 md:py-0 md:px-16 pb-16 '>
         {currentCars.map((car) => (
           <CardCar key={car._id} car={car} />
         ))}

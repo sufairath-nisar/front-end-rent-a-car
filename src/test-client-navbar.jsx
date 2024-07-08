@@ -3,11 +3,8 @@ import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 import DarkMode from "../DarkMode";
-import { useAuth } from "../../context/AuthContext";
 
 const ClientNavbar = () => {
-  const { user, logout } = useAuth(); // Use context to access logout function
-
   const navLinks = [
     { path: "/client", value: "Home" },
     { path: "/clients/cars", value: "Cars", hasSubmenu: true },
@@ -56,33 +53,17 @@ const ClientNavbar = () => {
 
   const authLinks = [
     { path: "/", value: "Logout" },
-    { path: "/clients/account-settings", value: "Settings", icon: faCog, hasSubmenu: true },
-  ];
-
-  const settingsDropdownLinks = [
-    { path: "/clients/account-settings/view-profile", value: "View Profile" },
-    { path: "/clients/account-settings/edit-profile", value: "Edit Profile" },
-    { path: "/clients/account-settings/change-password", value: "Change Password" },
+    { path: "/clients/account-settings", value: "Settings", icon: faCog },
   ];
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [activeCarsLink, setActiveCarsLink] = useState(false); // State to track active state of Cars link
   const [activeSubmenuIndex, setActiveSubmenuIndex] = useState(null); // State to track active submenu item
   const [activeSubLink, setActiveSubLink] = useState(null); // State to track active sub-link
-  const [isSettingsDropdownOpen, setIsSettingsDropdownOpen] = useState(false); // State for settings dropdown
-
-  const handleLogoutClick = async () => {
-    await logout(); // Call logout function from AuthContext
-    navigate("/client"); // Redirect to desired route after logout
-  };
 
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);
     setActiveCarsLink(!activeCarsLink); // Toggle active state of Cars link
-  };
-
-  const handleSettingsDropdownToggle = () => {
-    setIsSettingsDropdownOpen(!isSettingsDropdownOpen);
   };
 
   const handleSubmenuToggle = (index) => {
@@ -97,18 +78,11 @@ const ClientNavbar = () => {
     }
   };
 
-  const handleSettingsDropdownBlur = (e) => {
-    if (!e.currentTarget.contains(e.relatedTarget)) {
-      setIsSettingsDropdownOpen(false);
-    }
-  };
-
   const handleNavLinkClick = () => {
     setIsDropdownOpen(false);
     setActiveSubmenuIndex(null);
     setActiveCarsLink(false);
     setActiveSubLink(null);
-    setIsSettingsDropdownOpen(false); // Close settings dropdown
   };
 
   const handleSubLinkClick = (path) => {
@@ -117,7 +91,12 @@ const ClientNavbar = () => {
     setActiveSubLink(path);
   };
 
- 
+  const handleLogoutClick = () => {
+    setIsLogoutClicked(true);
+    navigate("/client");
+  };
+
+  
 
   return (
     <div className="fixed top-0 left-0 right-0 z-30 flex flex-wrap justify-between items-center p-2 text-2xl shadow-lg bg-white">
@@ -149,7 +128,7 @@ const ClientNavbar = () => {
             <li key={index} className="relative">
               {link.hasSubmenu ? (
                 <div className="dropdown z-50" onBlur={handleDropdownBlur}>
-                  <button
+                   <button
                     tabIndex={0}
                     onClick={handleDropdownToggle}
                     className={`btn-ghost m-1 flex items-center ${activeCarsLink ? "text-red-700" : "text-hover"}`}
@@ -157,7 +136,7 @@ const ClientNavbar = () => {
                     <span className="flex items-center">
                       Cars
                       <svg className="h-4 w-4 ml-1 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
-                        <path
+                      <path
                           fillRule="evenodd"
                           d="M10 15a1 1 0 0 1-.707-.293l-5-5a1 1 0 0 1 1.414-1.414L10 12.586l4.293-4.293a1 1 0 1 1 1.414 1.414l-5 5A1 1 0 0 1 10 15z"
                           clipRule="evenodd"
@@ -206,7 +185,7 @@ const ClientNavbar = () => {
               ) : (
                 <NavLink
                   to={link.path}
-                  onClick={handleNavLinkClick}
+                  onClick={handleNavLinkClick} 
                   className={({ isActive }) => isActive ? "text-red-700" : "text-hover"}
                 >
                   {link.value}
@@ -216,60 +195,30 @@ const ClientNavbar = () => {
           ))}
         </ul>
       </div>
+      
       <div className="flex items-center space-x-4"> {/* Add a flex container for right-aligned items */}
-        <div className={`${isDropdownOpen ? "block" : "hidden"} w-full md:flex md:items-center md:w-auto`}>
-          <ul className="flex flex-col md:flex-row items-center md:gap-x-1 text-base">
-            {authLinks.map((link, index) => (
-              <li key={index} className="relative">
-                {link.hasSubmenu ? (
-                  <div className="dropdown dropdown-left z-50" onBlur={handleSettingsDropdownBlur}>
-                    <button
-                      tabIndex={0}
-                      onClick={handleSettingsDropdownToggle}
-                      className={`btn-ghost m-1 flex items-center ${isSettingsDropdownOpen ? "text-red-700" : "text-hover"}`}
-                    >
-                      <FontAwesomeIcon icon={link.icon} className="mr-2 text-red-700 hover:text-red-500" />
-                     
-                      {/* <svg className="h-4 w-4 ml-1 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 15a1 1 0 0 1-.707-.293l-5-5a1 1 0 0 1 1.414-1.414L10 12.586l4.293-4.293a1 1 0 1 1 1.414 1.414l-5 5A1 1 0 0 1 10 15z"
-                          clipRule="evenodd"
-                        />
-                      </svg> */}
-                    </button>
-                    {isSettingsDropdownOpen && (
-                      <ul
-                        tabIndex={0}
-                        className="dropdown-content z-[1] menu p-2 shadow-red-200 shadow-xl bg-base-100 rounded-box w-44"
-                      >
-                        {settingsDropdownLinks.map((settingLink, settingIndex) => (
-                          <li key={settingIndex}>
-                            <NavLink
-                              to={settingLink.path}
-                              onClick={handleNavLinkClick}
-                              className={({ isActive }) => isActive ? "bg-red-700 text-white " : "text-hover settings-hover"}
-                            >
-                              {settingLink.value}
-                            </NavLink>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                ) : (
+          <div className={`${isDropdownOpen ? "block" : "hidden"} w-full md:flex md:items-center md:w-auto`}>
+            <ul className="flex flex-col md:flex-row items-center md:gap-x-1 text-base">
+              {authLinks.map((link, index) => (
+                <li key={index}>
                   <NavLink
-                  to={link.path}
-                  onClick={link.value === "Logout" ? handleLogoutClick : () => handleNavLinkClick(link.path)}
-                  className={({ isActive }) => isActive ? "text-red-400" : "text-red-700 link-hover"}
-                >
-                  {link.value}
-                </NavLink>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
+                    to={link.path}
+                    onClick={handleNavLinkClick} 
+                    className={({ isActive }) => isActive ? "text-red-400" : "text-red-700 link-hover"}
+                  >
+
+                    {link.icon ? (
+                      <FontAwesomeIcon icon={link.icon} className="mr-2" />
+                    ) : (
+                      <button className="btn btn-active btn-link text-red-700 link-hover">
+                        {link.value}
+                      </button>
+                    )}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </div>
         <DarkMode />
       </div>
     </div>

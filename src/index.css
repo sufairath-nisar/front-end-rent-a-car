@@ -244,7 +244,17 @@ background-color : #0000;
   @apply bg-slate-200;
 }
 
-input:-internal-autofill-selected {
+/* input:-internal-autofill-selected {
  @apply bg-red-600;
+} */
+
+
+.card hover:animate-wobble{
+  @apply animate-wobble !important;
+}
+
+.settings-hover:hover{
+  @apply bg-red-50;
+  @apply text-red-700;
 }
 

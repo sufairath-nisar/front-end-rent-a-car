@@ -2,46 +2,43 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import CardCar from './CardCar';
-import Pagination from './Pagination'; 
-import Button from '../clients/Button';
+import Pagination from './Pagination';
 import { Link } from 'react-router-dom';
+import Button from '../clients/Button';
 
 
 
-const capitalizeFirstLetter = (str) => {
-    // Remove hyphens and replace with spaces
-    const formattedStr = str.replace(/-/g, ' ');
-    // Capitalize first letter
-    return formattedStr.charAt(0).toUpperCase() + formattedStr.slice(1);
-};
+const CarListSearch = () => {
+  const { searchTerm } = useParams();
+  const [cars, setCars] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const carsPerPage = 6; // Number of cars to display per page
 
-const CarList = () => {
-    const { value } = useParams();
-    const [cars, setCars] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [currentPage, setCurrentPage] = useState(1);
-    const carsPerPage = 6; // Number of cars to display per page
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/v1/clients/search-cars/${searchTerm}`);
+        console.log('Fetched cars:', response.data);
 
-    useEffect(() => {
-        const fetchCars = async () => {
-            try {
-                const response = await axios.get(`http://localhost:3000/api/v1/clients/get-cars/types/${value}`);
-                
-                console.log('Fetched cars:', response.data);
-                setCars(response.data);
+        // Check if the response data is an array
+        if (Array.isArray(response.data)) {
+          setCars(response.data);
+        } else {
+          console.error('Expected an array but got:', response.data);
+          setError('Unexpected response format');
+        }
+      } catch (error) {
+        console.error('Error fetching cars:', error);
+        setError('Error fetching cars');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-                
-            } catch (error) {
-                console.error('Error fetching cars:', error);
-                setError(error.response ? error.response.data : 'Error fetching cars');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchCars();
-    }, [value]); 
+    fetchCars();
+  }, [searchTerm]);
 
   const indexOfLastCar = currentPage * carsPerPage;
   const indexOfFirstCar = indexOfLastCar - carsPerPage;
@@ -53,56 +50,48 @@ const CarList = () => {
   };
 
 
-    if (loading) {
-        return <div className='flex justify-center h-64 items-center italic text-red-700'>Loading cars...</div>;
-    }
+  if (loading) {
+    return <div className='flex justify-center h-64 items-center italic text-red-700'>Loading cars...</div>;
+  }
 
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
+  if (error) {
+    return <div className='flex justify-center md:h-64 items-center'>
+    <h3 className='justify-center items-center text-red-700'>No cars available</h3>
+    </div>;;
+  }
 
-    // if (cars.length === 0) {
-    //     return <div>No cars available.</div>;
-    // }
+  if (cars.length === 0) {
+    return <div className='flex justify-center md:h-64 items-center'>
+    <h3 className='justify-center items-center text-red-700'>No cars available</h3>
+    </div>;;
+  }
 
-    return (
-        
-        <div className='section-carList text-center pt-32 pb-16'>
-            <h2 className='text-red-700 font-semibold pt-2'>{capitalizeFirstLetter(value)} Cars</h2>
-            <div className="pb-5 flex justify-center pt-4 md:pt-0 md:justify-end md:mr-16">
-            <div className="flex items-center ">
-                <div tabIndex={0} className="collapse w-full">
-                    <div className="collapse-title text-xl font-medium w-6">Filter</div>
-                    <div className="collapse-content w-full">
-                         <p>tabindex={0} attribute is necessary to make the div focusable</p>
-                     </div>
-                </div>
-                <Link to="/cars/all-cars" className="cursor-pointer text-red-700 btn-link px-3 gap-2 font-semibold text-md w-4/5">
-                    View All Cars
+  return (
+      <div className='pt-32 '>
+        <div className=" md:pb-5 pb-2 flex justify-center pt-2 md:pt-0 md:justify-end md:mr-16">
+                <Link to="/cars/all-cars" className="cursor-pointer">
+                    <Button text="View All Cars >>" />
                 </Link>
-            </div>
-
-            </div>
-
-            {cars.length === 0 ? (
+         </div>
+   
+                {cars.length === 0 ? (
                     <div className='flex justify-center md:h-64 items-center'>
                         <h3 className='justify-center items-center text-red-700'>No cars available</h3>
                     </div>
                 ) : (
-                    <div className='grid md:grid-cols-3 grid-cols-1 gap-x-2 md:gap-x-7 gap-y-12 pb-16  px-5 md:px-16'>
+                    <div className='grid md:grid-cols-3 grid-cols-1 md:gap-x-7 md:gap-y-12 gap-y-6 pt-6 px-6 md:pt-2 md:pb-16 md:px-16 pb-10'>
                         {currentCars.map((car) => (
                             <CardCar key={car._id} car={car} />
                         ))}
                     </div>
                 )}
 
-            <div className='grid grid-rows-1  justify-center'>
-                 <Pagination totalPages={totalPages} currentPage={currentPage} onPageClick={handlePageClick} />
-            </div>
-        </div>
-        
-       
-    );
+                <div className='grid grid-rows-1 pb-16 justify-center'>
+                     <Pagination totalPages={totalPages} currentPage={currentPage} onPageClick={handlePageClick} />
+                </div>
+     
+      </div>
+  );
 };
 
-export default CarList;
+export default CarListSearch;

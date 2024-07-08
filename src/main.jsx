@@ -30,7 +30,11 @@ import CarListcategory from './components/cars/CarListcategory';
 import CarListSearch from './components/cars/CarListSearch';
 import AllCarsPage from './pages/cars/AllCarsPage';
 import ClientLayout from './layouts/ClientLayout';
-import SettingsPage from './pages/clients/SettingsPage';
+import EditProfilePage from './pages/clients/EditProfilePage';
+import ViewProfilePage from './pages/clients/ViewProfilePage';
+import ChangePasswordPage from './pages/clients/ChangePasswordPage';
+import { AuthProvider } from './context/AuthContext';
+
 
 
 const router = createBrowserRouter([
@@ -121,9 +125,18 @@ const router = createBrowserRouter([
       },
     
       {
-        path: "/clients/account-settings",
-        element: <SettingsPage />,
+        path: "/clients/account-settings/change-password",
+        element: <ChangePasswordPage />,
       },
+      {
+        path: "/clients/account-settings/edit-profile",
+        element: <EditProfilePage />,
+      },
+      {
+        path: "/clients/account-settings/view-profile",
+        element: <ViewProfilePage />,
+      },
+
       {
         path: "/clients/more-safety",
         element: <SafetyPage />
@@ -147,7 +160,8 @@ const router = createBrowserRouter([
       {
         path: "/clients/cars/all-cars",
         element: <AllCarsPage />      
-      },  
+      },
+     
     ],
  
   }
@@ -155,6 +169,10 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+     <AuthProvider>
+        <RouterProvider router={router} />
+     </AuthProvider>
   </React.StrictMode>,
 )
+
+
