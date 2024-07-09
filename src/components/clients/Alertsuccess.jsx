@@ -4,7 +4,7 @@ const Alertsuccess = ( { text }) => {
   return (
     <>
         <div className='grid grid-rows-1 place-items-center'>
-            <div role="alert" className="alert w-80 alert-success font-medium text-sm text-red-700">
+            <div role="alert" className="alert w-80 alert-success font-medium text-sm text-green-700">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-6 w-6 shrink-0 stroke-current"

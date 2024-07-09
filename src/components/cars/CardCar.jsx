@@ -1,8 +1,10 @@
 import React from 'react';
 import Button from '../clients/Button';
+import { Link } from 'react-router-dom';
 
 
-const CardCar = ({ car }) => {
+const CardCar = ({ car}) => {
+  
     console.log('Rendering car:', car);
 
    
@@ -67,7 +69,7 @@ const CardCar = ({ car }) => {
                         </div>
 
                         <div className="card-actions">
-                            <Button text="BOOK NOW" />
+                            <Link to="/booking"> <Button text="BOOK NOW" /></Link>
                         </div>
                     </div>
             </div>

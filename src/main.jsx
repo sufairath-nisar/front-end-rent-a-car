@@ -34,6 +34,9 @@ import EditProfilePage from './pages/clients/EditProfilePage';
 import ViewProfilePage from './pages/clients/ViewProfilePage';
 import ChangePasswordPage from './pages/clients/ChangePasswordPage';
 import { AuthProvider } from './context/AuthContext';
+import BookingPage from './pages/clients/BookingPage';
+import ChooseLocation from './components/clients/ChooseLocation';
+import Payment from './components/clients/Payment';
 
 
 
@@ -92,6 +95,14 @@ const router = createBrowserRouter([
       {
         path: "/cars/all-cars",
         element: <AllCarsPage />      
+      },
+      {
+        path: "/booking",
+        element: <BookingPage />      
+      },
+      {
+        path: "/booking/signup",
+        element: <SignupPage />      
       },
       // {
       //   path: "clients/logout",
@@ -161,7 +172,15 @@ const router = createBrowserRouter([
         path: "/clients/cars/all-cars",
         element: <AllCarsPage />      
       },
-     
+      {
+        path: "/booking/choose-location",
+        element: <ChooseLocation />      
+      },
+      {
+        path: "/booking/payment",
+        element: <Payment />      
+      },
+
     ],
  
   }

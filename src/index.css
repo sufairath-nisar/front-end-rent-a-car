@@ -132,8 +132,8 @@ background-color : #0000;
 }
 
 .alert-success{
-  @apply bg-red-50;
-  @apply border-red-700;
+  @apply bg-green-50;
+  @apply border-green-700;
 }
 
 .alert-warning{

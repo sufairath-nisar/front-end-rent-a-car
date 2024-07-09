@@ -3,7 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from "axios";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import Button from "./Button";
 import Alertsuccess from "./Alertsuccess";
 import AlertFail from "./AlertFail";
@@ -242,73 +242,46 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-// async function checkEmailExists(email) {
-//   try {
-//     const response = await axios.get(
-//       `http://localhost:3000/api/v1/clients/get-a-client`,
-//       { withCredentials: true }
-//     );
-//     console.log(`${email}`)
-//     console.log('Fetched clients:', response.data);
-//     if(response.data.length>0)
-//       {
-//         return response.data.exists; 
-//       }
-    
-//   } catch (error) {
-//     console.error("Error checking email:", error);
-//     return false; // Return false on error or if email doesn't exist
-//   }
-// }
 
-export default function Signup() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) });
 
+export default function Signup({ onSuccess }) {
+  const { register, handleSubmit, formState: { errors }, } = useForm({ resolver: yupResolver(schema) });
   const [role, setRole] = useState("personal");
-  const [showAlert, setShowAlert] = useState(false); 
+  const [showAlert, setShowAlert] = useState(false);
   const [emailExists, setEmailExists] = useState(false);
-  const navigate = useNavigate(); 
-  
+  const navigate = useNavigate();
+  const location = useLocation();
+  const fromBooking = location.state?.fromBooking;
 
   const onSubmit = async (data) => {
     console.log("testing data", data);
-   
     try {
       const response = await axios.get(
         `http://localhost:3000/api/v1/clients/get-a-client?email=${data.email}`,
-        { withCredentials: true }        
+        { withCredentials: true }
       );
-      console.log("response=",response);
-
+      console.log("response=", response);
       if (response.data) {
         setEmailExists(true);
         console.error("Client already exists with the provided email:", data.email);
         return;
       }
-
-     
-    } 
-    catch (error) {
+    } catch (error) {
       console.error("Error during signup:", error);
       console.error("Response data:", error.response?.data);
-      const res = await axios.post(
-        "http://localhost:3000/api/v1/clients/signup",
-        data,
-        {
-          withCredentials: true,
-        }
-      );
-      console.log(res.data);
-      setShowAlert(true);
-      setTimeout(() => {
-        setShowAlert(false);
-        navigate("/client");
-      }, 2000); 
     }
+
+    const res = await axios.post("http://localhost:3000/api/v1/clients/signup", data, { withCredentials: true });
+    console.log(res.data);
+    setShowAlert(true);
+    setTimeout(() => {
+      setShowAlert(false);
+      if (fromBooking) {
+        navigate('/booking/choose-location');
+      } else {
+        navigate('/client');
+      }
+    }, 2000);
   };
 
   const handleEmailChange = () => {
