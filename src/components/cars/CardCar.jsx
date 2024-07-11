@@ -19,6 +19,35 @@ const CardCar = ({ car}) => {
 
   
     const features = car.features[0];
+
+    // const handleBookNow = () => {
+    //     // Assuming you want to store the first branch
+    //     const branch = car.branch.length > 0 ? car.branch[0] : null;
+    
+    //     // Store the car details in Local Storage
+    //     localStorage.setItem('selectedCar', JSON.stringify({
+    //       ...car,
+    //       branch
+    //     }));
+    
+    //     console.log('Car details stored in Local Storage:', car);
+    //   };
+
+    const handleBookNow = () => {
+        const branch = car.branch.length > 0 ? car.branch[0] : null;
+
+        const carDetails = {
+            ...car,
+            branch,
+            carId: car.id // Assuming car.id is the car's unique identifier
+        };
+
+        // Store the car details in Local Storage
+        localStorage.setItem('selectedCar', JSON.stringify(carDetails));
+
+        console.log('Car details stored in Local Storage:', carDetails);
+    };
+
     
     return (
         <>
@@ -69,7 +98,7 @@ const CardCar = ({ car}) => {
                         </div>
 
                         <div className="card-actions">
-                            <Link to="/booking"> <Button text="BOOK NOW" /></Link>
+                            <Link to="/booking"> <Button text="BOOK NOW" onClick={handleBookNow}/></Link>
                         </div>
                     </div>
             </div>

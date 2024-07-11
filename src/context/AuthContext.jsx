@@ -1,4 +1,3 @@
-// AuthContext.jsx
 import React, { createContext, useState, useContext } from 'react';
 import axios from 'axios';
 
@@ -16,14 +15,18 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await axios.post(
         "http://localhost:3000/api/v1/clients/signin",
-        { email, password, captchaToken },
+        { email, password, captchaToken},
         { withCredentials: true }
       );
 
       if (res.status === 200) {
-        const userData = { email }; // Assuming you only need email for user info
+        const { clientId, email } = res.data; // Assuming response contains clientId and email
+        console.log("clientId", clientId);
+        const userData = { clientId, email };
         setUser(userData);
+        console.log("userData",userData);
         localStorage.setItem('user', JSON.stringify(userData));
+        localStorage.setItem('clientId', clientId); // Store client ID separately if needed
         return { success: true, path: returnTo }; // Return path to navigate to
       } else {
         return { success: false, message: "An error occurred. Please try again." };
@@ -41,13 +44,43 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const signup = async (email, password, captchaToken) => {
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/v1/clients/signup",
+        { email, password, captchaToken },
+        { withCredentials: true }
+      );
+
+      if (res.status === 201) {
+        const { clientId, email } = res.data; // Assuming response contains clientId and email
+        const userData = { clientId, email };
+        setUser(userData);
+        localStorage.setItem('user', JSON.stringify(userData));
+        localStorage.setItem('clientId', clientId); // Store client ID separately if needed
+        return { success: true };
+      } else {
+        return { success: false, message: "An error occurred. Please try again." };
+      }
+    } catch (error) {
+      let message = "An error occurred. Please try again.";
+      if (error.response) {
+        if (error.response.status === 400) {
+          message = "Bad request. Please check your input.";
+        }
+      }
+      return { success: false, message };
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem('user');
+    localStorage.removeItem('clientId');
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, signup, logout }}>
       {children}
     </AuthContext.Provider>
   );

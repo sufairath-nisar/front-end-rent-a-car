@@ -6,6 +6,8 @@ import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Button from './Button';
+import { format } from 'date-fns';
+import { useNavigate } from 'react-router-dom'; // Correct import for useNavigate
 
 // Yup schema for form validation
 const schema = Yup.object().shape({
@@ -18,19 +20,6 @@ const schema = Yup.object().shape({
   dropoffLocation: Yup.string().required('Dropoff location is required'),
 });
 
-// Function to format the date as YYYY-MM-DD
-const formatDate = (date) => {
-  const d = new Date(date);
-  let month = '' + (d.getMonth() + 1);
-  let day = '' + d.getDate();
-  const year = d.getFullYear();
-
-  if (month.length < 2) month = '0' + month;
-  if (day.length < 2) day = '0' + day;
-
-  return [year, month, day].join('-');
-};
-
 const ChooseLocation = ({ onComplete }) => {
   const [car, setCar] = useState(null);
   const [initialLoad, setInitialLoad] = useState(true);
@@ -42,6 +31,7 @@ const ChooseLocation = ({ onComplete }) => {
   });
 
   const drivenMethod = watch('drivenMethod');
+  const navigate = useNavigate(); // Correct useNavigate hook
 
   useEffect(() => {
     const storedCar = localStorage.getItem('selectedCar');
@@ -64,28 +54,6 @@ const ChooseLocation = ({ onComplete }) => {
     }
   }, [setValue, initialLoad]);
 
-  const [pickupDate, setPickupDate] = useState(null);
-  const [dropoffDate, setDropoffDate] = useState(null);
-
-//   const removeTimeFromDate = (dateString) => {
-//   return dateString.split('T')[0];
-// };
-
-  const handlePickupDateChange = (date) => {
-    setPickupDate(date);
-    // setValue('pickupDate', removeTimeFromDate(date.toISOString()));
-    setValue('pickupDate', date); // Set value for form validation
-    if (!dropoffDate || date > dropoffDate) {
-      setDropoffDate(new Date(date.getTime()));
-      setValue('dropoffDate', new Date(date.getTime())); // Set value for form validation
-    }
-  };
-
-  const handleDropoffDateChange = (date) => {
-    setDropoffDate(date);
-    setValue('dropoffDate', date); // Set value for form validation
-  };
-
   const onSubmit = async (formData) => {
     try {
       const clientId = localStorage.getItem('clientId');
@@ -98,20 +66,32 @@ const ChooseLocation = ({ onComplete }) => {
         ...formData,
         client: clientId,
         car: car._id,
-        pickupDate: formatDate(formData.pickupDate),
-        dropoffDate: formatDate(formData.dropoffDate),
+        pickupDate: format(new Date(formData.pickupDate), 'dd-MM-yyyy'),
+        dropoffDate: format(new Date(formData.dropoffDate), 'dd-MM-yyyy'),
       };
+
       console.log('dataToSend', dataToSend);
 
       const response = await axios.post('http://localhost:3000/api/v1/clients/create-order', dataToSend, {
         withCredentials: true,
       });
+
       console.log('Order created:', response.data);
-      onComplete();
-      // If you have a navigate function to go to the next page, you should call it here
-      // navigate('/booking/payment');
+      if (onComplete && typeof onComplete === 'function') {
+        onComplete();
+      }
+    
+     
+      
+      if (response && response.status === 200) {
+        navigate('/booking/payment'); // Navigate to payment page on success
+      } else {
+        console.log('Booking failed:', response);
+        // Handle error state or display error message
+      }
     } catch (error) {
       console.error('Error creating order:', error);
+      // Handle error state or display error message
     }
   };
 
@@ -122,8 +102,7 @@ const ChooseLocation = ({ onComplete }) => {
     if (selectedMethod === 'self' && car && car.branch) {
       const pickupLocation = `${car.branch.name}, ${car.branch.address}`;
       setValue('pickupLocation', pickupLocation);
-      const dropoffLocation = `${car.branch.name}, ${car.branch.address}`;
-      setValue('dropoffLocation', dropoffLocation);
+      setValue('dropoffLocation', pickupLocation); // Assuming dropoff location same as pickup for self-drive
     }
   };
 
@@ -132,7 +111,7 @@ const ChooseLocation = ({ onComplete }) => {
   };
 
   const filterDropoffDates = (date) => {
-    return date > pickupDate;
+    return date > watch('pickupDate');
   };
 
   const handleSaveAndContinue = () => {
@@ -176,8 +155,8 @@ const ChooseLocation = ({ onComplete }) => {
               <label htmlFor="pickupDate" className="block text-sm font-medium text-gray-900 mb-3">Pickup Date</label>
               <DatePicker
                 id="pickupDate"
-                selected={pickupDate}
-                onChange={handlePickupDateChange}
+                selected={watch('pickupDate')}
+                onChange={date => setValue('pickupDate', date)}
                 placeholderText="Pickup Date"
                 className="block py-2 w-64 border bg-red-50 px-2 p text-sm text-gray-900 border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
                 dateFormat="dd-MM-yyyy"
@@ -190,12 +169,12 @@ const ChooseLocation = ({ onComplete }) => {
               <label htmlFor="dropOffDate" className="block text-sm font-medium text-gray-900 mb-3">Dropoff Date</label>
               <DatePicker
                 id="dropOffDate"
-                selected={dropoffDate}
-                onChange={handleDropoffDateChange}
+                selected={watch('dropoffDate')}
+                onChange={date => setValue('dropoffDate', date)}
                 placeholderText="Dropoff Date"
                 className="block w-64 py-2 border bg-red-50 px-2 p text-sm text-gray-900 border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
                 dateFormat="dd-MM-yyyy"
-                minDate={pickupDate}
+                minDate={watch('pickupDate')}
                 filterDate={filterDropoffDates}
               />
               {errors.dropoffDate && <p className="text-red-500">{errors.dropoffDate.message}</p>}
