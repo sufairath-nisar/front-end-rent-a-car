@@ -43,14 +43,11 @@ import { useNavigate } from 'react-router-dom';
 import Signin from './Signin';
 import ChooseLocation from './ChooseLocation';
 import Payment from './Payment';
-import { useAuth } from '../../context/AuthContext';
 
 const Booking = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLocationChosen, setIsLocationChosen] = useState(false);
-  const { user, login, signup, logout } = useAuth();
   const navigate = useNavigate();
-  
 
   const handleSigninSuccess = () => {
     setIsLoggedIn(true);

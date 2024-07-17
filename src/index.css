@@ -258,3 +258,11 @@ background-color : #0000;
   @apply text-red-700;
 }
 
+[data-theme="night"] .logo-emirates {
+  @apply bg-[url('/images/lightmode-logo.png')];
+}
+
+
+.logo-emirates {
+  @apply bg-[url('/images/darkmode-logo.png')];
+}

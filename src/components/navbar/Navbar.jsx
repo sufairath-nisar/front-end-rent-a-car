@@ -90,8 +90,8 @@ const Navbar = () => {
 
   return (
     <div className="fixed top-0 left-0 right-0 z-30 flex flex-wrap justify-between items-center  p-2 text-2xl shadow-lg bg-white">
-      <div className="flex items-center">
-        <img src="/images/logo-emirates-drive.png" className=" w-40" alt="Logo" />
+      <div className="flex items-center logo-emirates w-60 h-16">
+      
       </div>
       <button
         className="block md:hidden px-2 text-gray-700 focus:outline-none"

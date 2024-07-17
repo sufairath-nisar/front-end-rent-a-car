@@ -27,6 +27,7 @@ export const AuthProvider = ({ children }) => {
         console.log("userData",userData);
         localStorage.setItem('user', JSON.stringify(userData));
         localStorage.setItem('clientId', clientId); // Store client ID separately if needed
+        localStorage.setItem('clientEmail', email);
         return { success: true, path: returnTo }; // Return path to navigate to
       } else {
         return { success: false, message: "An error occurred. Please try again." };
@@ -58,6 +59,7 @@ export const AuthProvider = ({ children }) => {
         setUser(userData);
         localStorage.setItem('user', JSON.stringify(userData));
         localStorage.setItem('clientId', clientId); // Store client ID separately if needed
+        localStorage.setItem('clientEmail', email);
         return { success: true };
       } else {
         return { success: false, message: "An error occurred. Please try again." };
@@ -76,6 +78,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('clientId');
+    localStorage.removeItem('clientEmail');
     setUser(null);
   };
 

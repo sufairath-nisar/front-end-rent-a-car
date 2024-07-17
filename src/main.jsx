@@ -37,6 +37,7 @@ import { AuthProvider } from './context/AuthContext';
 import BookingPage from './pages/clients/BookingPage';
 import ChooseLocation from './components/clients/ChooseLocation';
 import Payment from './components/clients/Payment';
+import OnlinePayment from './components/clients/OnlinePayment';
 
 
 
@@ -179,6 +180,10 @@ const router = createBrowserRouter([
       {
         path: "/booking/payment",
         element: <Payment />      
+      },
+      {
+        path: "/booking/online-payment",
+        element: <OnlinePayment/>      
       },
 
     ],

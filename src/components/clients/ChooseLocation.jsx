@@ -6,7 +6,7 @@ import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Button from './Button'; // Assuming Button component is defined elsewhere
-import { format, formatISO } from 'date-fns';
+import { format,differenceInDays, formatISO } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 
 const schema = Yup.object().shape({
@@ -17,16 +17,16 @@ const schema = Yup.object().shape({
   // pickupTime: Yup.string().required('Pickup time is required'),
   // dropoffTime: Yup.string().required('Dropoff time is required'),
   pickupTime: Yup.string()
-  .required('Pickup time is required')
-  .matches(
-    /^([0][0-9]|[1][0-1]):[0-5][0-9]\s(?:AM|PM)$/i,
-    'Pickup time must be between 00:00 AM and 11:59 PM'
-  ),
+    .required('Pickup time is required')
+    .matches(
+      /^(9|10|11):[0-5][0-9]\sAM$|^(12|[1-5]):[0-5][0-9]\sPM$|^6:00\sPM$/i,
+      'Pickup time must be between 9:00 AM and 6:00 PM'
+    ),
   dropoffTime: Yup.string()
     .required('Dropoff time is required')
     .matches(
-      /^([0][0-9]|[1][0-1]):[0-5][0-9]\s(?:AM|PM)$/i,
-      'Dropoff time must be between 00:00 AM and 11:59 PM'
+      /^(9|10|11):[0-5][0-9]\sAM$|^(12|[1-5]):[0-5][0-9]\sPM$|^6:00\sPM$/i,
+      'Dropoff time must be between 9:00 AM and 6:00 PM'
     ),
   
   drivenMethod: Yup.string().required('Please select driven method'),
@@ -81,7 +81,7 @@ const ChooseLocation = ({ onComplete }) => {
       const filteredOrders = orders.filter(order => {
         if (Array.isArray(order.car)) {
           const isCarMatch = order.car.some(car => car._id === carId);
-          console.log('Checking order:', order._id, 'Car Match:', isCarMatch);
+          // console.log('Checking order:', order._id, 'Car Match:', isCarMatch);
           return isCarMatch;
         }
         return false;
@@ -93,6 +93,12 @@ const ChooseLocation = ({ onComplete }) => {
         pickupDate: new Date(order.pickupDate),
         dropoffDate: new Date(order.dropoffDate),
       }));
+
+      // Loop through the dates array and store each date separately
+      dates.forEach((date, index) => {
+        localStorage.setItem(`pickupDate_${index}`, date.pickupDate.toISOString());
+        localStorage.setItem(`dropoffDate_${index}`, date.dropoffDate.toISOString());
+      });
   
       // console.log('Booked dates:', JSON.stringify(dates, null, 2)); // Log booked dates for debugging
       setBookedDates(dates);
@@ -115,6 +121,11 @@ const ChooseLocation = ({ onComplete }) => {
       const pickupDate = new Date(formData.pickupDate);
       const dropoffDate = new Date(formData.dropoffDate);
 
+      const pricePerMonth = parseFloat(car.pricePerMonth);
+      const pricePerWeek = parseFloat(car.pricePerWeek);
+      const pricePerDay = parseFloat(car.pricePerDay);
+      // Calculate the total payment
+      const totalPayment = calculatePayment(pickupDate, dropoffDate, car.pricepermonth, car.priceperweek, car.priceperday);
     
 
     // Ensure the time zone offset is handled correctly
@@ -124,7 +135,11 @@ const ChooseLocation = ({ onComplete }) => {
       car: car._id,
       pickupDate: formatISO(pickupDate),
       dropoffDate: formatISO(dropoffDate),
+      totalPayment,
     };
+
+    console.log('totalPayment', totalPayment)
+    localStorage.setItem('totalPayment', JSON.stringify(totalPayment));
 
    
       // console.log('dataToSend', dataToSend);
@@ -139,6 +154,7 @@ const ChooseLocation = ({ onComplete }) => {
       }
 
       if (response && response.status === 200) {
+        localStorage.setItem('orderId', response.data._id);
         navigate('/booking/payment'); // Navigate to payment page on success
       } else {
         console.log('Booking failed:', response);
@@ -147,6 +163,27 @@ const ChooseLocation = ({ onComplete }) => {
       console.error('Error creating order:', error);
     }
   };
+
+  const calculatePayment = (pickupDate, dropoffDate, pricePerMonth, pricePerWeek, pricePerDay) => {
+    // Ensure dates are valid Date objects
+    pickupDate = new Date(pickupDate);
+    dropoffDate = new Date(dropoffDate);
+
+    console.log('pickupDate',pickupDate);
+    console.log('dropoffDate',dropoffDate);
+    console.log('pricePerDay',pricePerDay);
+    console.log('pricePerWeek',pricePerWeek);
+    console.log('pricePerMonth',pricePerMonth);
+
+    const totalDays = Math.ceil((dropoffDate - pickupDate) / (1000 * 60 * 60 * 24)); // More accurate calculation using milliseconds
+
+    const months = Math.floor(totalDays / 30);
+    const weeks = Math.floor((totalDays % 30) / 7);
+    const days = totalDays % 7;
+
+    const totalPayment = (months * pricePerMonth) + (weeks * pricePerWeek) + (days * pricePerDay);
+    return totalPayment;
+};
 
   const handleDrivenMethodChange = (event) => {
     const selectedMethod = event.target.value;
