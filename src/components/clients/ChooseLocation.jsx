@@ -225,7 +225,8 @@ const ChooseLocation = ({ onComplete }) => {
 
 
   return (
-    <div className="pb-16 pt-36">
+    <div  className="pb-16 pt-36">
+       <div className='pb-20'>
       <h2 className="font-semibold mb-4 text-center">Choose your <span className="text-red-700">Date and Time</span></h2>
       <div className="max-w-2xl mx-auto mt-10 p-12 shadow-xl shadow-red-700 rounded-lg">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 px-3">
@@ -344,7 +345,17 @@ const ChooseLocation = ({ onComplete }) => {
           </div>
         </form>
       </div>
+       </div>
+
+       <div className='flex justify-center'>
+        <ul className="steps steps-horizontal">
+          <li className="step step-error text-red-700  font-semibold">Create Account</li>
+          <li className="step step-error text-red-700 font-semibold">Choose Date & Time</li>
+          <li className="step font-semibold">Payment Details</li>
+        </ul>
+       </div>
     </div>
+   
   );
 };
 

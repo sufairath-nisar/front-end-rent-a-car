@@ -117,14 +117,14 @@ const Signin = ({ onSuccess, onReturnToBooking, fromBooking }) => {
           <div className="text-sm text-center">
             <p className="justify-center text-center text-sm font-medium text-gray-900">
               Not registered yet?{' '}
-              {/* <Link to="/clients/signup" className="btn-link link-hover text-sm font-medium text-red-700">
-                Signup
-              </Link> */}
+           
               <Link 
                 to="/clients/signup" 
                 state={fromBooking ? { fromBooking: true } : undefined} // Conditionally pass state
                 className="btn-link link-hover text-sm font-medium text-red-700"
               >Signup</Link>
+
+                            
             </p>
           </div>
         </form>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 import DarkMode from "../DarkMode";
@@ -7,6 +8,7 @@ import { useAuth } from "../../context/AuthContext";
 
 const ClientNavbar = () => {
   const { user, logout } = useAuth(); // Use context to access logout function
+  const navigate = useNavigate();
 
   const navLinks = [
     { path: "/client", value: "Home" },
@@ -73,7 +75,7 @@ const ClientNavbar = () => {
 
   const handleLogoutClick = async () => {
     await logout(); // Call logout function from AuthContext
-    navigate("/client"); // Redirect to desired route after logout
+    navigate("/"); // Redirect to desired route after logout
   };
 
   const handleDropdownToggle = () => {

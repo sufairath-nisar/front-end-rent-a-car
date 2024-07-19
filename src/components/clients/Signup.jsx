@@ -2,11 +2,12 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Button from "./Button";
 import Alertsuccess from "./Alertsuccess";
 import AlertFail from "./AlertFail";
+import { useAuth } from "../../context/AuthContext";
 
 const schema = yup.object().shape({
   email: yup.string().email().required().min(3).max(30),
@@ -252,6 +253,15 @@ export default function Signup({ onSuccess }) {
   const navigate = useNavigate();
   const location = useLocation();
   const fromBooking = location.state?.fromBooking;
+  const { isLogged, signup } = useAuth();
+
+  useEffect(() => {
+    if (isLogged) {
+      navigate('/booking/choose-location'); // Replace with your desired redirect path
+      // OR
+      // setShowAlert(true); // Display a message like "You are already logged in"
+    }
+  }, [isLogged]);
 
   const onSubmit = async (data) => {
     console.log("testing data", data);
@@ -271,8 +281,13 @@ export default function Signup({ onSuccess }) {
       console.error("Response data:", error.response?.data);
     }
 
-    const res = await axios.post("http://localhost:3000/api/v1/clients/signup", data, { withCredentials: true });
-    console.log(res.data);
+    // const res = await axios.post("http://localhost:3000/api/v1/clients/signup", data, { withCredentials: true });
+       
+
+     // Call signup with individual parameters
+     const res = await signup(data);
+     console.log(res);
+
     setShowAlert(true);
     setTimeout(() => {
       setShowAlert(false);
@@ -352,7 +367,8 @@ export default function Signup({ onSuccess }) {
                   className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
                   onChange={handleEmailChange} 
                 />
-                {errors.email && <p className="text-red-700 text-sm font-medium">{capitalizeFirstLetter(errors.email.message)}</p>}
+                {/* {errors.email && <p className="text-red-700 text-sm font-medium">{capitalizeFirstLetter(errors.email.message)}</p>} */}
+                {errors.email && <p className="text-red-700 text-sm font-medium">{errors.email.message}</p>}
               </div>
             </div>
 
@@ -447,7 +463,8 @@ export default function Signup({ onSuccess }) {
                   placeholder="License"
                   className="block w-full  border  bg-red-50 px-2 py-1.5 text-sm text-gray-900   border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
                 />
-                {errors.license && <p className="text-red-700 text-sm font-medium">{capitalizeFirstLetter(errors.license.message)}</p>}
+                {/* {errors.license && <p className="text-red-700 text-sm font-medium">{capitalizeFirstLetter(errors.license.message)}</p>} */}
+                {errors.license && <p className="text-red-700 text-sm font-medium">{errors.license.message}</p>}
               </div>
             </div>
           </div>
@@ -509,9 +526,22 @@ export default function Signup({ onSuccess }) {
                 </Link>
               </p>
             </div>
+
+            
           </div>
         </form>
       </div>
+
+
+        {fromBooking && ( // Add condition to check for fromBooking prop
+          <div className='flex justify-center pt-16'>
+            <ul className="steps steps-horizontal">
+              <li className="step step-error text-red-700  font-semibold">Create Account</li>
+              <li className="step   font-semibold">Choose Date & Time</li>
+              <li className="step font-semibold">Payment Details</li>
+            </ul>
+          </div>
+        )}
     </div>
   );
 }

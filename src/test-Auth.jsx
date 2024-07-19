@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext } from 'react';
 import axios from 'axios';
 
 const AuthContext = createContext();
@@ -7,25 +7,32 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
-    // Check if there's a user stored in localStorage on mount
     const storedUser = localStorage.getItem('user');
     return storedUser ? JSON.parse(storedUser) : null;
   });
 
-  const login = async (email, password, captchaToken) => {
+  const login = async (email, password, captchaToken, returnTo) => {
     try {
       const res = await axios.post(
         "http://localhost:3000/api/v1/clients/signin",
-        { email, password, captchaToken },
-        { withCredentials: true } // Ensure credentials are included (cookies)
+        { email, password, captchaToken},
+        { withCredentials: true }
       );
 
       if (res.status === 200) {
-        const userData = { email }; // Assuming you only need email for user info
+        const { clientId, email } = res.data; // Assuming response contains clientId and email
+        console.log("clientId", clientId);
+        const userData = { clientId, email };
         setUser(userData);
-        localStorage.setItem('user', JSON.stringify(userData)); // Store user in localStorage
-        
-        return { success: true };
+        console.log("userData",userData);
+        localStorage.setItem('user', JSON.stringify(userData));
+        localStorage.setItem('clientId', clientId); // Store client ID separately if needed
+        localStorage.setItem('clientEmail', email);
+
+        localStorage.setItem('isLogged', JSON.stringify(true)); // Set isLogged to true
+
+
+        return { success: true, path: returnTo }; // Return path to navigate to
       } else {
         return { success: false, message: "An error occurred. Please try again." };
       }
@@ -42,43 +49,50 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-
-
-  const updateUserPassword = async (newPassword) => {
+  const signup = async (email, password, captchaToken) => {
     try {
-      const response = await axios.put(
-        'http://localhost:3000/api/v1/clients/change-password',
-        {
-          email: user.email,
-          newPassword,
-        },
-        { withCredentials: true } // Ensure credentials are included (cookies)
+      const res = await axios.post(
+        "http://localhost:3000/api/v1/clients/signup",
+        { email, password, captchaToken },
+        { withCredentials: true }
       );
 
-      console.log(response.data); // Log the response for verification
+      if (res.status === 201) {
+        const { clientId, email } = res.data; // Assuming response contains clientId and email
+        const userData = { clientId, email };
+        setUser(userData);
+        localStorage.setItem('user', JSON.stringify(userData));
+        localStorage.setItem('clientId', clientId); // Store client ID separately if needed
+        localStorage.setItem('clientEmail', email);
 
-      // Update user object locally
-      setUser({ ...user, password: newPassword }); // Update user object with new password
+        localStorage.setItem('isLogged', JSON.stringify(true)); // Set isLogged to true
 
-      return { success: true, message: "Password changed successfully" };
+
+        return { success: true };
+      } else {
+        return { success: false, message: "An error occurred. Please try again." };
+      }
     } catch (error) {
-      console.error('Error changing password:', error);
-      let message = 'Failed to change password. Please try again later!';
-      if (error.response && error.response.data) {
-        message = error.response.data.message || message;
+      let message = "An error occurred. Please try again.";
+      if (error.response) {
+        if (error.response.status === 400) {
+          message = "Bad request. Please check your input.";
+        }
       }
       return { success: false, message };
     }
   };
-  
-  
+
   const logout = () => {
-    localStorage.removeItem('user'); // Remove user from localStorage
-    setUser(null); // Set user state to null
+    localStorage.removeItem('user');
+    localStorage.removeItem('clientId');
+    localStorage.removeItem('clientEmail');
+    localStorage.removeItem('isLogged');
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, updateUserPassword }}>
+    <AuthContext.Provider value={{ user, login, signup, logout }}>
       {children}
     </AuthContext.Provider>
   );

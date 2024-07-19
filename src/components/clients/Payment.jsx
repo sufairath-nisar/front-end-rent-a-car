@@ -60,7 +60,8 @@ const Payment = () => {
       const response = await axios.post("http://localhost:3000/api/v1/clients/add-payment", formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
-        }
+        },
+        withCredentials: true
       });
 
       if (response.data.paymentMethod === 'cash') {
@@ -110,69 +111,83 @@ const Payment = () => {
   };
 
   return (
-    <div className='pb-7 pt-3'>
-      <div className='md:min-h-96 pt-36 flex justify-center'>
-        <form className="form-control w-full max-w-sm text-center pb-16" onSubmit={handleSubmit}>
-          <div className="pb-10">
-            <h4 className='text-red-700 font-semibold pb-2'>Upload</h4>
-            <ul className='list-disc list-inside'>
-              <li>Emirated ID/Visit visa copy</li>
-              <li>Passport front and back page</li>
-              <li>Driving license</li>
-            </ul>
-          </div>
-          <div className='pb-10'>
-            <input
-              type="file"
-              multiple
-              accept="image/*,application/pdf"
-              className="file:bg-red-700 file:border-red-900 file-input file-input-bordered border-red-700 bg-red-50 w-full max-w-sm"
-              onChange={handleFileChange}
-            />
-          </div>
+    <div className=' pb-16 md:min-h-96 pt-36'>
 
-          <div className="pt-5 pb-7">
-            <div className="flex justify-center space-x-12">
-              <label className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="cash"
-                  checked={paymentMethod === 'cash'}
-                  onChange={handlePaymentMethodChange}
-                  className="appearance-none w-3 h-3 border border-gray-500 rounded-full cursor-pointer focus:ring-2 focus:ring-offset-2 focus:ring-red-400 focus:outline-none checked:bg-red-700 checked:ring-2 checked:ring-offset-2 checked:ring-red-700 checked:border-red-700"
-                />
-                <span>Cash on Delivery</span>
-              </label>
-              <label className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="online"
-                  checked={paymentMethod === 'online'}
-                  onChange={handlePaymentMethodChange}
-                  className="appearance-none w-3 h-3 border border-gray-500 rounded-full cursor-pointer focus:ring-2 focus:ring-offset-2 focus:ring-red-400 focus:outline-none checked:bg-red-700 checked:ring-2 checked:ring-offset-2 checked:ring-red-700 checked:border-red-700"
-                />
-                <span>Online Transaction</span>
-              </label>
-            </div>
-          </div>
-          <Button text="CONFIRM" />
-        </form>
-      </div>
+        <div className='pb-16'>
+        <h2 className="font-semibold mb-4 text-center">Payment<span className="text-red-700"> Details</span></h2>
+              <div className=' flex justify-center shadow-xl shadow-red-700 rounded-lg max-w-lg mx-auto mt-10 p-7'>
+                <form className="form-control w-full max-w-sm text-center pb-10" onSubmit={handleSubmit}>
+                  <div className="pb-10">
+                    <h4 className='text-red-700 font-semibold pb-2'>Upload</h4>
+                    <ul className='list-disc list-inside'>
+                      <li>Emirated ID/Visit visa copy</li>
+                      <li>Passport front and back page</li>
+                      <li>Driving license</li>
+                    </ul>
+                  </div>
+                  <div className='pb-10'>
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*,application/pdf"
+                      className="file:bg-red-700 file:border-red-900 file-input file-input-bordered border-red-700 bg-red-50 w-full max-w-sm"
+                      onChange={handleFileChange}
+                    />
+                  </div>
 
-      {showAlert && alertType === 'success' && (
-        <div className={`bg-opacity-80 backdrop-filter backdrop-blur-md absolute top-0 left-0 h-full w-full flex justify-center items-center z-10`}>
-          <Alertsuccess text={alertMessage} />
+                  <div className="pt-5 pb-10">
+                    <div className="flex justify-center space-x-12">
+                      <label className="flex items-center space-x-2">
+                        <input
+                          type="radio"
+                          name="paymentMethod"
+                          value="cash"
+                          checked={paymentMethod === 'cash'}
+                          onChange={handlePaymentMethodChange}
+                          className="appearance-none w-3 h-3 border border-gray-500 rounded-full cursor-pointer focus:ring-2 focus:ring-offset-2 focus:ring-red-400 focus:outline-none checked:bg-red-700 checked:ring-2 checked:ring-offset-2 checked:ring-red-700 checked:border-red-700"
+                        />
+                        <span>Cash on Delivery</span>
+                      </label>
+                      <label className="flex items-center space-x-2">
+                        <input
+                          type="radio"
+                          name="paymentMethod"
+                          value="online"
+                          checked={paymentMethod === 'online'}
+                          onChange={handlePaymentMethodChange}
+                          className="appearance-none w-3 h-3 border border-gray-500 rounded-full cursor-pointer focus:ring-2 focus:ring-offset-2 focus:ring-red-400 focus:outline-none checked:bg-red-700 checked:ring-2 checked:ring-offset-2 checked:ring-red-700 checked:border-red-700"
+                        />
+                        <span>Online Transaction</span>
+                      </label>
+                    </div>
+                  </div>
+                  <Button text="CONFIRM" />
+                </form>
+              </div>
+
+              {showAlert && alertType === 'success' && (
+                <div className={`bg-opacity-80 backdrop-filter backdrop-blur-md absolute top-0 left-0 h-full w-full flex justify-center items-center z-10`}>
+                  <Alertsuccess text={alertMessage} />
+                </div>
+              )}
+
+              {showAlert && alertType === 'fail' && (
+                <div className="mt-4">
+                  <AlertFail text={alertMessage} />
+                </div>
+              )}
         </div>
-      )}
 
-      {showAlert && alertType === 'fail' && (
-        <div className="mt-4">
-          <AlertFail text={alertMessage} />
+
+        <div className='flex justify-center '>
+                <ul className="steps steps-horizontal">
+                  <li className="step step-error text-red-700 font-semibold">Create Account</li>
+                  <li className="step  step-error text-red-700 font-semibold">Choose Date & Time</li>
+                  <li className="step  step-error text-red-700 font-semibold">Payment Details</li>
+                </ul>
         </div>
-      )}
     </div>
+   
   );
 }
 

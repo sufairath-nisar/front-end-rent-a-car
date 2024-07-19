@@ -6,7 +6,7 @@ const BookingPage = () => {
   return (
     <>
         <Booking />
-        <StepsBooking />
+       
     </>
   )
 }

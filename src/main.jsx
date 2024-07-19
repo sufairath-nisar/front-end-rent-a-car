@@ -105,10 +105,6 @@ const router = createBrowserRouter([
         path: "/booking/signup",
         element: <SignupPage />      
       },
-      // {
-      //   path: "clients/logout",
-      //   element: <HomePage />,
-      // },  
     ],
   },
 
@@ -185,6 +181,10 @@ const router = createBrowserRouter([
         path: "/booking/online-payment",
         element: <OnlinePayment/>      
       },
+      // {
+      //   path: "/bookings",
+      //   element: <BookingPage/>      
+      // },
 
     ],
  
