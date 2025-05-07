@@ -13,6 +13,8 @@ const Payment = () => {
   const [showAlert, setShowAlert] = useState(false);
   const navigate = useNavigate();
 
+  const token = localStorage.getItem('token'); // Retrieve the token from local storage
+  console.log('Token:', token); // Log the token to check if it's defined
   const handleFileChange = (e) => {
     setFiles(e.target.files);
   };
@@ -25,7 +27,7 @@ const Payment = () => {
     e.preventDefault();
 
     if (files.length < 4) {
-      setAlertMessage('Please upload all files!');
+      setAlertMessage('Please upload all 4 files. Ensure the passport front and back pages are uploaded as separate files.');
       setAlertType('fail');
       setShowAlert(true);
       return;
@@ -57,6 +59,9 @@ const Payment = () => {
     formData.append('clientEmail', clientEmail);
 
     try {
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
       const response = await axios.post("http://localhost:3000/api/v1/clients/add-payment", formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -75,9 +80,30 @@ const Payment = () => {
         setTimeout(() => {
           navigate('/client');
         }, 9000);
-      } else {
-        navigate('/booking/online-payment');
       }
+      
+      else if (response.data.paymentMethod === 'online') {
+        navigate('/booking/online-payment', {
+          state: {
+            carId: orderId, // Pass the order ID to the online payment page
+          },
+        });
+      }
+
+    // if (response.data.paymentMethod === 'online') {
+    //   navigate('/booking/online-payment', {
+    //     state: {
+    //       carId: orderId,
+    //     },
+    //   });
+    // }
+    
+    }
+
+    else{
+      console.error('Token is not defined');
+
+    }
 
     } catch (error) {
       console.error('Failed to submit payment', error.response || error.message || error);
@@ -109,6 +135,7 @@ const Payment = () => {
       setShowAlert(true);
     }
   };
+  
 
   return (
     <div className=' pb-16 md:min-h-96 pt-36'>

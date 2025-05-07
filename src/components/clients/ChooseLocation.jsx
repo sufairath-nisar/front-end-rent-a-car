@@ -265,7 +265,7 @@ const ChooseLocation = ({ onComplete }) => {
                 selected={watch('pickupDate')}
                 onChange={date => setValue('pickupDate', date)}
                 placeholderText="Pickup Date"
-                className="block py-2 w-64 border bg-red-50 px-2 p text-sm text-gray-900 border-red-300 shadow-sm focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
+                className="block py-2 w-64 border bg-red-50 px-2 p text-sm text-gray-900 border-red-300 shadow-sm focus:text-gray-900 focus:ring-red-700 focus:border-red-700 focus:outline-none focus:ring-1"
                 dateFormat="dd-MM-yyyy"
                 minDate={new Date()}
                 filterDate={isFutureDate}
@@ -274,7 +274,7 @@ const ChooseLocation = ({ onComplete }) => {
               {errors.pickupDate && <p className="text-red-500">{errors.pickupDate.message}</p>}
             </div>
             <div>
-              <label htmlFor="dropoffDate" className="block text-sm font-medium text-gray-900 mb-3">Dropoff Date</label>
+              <label htmlFor="dropoffDate" className="block text-sm font-medium !text-gray-900 mb-3">Dropoff Date</label>
               <DatePicker
                 id="dropoffDate"
                 selected={watch('dropoffDate')}
@@ -339,6 +339,10 @@ const ChooseLocation = ({ onComplete }) => {
               {errors.dropoffLocation && <p className="text-red-500">{errors.dropoffLocation.message}</p>}
             </div>
           </div>
+
+         
+
+     
 
           <div className="flex items-center justify-center pt-8">
             <Button text="Save & Continue" onClick={handleSaveAndContinue} />

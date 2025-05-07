@@ -34,14 +34,17 @@ export const AuthProvider = ({ children }) => {
         { withCredentials: true }
       );
 
+      console.log('Login response:', res); // Log the response for debugging
+      console.log('Login response data:', res.data); // Log the response data for debugging
       if (res.status === 200) {
-        const { clientId, email } = res.data;
+        const { clientId, email, token } = res.data;
         const userData = { clientId, email };
         setUser(userData);
         localStorage.setItem('user', JSON.stringify(userData));
         localStorage.setItem('clientId', clientId);
         localStorage.setItem('clientEmail', email);
         localStorage.setItem('isLogged', JSON.stringify(true));
+        localStorage.setItem('token', token); // Store the token in local storage
         setIsLogged(true);
 
         return { success: true, path: returnTo };

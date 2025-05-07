@@ -33,6 +33,7 @@
     "react-select": "^5.8.0",
     "react-time-picker": "^7.0.0",
     "react-toastify": "^10.0.5",
+    "rent-a-car": "file:",
     "yup": "^1.4.0"
   },
   "devDependencies": {

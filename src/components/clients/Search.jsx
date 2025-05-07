@@ -77,14 +77,14 @@ const Search = () => {
           </div>
 
           <div className='grid-cols-1 border-r md:pt-1 md:pb-3  border-gray-300 w-full'>
-            <Link to="/cars/types/luxury" className="flex flex-col items-center cursor-pointer">
+            <Link to="/cars/category/luxury" className="flex flex-col items-center cursor-pointer">
               <img src='/images/icons/home-icon-luxury.png' alt="Luxury cars" />
               <p>Luxury cars</p>
             </Link>
           </div>
 
           <div className='grid-cols-1 w-full md:pt-1 pb-3'>
-            <Link to="/cars/types/commercial" className="flex flex-col items-center cursor-pointer">
+            <Link to="/cars/category/commercial" className="flex flex-col items-center cursor-pointer">
               <img src='/images/icons/home-icon-commercial.png' alt="Commercial cars" />
               <p>Commercial cars</p>
             </Link>

@@ -4,6 +4,7 @@ import Signin from './Signin';
 import ChooseLocation from './ChooseLocation';
 import Payment from './Payment';
 
+
 const Booking = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLocationChosen, setIsLocationChosen] = useState(false);
@@ -57,6 +58,8 @@ const Booking = () => {
       {isLoggedIn && isLocationChosen && (
         <Payment />
       )}
+
+     
     </div>
   );
 };

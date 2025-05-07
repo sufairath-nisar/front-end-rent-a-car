@@ -92,8 +92,8 @@ export const Home = () => {
           </div>
 
           <div className='grid-cols-1 justify-center flex'>
-              <Link to="/cars/brand/mistubishi">
-                  <CardBrand name="Mistubishi"  path="/images/mistubishi-logo.webp"/>
+              <Link to="/cars/brand/mitsubishi">
+                  <CardBrand name="Mitsubishi"  path="/images/mistubishi-logo.webp"/>
               </Link>
           </div>
 

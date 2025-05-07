@@ -143,6 +143,7 @@ background-color : #0000;
 
 [data-theme="night"] .bg-white {
  @apply bg-slate-700;
+ @apply text-slate-900;
  }
 
  [data-theme="night"] .text-gray-700 {
@@ -267,4 +268,21 @@ background-color : #0000;
   @apply bg-[url('/images/darkmode-logo.png')];
 }
 
+/* new april 2025*/
 
+[data-theme="night"] .text-gray-900 {
+  @apply text-white
+}
+
+
+[data-theme="night"] .bg-red-50 {
+  @apply bg-[#fe9b9b23];
+}
+
+[data-theme="night"] .text-slate-500 {
+  @apply text-gray-400;
+}
+
+[data-theme="night"] .bg-red-400 {
+  @apply bg-black;
+}
